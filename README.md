@@ -1,7 +1,7 @@
 # Granfalloon
 
 > The one who is many
-> - Castlevania
+> \- Castlevania
 
 Granfalloon is a reverse-proxy that allows secure, distributed usage of a
 typically centralized secret
