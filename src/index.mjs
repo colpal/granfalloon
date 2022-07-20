@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 import { createServer } from 'http';
 
+const startChallenge = (req, res) => res.end('Start Challenge');
+const completeChallenge = (req, res) => res.end('Complete Challenge');
+const passthrough = (req, res) => res.writeHead(404).end();
+
 const server = createServer((req, res) => {
   switch (true) {
     case req.url.startsWith('/_/start-challenge'):
-      return res.end('Start Challenge');
+      return startChallenge(req, res);
     case req.url.startsWith('/_/complete-challenge'):
-      return res.end('Complete Challenge');
+      return completeChallenge(req, res);
     default:
-      return res.writeHead(404).end();
+      return passthrough(req, res);
   }
 });
 
