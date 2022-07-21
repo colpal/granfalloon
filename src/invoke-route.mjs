@@ -1,4 +1,4 @@
-export default (fn) => async (req, res) => {
+export default async (fn, req, res) => {
   try {
     const { status, body, headers } = await fn(req);
     return res
