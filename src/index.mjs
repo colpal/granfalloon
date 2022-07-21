@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { createServer } from 'http';
-import invokeRoute from './invoke-route';
-import startChallenge from './routes/start-challenge';
-import completeChallenge from './routes/complete-challenge';
-import passThrough from './routes/pass-through';
+import invokeRoute from './invoke-route.mjs';
+import startChallenge from './routes/start-challenge.mjs';
+import completeChallenge from './routes/complete-challenge.mjs';
+import passThrough from './routes/pass-through.mjs';
 
 const server = createServer((req, res) => {
   switch (req.url) {
