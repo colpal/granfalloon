@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 import { createServer } from 'http';
-
-const startChallenge = (req, res) => res.end('Start Challenge');
-const completeChallenge = (req, res) => res.end('Complete Challenge');
-const passthrough = (req, res) => res.writeHead(404).end();
+import invokeRoute from './invoke-route';
+import startChallenge from './routes/start-challenge';
+import completeChallenge from './routes/complete-challenge';
+import passThrough from './routes/pass-through';
 
 const server = createServer((req, res) => {
-  switch (true) {
-    case req.url.startsWith('/_/start-challenge'):
-      return startChallenge(req, res);
-    case req.url.startsWith('/_/complete-challenge'):
-      return completeChallenge(req, res);
+  switch (req.url) {
+    case '/_/start-challenge':
+      return invokeRoute(startChallenge, req, res);
+    case '/_/complete-challenge':
+      return invokeRoute(completeChallenge, req, res);
     default:
-      return passthrough(req, res);
+      return invokeRoute(passThrough, req, res);
   }
 });
 
