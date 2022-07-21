@@ -11,6 +11,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'no-restricted-syntax': 'off',
     'import/extensions': ['error', 'ignorePackages'],
   },
 };
