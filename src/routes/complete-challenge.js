@@ -1,3 +1,1 @@
-export default async (request) => ({
-  body: 'Complete Challenge',
-});
+export default () => new Request('Complete Challenge');
