@@ -1,21 +1,14 @@
-#!/usr/bin/env deno run
-import { createServer } from 'http';
-import invokeRoute from './invoke-route.mjs';
-import startChallenge from './routes/start-challenge.mjs';
-import completeChallenge from './routes/complete-challenge.mjs';
-import passThrough from './routes/pass-through.mjs';
+#!/usr/bin/env deno run --allow-net
+import { serve } from './deps.ts';
 
-const server = createServer((req, res) => {
-  switch (req.url) {
+serve((request) => {
+  const url = new URL(request.url);
+  switch (url.pathname) {
     case '/_/start-challenge':
-      return invokeRoute(startChallenge, req, res);
+      return new Response('Start Challenge');
     case '/_/complete-challenge':
-      return invokeRoute(completeChallenge, req, res);
+      return new Response('Complete Challenge');
     default:
-      return invokeRoute(passThrough, req, res);
+      return new Response(null, { status: 404 });
   }
 });
-
-const port = 8000;
-console.log(`Listening on port ${port}...`);
-server.listen(port);
