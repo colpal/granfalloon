@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env deno run
 import { createServer } from 'http';
 import invokeRoute from './invoke-route.mjs';
 import startChallenge from './routes/start-challenge.mjs';
