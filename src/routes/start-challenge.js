@@ -1,21 +1,16 @@
-import getJSON from '../get-json.mjs';
-import attempt from '../attempt.mjs';
+import attempt from '../attempt.js';
 
 export default async (request) => {
-  const [bodyError, body] = await attempt(getJSON(request));
+  const [bodyError, body] = await attempt(request.json());
   if (bodyError) {
-    return {
-      status: 422,
-      body: 'A JSON body is required',
-    };
+    return new Response('A JSON body is required', { status: 422 });
   }
 
   if (!body.publicKey) {
-    return {
-      status: 422,
-      body: 'The JSON body must include a "publicKey" key',
-    };
+    return new Response('The JSON body must include a "publicKey" key', {
+      status: 422
+    });
   }
 
-  return { status: 200 };
+  return new Response();
 };
