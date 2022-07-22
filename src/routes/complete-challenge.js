@@ -1,1 +1,1 @@
-export default () => new Request('Complete Challenge');
+export default () => new Response('Complete Challenge');
