@@ -19,6 +19,7 @@
   "https://deno.land/std@0.149.0/datetime/formatter.ts": "7c8e6d16a0950f400aef41b9f1eb9168249869776ec520265dfda785d746589e",
   "https://deno.land/std@0.149.0/datetime/mod.ts": "28cdfd81f4e02696e2663807234e857cb08bb13f5573db862c7cd4a6287e2bde",
   "https://deno.land/std@0.149.0/datetime/tokenizer.ts": "7381e28f6ab51cb504c7e132be31773d73ef2f3e1e50a812736962b9df1e8c47",
+  "https://deno.land/std@0.149.0/flags/mod.ts": "594472736e24b2f2afd3451cf7ccd58a21706ce91006478a544fdfa056c69697",
   "https://deno.land/std@0.149.0/http/_negotiation/common.ts": "410e902f01cdd324e4746e8017595be4fc357d6fc4cd6044f2f808a943d7eaf7",
   "https://deno.land/std@0.149.0/http/_negotiation/encoding.ts": "f749c1d539d139af783e8a7741de5a47a98a5e3c9af82b8af512567ccf5fe632",
   "https://deno.land/std@0.149.0/http/_negotiation/language.ts": "53c306186904d2dace4c624a8822542866ad332a7f40ac90e0af1504f95c63d0",
