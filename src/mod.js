@@ -1,8 +1,11 @@
-#!/usr/bin/env deno run --allow-net
+#!/usr/bin/env deno run --allow-net --allow-read
 import { serve } from './deps.ts';
+import * as profile from './profile.js'
 import startChallenge from './routes/start-challenge.js'
 import completeChallenge from './routes/complete-challenge.js';
 import * as Store from './store/in-memory.js';
+
+const profiles = await Promise.all(Deno.args.map(profile.load));
 
 const store = Store.create();
 
