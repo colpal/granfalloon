@@ -3,13 +3,13 @@ import { serve } from './deps.ts';
 import * as profile from './profile.js'
 import startChallenge from './routes/start-challenge.js'
 import completeChallenge from './routes/complete-challenge.js';
-import * as Store from './store/in-memory.js';
+import * as InMemoryStore from './store/in-memory.js';
 
 const profiles = Object.fromEntries(
   await Promise.all(Deno.args.map(profile.load))
 );
 
-const store = Store.create();
+const store = InMemoryStore.create();
 
 serve((request) => {
   const url = new URL(request.url);
