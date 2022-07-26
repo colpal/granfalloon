@@ -15,7 +15,7 @@ serve((request) => {
   const url = new URL(request.url);
   switch (url.pathname) {
     case '/_/start-challenge':
-      return startChallenge(request, { store });
+      return startChallenge(request, { store, profiles });
     case '/_/complete-challenge':
       return completeChallenge(request);
     default:
