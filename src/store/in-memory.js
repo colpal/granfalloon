@@ -1,12 +1,15 @@
-export const create = () => ({});
+export const get = (store) => (key) => store[key];
 
-export const get = (client, key) => client[key];
-
-export const set = (client, key, value, ex = null) => {
-  client[key] = value;
+export const set = (store) => (key, value, { ex }) => {
+  store[key] = value;
   if (ex) {
     setTimeout(() => {
-      delete client[key];
+      delete store[key];
     }, ex * 1000);
   }
+};
+
+export const create = () => {
+  const store = {};
+  return { get: get(store), set: set(store) };
 };
