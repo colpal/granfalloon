@@ -1,4 +1,4 @@
-import { crypto } from "../deps.ts";
+import { crypto, base64Encode } from "../deps.ts";
 import attempt from '../attempt.js';
 import { thumbprint } from '../jwk.js';
 
@@ -41,5 +41,15 @@ export default async (request, { store, profiles }) => {
     });
   }
 
-  return new Response();
+  const nonce = `nonce-${crypto.randomUUID()}`;
+  const secret = `secret-${crypto.randomUUID()}`;
+  await store.set(nonce, secret, { ex: 60 });
+  const encrypted = await crypto.subtle.encrypt(
+    { name: "RSA-OAEP" },
+    publicKey,
+    new TextEncoder().encode(secret),
+  )
+  const challenge = base64Encode(encrypted);
+
+  return new Response(JSON.stringify({ data: { nonce, challenge } }));
 };
