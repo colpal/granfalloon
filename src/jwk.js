@@ -1,22 +1,16 @@
-import { crypto } from './deps.ts';
+import { crypto, encode } from "./deps.ts";
 
-async function thumbprintRSA(jwk) {
-  const container = {};
-  ["e", "kty", "n"].forEach(k => {
-    container[k] = jwk[k];
-  });
-  const json = JSON.stringify(container);
-  const textEncoder = new TextEncoder();
-  const encoded = textEncoder.encode(json);
-  const hash = await crypto.subtle.digest('SHA-256', encoded);
-  return '';
-}
+const requiredKeys = {
+  RSA: ["e", "kty", "n"],
+};
 
-export function thumbprint(k) {
-  switch (k.kty) {
-    case "RSA":
-      return thumbprintRSA(k);
-    default:
-      throw new Error(`Unsupported kty: "${k.kty}"`);
-  }
+export async function thumbprint(jwk) {
+  const ks = requiredKeys[jwk.kty];
+  if (!ks) throw new Error(`Unsupported kty: "${jwk.kty}"`);
+  const entries = ks.map((k) => [k, jwk[k]]);
+  const object = Object.fromEntries(entries);
+  const json = JSON.stringify(object);
+  const buffer = new TextEncoder().encode(json);
+  const bufferHash = await crypto.subtle.digest("SHA-256", buffer);
+  return encode(bufferHash);
 }
