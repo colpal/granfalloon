@@ -5,7 +5,9 @@ import startChallenge from './routes/start-challenge.js'
 import completeChallenge from './routes/complete-challenge.js';
 import * as Store from './store/in-memory.js';
 
-const profiles = await Promise.all(Deno.args.map(profile.load));
+const profiles = Object.fromEntries(
+  await Promise.all(Deno.args.map(profile.load))
+);
 
 const store = Store.create();
 
