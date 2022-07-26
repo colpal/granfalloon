@@ -1,6 +1,6 @@
-export const get = (store) => (key) => store[key];
+const get = (store) => (key) => store[key];
 
-export const set = (store) => (key, value, { ex }) => {
+const set = (store) => (key, value, { ex }) => {
   store[key] = value;
   if (ex) {
     setTimeout(() => {
