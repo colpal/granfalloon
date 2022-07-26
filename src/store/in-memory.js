@@ -2,10 +2,11 @@ export const create = () => ({});
 
 export const get = (client, key) => client[key];
 
-export const set = (client, key, value, expiration) => {
-  const now = new Date();
+export const set = (client, key, value, ex = null) => {
   client[key] = value;
-  setTimeout(() => {
-    delete client[key];
-  }, expiration.getTime() - now.getTime());
+  if (ex) {
+    setTimeout(() => {
+      delete client[key];
+    }, ex * 1000);
+  }
 };
