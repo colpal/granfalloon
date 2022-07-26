@@ -17,7 +17,7 @@ serve((request) => {
     case '/_/start-challenge':
       return startChallenge(request, { store, profiles });
     case '/_/complete-challenge':
-      return completeChallenge(request);
+      return completeChallenge(request, { store });
     default:
       return new Response(null, { status: 404 });
   }
