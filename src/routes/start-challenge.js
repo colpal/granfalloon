@@ -43,12 +43,19 @@ export default async (request, { store, profiles }) => {
 
   const nonce = `nonce-${crypto.randomUUID()}`;
   const secret = `secret-${crypto.randomUUID()}`;
-  await store.set(nonce, secret, { ex: 60 });
-  const encrypted = await crypto.subtle.encrypt(
+  const [setError] = await store.set(nonce, secret, { ex: 60 });
+  if (setError) {
+    return new Response("Could not establish nonce session", { status: 500 });
+  }
+
+  const [encryptError, encrypted] = await attempt(crypto.subtle.encrypt(
     { name: "RSA-OAEP" },
     publicKey,
     new TextEncoder().encode(secret),
-  )
+  ))
+  if (encryptError) {
+    return new Response("Could not encrypt challenge secret", { status: 500 });
+  }
   const challenge = base64Encode(encrypted);
 
   return new Response(JSON.stringify({ data: { nonce, challenge } }));
