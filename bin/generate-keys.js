@@ -1,6 +1,6 @@
 #!/usr/bin/env deno run --allow-write
-import { crypto } from '../src/deps.ts';
-import { parse } from '../src/deps.ts';
+import { crypto } from "../src/deps.ts";
+import { parse } from "../src/deps.ts";
 
 const flags = parse(Deno.args);
 if (!flags.private) {
@@ -21,9 +21,9 @@ const { publicKey, privateKey } = await crypto.subtle.generateKey(
 
 await Deno.writeTextFile(
   flags.private,
-  JSON.stringify(await crypto.subtle.exportKey('jwk', privateKey), null, 2),
-)
+  JSON.stringify(await crypto.subtle.exportKey("jwk", privateKey), null, 2),
+);
 
 console.log(
-  JSON.stringify(await crypto.subtle.exportKey('jwk', publicKey), null, 2),
+  JSON.stringify(await crypto.subtle.exportKey("jwk", publicKey), null, 2),
 );

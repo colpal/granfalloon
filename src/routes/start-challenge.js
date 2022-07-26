@@ -1,16 +1,16 @@
-import { crypto, base64Encode } from "../deps.ts";
-import attempt from '../attempt.js';
-import { thumbprint } from '../jwk.js';
+import { base64Encode, crypto } from "../deps.ts";
+import attempt from "../attempt.js";
+import { thumbprint } from "../jwk.js";
 
 export default async (request, { store, profiles }) => {
   const [bodyError, body] = await attempt(request.json());
   if (bodyError) {
-    return new Response('A JSON body is required', { status: 422 });
+    return new Response("A JSON body is required", { status: 422 });
   }
 
   if (!body.publicKey) {
     return new Response('The JSON body must include a "publicKey" key', {
-      status: 422
+      status: 422,
     });
   }
 
@@ -24,7 +24,7 @@ export default async (request, { store, profiles }) => {
   const profile = profiles[kid];
   if (!profile) {
     return new Response("Public key's thumbprint does not match any profiles", {
-      status: 400
+      status: 400,
     });
   }
 
@@ -52,7 +52,7 @@ export default async (request, { store, profiles }) => {
     { name: "RSA-OAEP" },
     publicKey,
     new TextEncoder().encode(secret),
-  ))
+  ));
   if (encryptError) {
     return new Response("Could not encrypt challenge secret", { status: 500 });
   }
