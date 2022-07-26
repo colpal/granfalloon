@@ -1,4 +1,4 @@
-import { crypto, encode } from "./deps.ts";
+import { crypto, base64urlEncode } from "./deps.ts";
 
 const requiredKeys = {
   RSA: ["e", "kty", "n"],
@@ -12,5 +12,5 @@ export async function thumbprint(jwk) {
   const json = JSON.stringify(object);
   const buffer = new TextEncoder().encode(json);
   const bufferHash = await crypto.subtle.digest("SHA-256", buffer);
-  return encode(bufferHash);
+  return base64urlEncode(bufferHash);
 }
