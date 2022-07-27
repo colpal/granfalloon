@@ -18,19 +18,23 @@ export default async (request, { store }) => {
     });
   }
 
-  const [expectedGetError, expected] = await attempt(store.get(nonce));
-  if (expectedGetError) {
+  const [getError, [kid, expected]] = await attempt(Promise.all([
+    store.get(`${nonce}:kid`),
+    store.get(`${nonce}:secret`),
+  ]));
+  if (getError) {
     return new Response("Could not retrieve answer from the store", {
       status: 500,
     });
   }
-  if (!expected) {
+  if (!kid || !expected) {
     return new Response("No active challenge found for that nonce", {
       status: 400,
     });
   }
   if (answer !== expected) {
-    store.del(nonce);
+    store.del(`${nonce}:kid`);
+    store.del(`${nonce}:secret`);
     return new Response("Provided answer does not satisfy challenge", {
       status: 400,
     });
