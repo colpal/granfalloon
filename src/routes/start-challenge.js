@@ -43,7 +43,10 @@ export default async (request, { store, profiles }) => {
 
   const nonce = `nonce-${crypto.randomUUID()}`;
   const secret = `secret-${crypto.randomUUID()}`;
-  const [setError] = await store.set(nonce, secret, { ex: 60 });
+  const [setError] = await attempt(Promise.all([
+    store.set(`${nonce}:kid`, kid, { ex: 60 }),
+    store.set(`${nonce}:secret`, secret, { ex: 60 }),
+  ]));
   if (setError) {
     return new Response("Could not establish nonce session", { status: 500 });
   }
