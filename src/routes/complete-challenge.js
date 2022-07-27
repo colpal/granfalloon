@@ -24,6 +24,11 @@ export default async (request, { store }) => {
       status: 500,
     });
   }
+  if (!expected) {
+    return new Response("No active challenge found for that nonce", {
+      status: 400,
+    });
+  }
 
   return new Response("Complete Challenge");
 };
