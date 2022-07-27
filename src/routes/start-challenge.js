@@ -1,6 +1,6 @@
 import { base64Encode, crypto } from "../deps.ts";
 import attempt from "../attempt.js";
-import { thumbprint } from "../jwk.js";
+import thumbprint from "../jwk/thumbprint.js";
 
 export default async (request, { store, profiles }) => {
   const [bodyError, body] = await attempt(request.json());
