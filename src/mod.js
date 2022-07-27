@@ -3,6 +3,7 @@ import { serve } from "./deps.ts";
 import load from "./profiles/load.js";
 import startChallenge from "./routes/start-challenge.js";
 import completeChallenge from "./routes/complete-challenge.js";
+import passThrough from "./routes/pass-through.js";
 import * as InMemoryStore from "./store/in-memory.js";
 
 const profiles = Object.fromEntries(
@@ -19,6 +20,6 @@ serve((request) => {
     case "/_/complete-challenge":
       return completeChallenge(request, { store });
     default:
-      return new Response(null, { status: 404 });
+      return passThrough(request, { store, profiles });
   }
 });

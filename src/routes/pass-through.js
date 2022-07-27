@@ -1,3 +1,1 @@
-export default async () => ({
-  status: 404,
-});
+export default () => new Response(null, { status: 404 });
