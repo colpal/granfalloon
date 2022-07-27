@@ -29,6 +29,12 @@ export default async (request, { store }) => {
       status: 400,
     });
   }
+  if (answer !== expected) {
+    store.del(nonce);
+    return new Response("Provided answer does not satisfy challenge", {
+      status: 400,
+    });
+  }
 
   return new Response("Complete Challenge");
 };
