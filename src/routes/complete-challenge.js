@@ -23,7 +23,7 @@ export default async (request, { store }) => {
     store.get(`${nonce}:secret`),
   ]));
   if (getError) {
-    return new Response("Could not retrieve answer from the store", {
+    return new Response("Could not retrieve stored challenge information", {
       status: 500,
     });
   }
