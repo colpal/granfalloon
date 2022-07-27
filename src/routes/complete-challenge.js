@@ -1,3 +1,4 @@
+import { crypto } from '../deps.ts';
 import attempt from "../attempt.js";
 
 export default async (request, { store }) => {
@@ -40,5 +41,11 @@ export default async (request, { store }) => {
     });
   }
 
-  return new Response("Complete Challenge");
+  const session = `session-${crypto.randomUUID()}`;
+  const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));
+  if (setError) {
+    return new Response("Could not establish session", { status: 500 });
+  }
+
+  return new Response(JSON.stringify({ session }));
 };
