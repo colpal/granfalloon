@@ -1,10 +1,10 @@
-import { base64urlEncode, crypto } from "./deps.ts";
+import { base64urlEncode, crypto } from "../deps.ts";
 
 const requiredKeys = {
   RSA: ["e", "kty", "n"],
 };
 
-export async function thumbprint(jwk) {
+export default async function thumbprint(jwk) {
   const ks = requiredKeys[jwk.kty];
   if (!ks) throw new Error(`Unsupported kty: "${jwk.kty}"`);
   const entries = ks.map((k) => [k, jwk[k]]);

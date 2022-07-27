@@ -1,4 +1,4 @@
-import { thumbprint } from "../jwk.js";
+import thumbprint from "../jwk/thumbprint.js";
 
 export default async function load(path) {
   const profile = JSON.parse(await Deno.readTextFile(path));
