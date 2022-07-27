@@ -41,6 +41,14 @@ export default async (request, { store }) => {
     });
   }
 
+  const [clearNonceError] = await attempt(Promise.all([
+    store.del(`${nonce}:kid`),
+    store.del(`${nonce}:secret`),
+  ]));
+  if (clearNonceError) {
+    return new Response("Could not clear challenge session", { status: 500 });
+  }
+
   const session = `session-${crypto.randomUUID()}`;
   const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));
   if (setError) {
