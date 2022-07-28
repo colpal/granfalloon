@@ -55,7 +55,8 @@ Deno.test("store error", async () => {
     {
       profiles,
       store: {
-        set() {
+        // deno-lint-ignore require-await
+        async set() {
           throw new Error();
         },
       },
