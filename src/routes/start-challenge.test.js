@@ -45,3 +45,21 @@ Deno.test("unknown public key", async () => {
   );
   assertEquals(floorHundred(status), 400);
 });
+
+Deno.test("store error", async () => {
+  const { status } = await startChallenge(
+    new Request(url, {
+      method: "POST",
+      body: JSON.stringify({ publicKey: profile.publicKey }),
+    }),
+    {
+      profiles,
+      store: {
+        set() {
+          throw new Error();
+        },
+      },
+    },
+  );
+  assertEquals(floorHundred(status), 500);
+});
