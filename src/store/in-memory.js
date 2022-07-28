@@ -1,10 +1,13 @@
-const get = (store) => (key) => store[key];
+// deno-lint-ignore require-await
+const get = (store) => async (key) => store[key];
 
-const del = (store) => (key) => {
+// deno-lint-ignore require-await
+const del = (store) => async (key) => {
   delete store[key];
 };
 
-const set = (store) => (key, value, { ex }) => {
+// deno-lint-ignore require-await
+const set = (store) => async (key, value, { ex }) => {
   store[key] = value;
   if (ex) {
     setTimeout(() => {
