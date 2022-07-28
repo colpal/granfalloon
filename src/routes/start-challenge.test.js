@@ -33,5 +33,5 @@ Deno.test("empty public key", async () => {
     }),
     { profiles, store: InMemoryStore.create() }
   );
-  assertEquals(floorHundred(status, 400));
+  assertEquals(floorHundred(status), 400);
 });
