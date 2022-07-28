@@ -1,4 +1,4 @@
-import { globToRegExp } from '../deps.ts';
+import { globToRegExp } from "../deps.ts";
 
 export default async (request, { store, profiles }) => {
   const authorization = request.headers.get("Authorization");

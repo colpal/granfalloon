@@ -20,7 +20,7 @@ Deno.test("empty JSON", async () => {
   const { status } = await startChallenge(
     new Request(url, { method: "POST", body: "{}" }),
     { profiles, store: InMemoryStore.create() },
-  )
+  );
   assertEquals(floorHundred(status), 400);
 });
 
@@ -28,9 +28,9 @@ Deno.test("empty public key", async () => {
   const { status } = await startChallenge(
     new Request(url, {
       method: "POST",
-      body: JSON.stringify({ publicKey: {} })
+      body: JSON.stringify({ publicKey: {} }),
     }),
-    { profiles, store: InMemoryStore.create() }
+    { profiles, store: InMemoryStore.create() },
   );
   assertEquals(floorHundred(status), 400);
 });

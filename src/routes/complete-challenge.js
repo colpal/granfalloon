@@ -1,4 +1,4 @@
-import { crypto } from '../deps.ts';
+import { crypto } from "../deps.ts";
 import attempt from "../attempt.js";
 
 export default async (request, { store }) => {
