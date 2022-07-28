@@ -13,6 +13,6 @@ Deno.test("empty body", async () => {
   const { status } = await startChallenge(
     new Request(url),
     { profiles, store: InMemoryStore.create() },
-  )
-  assertEquals(floorHundred(status), 400)
+  );
+  assertEquals(floorHundred(status), 400);
 });
