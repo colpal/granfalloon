@@ -1,4 +1,5 @@
-import { assertNotEquals } from "../deps.ts"
+import { assertEquals } from "../deps.ts";
+import floorHundred from "../util/floor-hundred.js";
 import startChallenge from "./start-challenge.js";
 import * as InMemoryStore from "../store/in-memory.js";
 import load from "../profiles/load.js";
@@ -12,5 +13,5 @@ Deno.test("empty body", async () => {
     new Request("http://localhost/_/start-challenge"),
     { profiles, store: InMemoryStore.create() },
   )
-  assertNotEquals(status, 200);
+  assertEquals(floorHundred(status), 400)
 });
