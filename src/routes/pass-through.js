@@ -21,5 +21,6 @@ export default async (request, { store, profiles }) => {
   });
   if (!isAllowed) return new Response(null, { status: 403 });
 
-  return new Response(null, { status: 200 });
+  const url = new URL(pathname, "https://jsonplaceholder.typicode.com");
+  return fetch(new Request(url, request));
 };
