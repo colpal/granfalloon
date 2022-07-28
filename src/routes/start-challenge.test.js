@@ -4,8 +4,8 @@ import startChallenge from "./start-challenge.js";
 import * as InMemoryStore from "../store/in-memory.js";
 import load from "../profiles/load.js";
 
-const profile = await load("./test/profiles/example.json");
-const profiles = Object.fromEntries([profile]);
+const [kid, profile] = await load("./test/profiles/example.json");
+const profiles = Object.fromEntries([[kid, profile]]);
 const url = "http://localhost/_/start-challenge";
 
 Deno.test("empty body", async () => {
@@ -36,11 +36,10 @@ Deno.test("empty public key", async () => {
 });
 
 Deno.test("unknown public key", async () => {
-  const [, { publicKey }] = profile;
   const { status } = await startChallenge(
     new Request(url, {
       method: "POST",
-      body: JSON.stringify({ publicKey })
+      body: JSON.stringify({ publicKey: profile.publicKey }),
     }),
     { profiles: {}, store: InMemoryStore.create() },
   );
