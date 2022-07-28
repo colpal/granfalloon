@@ -1,5 +1,5 @@
 import { crypto } from "../deps.ts";
-import attempt from "../attempt.js";
+import attempt from "../util/attempt.js";
 
 export default async (request, { store }) => {
   const [bodyError, { nonce, answer }] = await attempt(request.json());

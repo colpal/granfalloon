@@ -1,5 +1,5 @@
 import { base64Encode, crypto } from "../deps.ts";
-import attempt from "../attempt.js";
+import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
 
 export default async (request, { store, profiles }) => {
