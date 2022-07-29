@@ -6,7 +6,7 @@ import load from "./profiles/load.js";
 import Router from "./router.js";
 
 Deno.test({
-  name: "full flow",
+  name: "end-to-end",
   sanitizeOps: false,
   sanitizeResources: false,
   fn: async () => {
