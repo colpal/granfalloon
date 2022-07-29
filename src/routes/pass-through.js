@@ -1,7 +1,7 @@
 import { globToRegExp } from "../deps.ts";
 import attempt from "../util/attempt.js";
 
-export default async (request, { store, profiles, target }) => {
+export default async (request, { store, profiles, target, token }) => {
   const authorization = request.headers.get("Authorization");
   if (!authorization) return new Response(null, { status: 401 });
 
@@ -22,6 +22,9 @@ export default async (request, { store, profiles, target }) => {
   });
   if (!isAllowed) return new Response(null, { status: 403 });
 
+  const headers = new Headers(request.headers);
+  headers.set("Authorization", `token ${token}`);
+
   const url = new URL(pathname, target);
-  return fetch(new Request(url, request));
+  return fetch(new Request(url, { ...request, headers }));
 };
