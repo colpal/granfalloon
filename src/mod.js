@@ -6,6 +6,8 @@ import completeChallenge from "./routes/complete-challenge.js";
 import passThrough from "./routes/pass-through.js";
 import * as InMemoryStore from "./store/in-memory.js";
 
+const target = "https://jsonplaceholder.typicode.com";
+
 const profiles = Object.fromEntries(
   await Promise.all(Deno.args.map(load)),
 );
