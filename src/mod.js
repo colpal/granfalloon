@@ -22,6 +22,6 @@ serve((request) => {
     case "/_/complete-challenge":
       return completeChallenge(request, { store });
     default:
-      return passThrough(request, { store, profiles });
+      return passThrough(request, { store, profiles, target });
   }
 });

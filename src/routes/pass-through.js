@@ -1,6 +1,6 @@
 import { globToRegExp } from "../deps.ts";
 
-export default async (request, { store, profiles }) => {
+export default async (request, { store, profiles, target }) => {
   const authorization = request.headers.get("Authorization");
   if (!authorization) return new Response(null, { status: 401 });
 
@@ -21,6 +21,6 @@ export default async (request, { store, profiles }) => {
   });
   if (!isAllowed) return new Response(null, { status: 403 });
 
-  const url = new URL(pathname, "https://jsonplaceholder.typicode.com");
+  const url = new URL(pathname, target);
   return fetch(new Request(url, request));
 };
