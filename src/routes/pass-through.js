@@ -17,7 +17,7 @@ export default async (request, { store, profiles, target }) => {
   if (!profile) return new Response(null, { status: 500 });
 
   const { pathname } = new URL(request.url);
-  const isAllowed = profiles.allow.some(([method, glob]) => {
+  const isAllowed = profile.allow.some(([method, glob]) => {
     return request.method === method && globToRegExp(glob).test(pathname);
   });
   if (!isAllowed) return new Response(null, { status: 403 });
