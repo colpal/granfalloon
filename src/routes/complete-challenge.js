@@ -55,5 +55,5 @@ export default async (request, { store }) => {
     return new Response("Could not establish session", { status: 500 });
   }
 
-  return new Response(JSON.stringify({ session }));
+  return new Response(JSON.stringify({ data: { session } }));
 };
