@@ -1,0 +1,13 @@
+on: push
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - run: deno test --lock=lock.json --allow-read --allow-env --allow-net
