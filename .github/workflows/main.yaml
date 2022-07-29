@@ -11,3 +11,5 @@ jobs:
           deno-version: v1.x
 
       - run: deno test --lock=lock.json --allow-read --allow-env --allow-net
+        env:
+          GRANFALLOON_TOKEN: ${{ github.token }}
