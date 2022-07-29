@@ -10,10 +10,15 @@ Deno.test({
   sanitizeOps: false,
   sanitizeResources: false,
   fn: async () => {
+    const target = "https://api.github.com";
+    const pathname = "user"
+    const token = Deno.env.get("GRANFALLOON_TOKEN");
+
     const [kid, profile] = await load("./test/profiles/example.json");
     const router = Router({
+      target,
+      token,
       store: InMemoryStore.create(),
-      target: "https://jsonplaceholder.typicode.com",
       profiles: Object.fromEntries([[kid, profile]]),
     });
 
@@ -38,15 +43,18 @@ Deno.test({
     );
 
     const { data: { session } } = await complete.json();
-    const passThrough = await router(
-      new Request("http://localhost/todos/1", {
+    const actual = await router(
+      new Request(`http://localhost/${pathname}`, {
         headers: { Authorization: `token ${session}` },
       }),
     );
 
-    assertEquals(
-      await passThrough.json(),
-      { userId: 1, id: 1, title: "delectus aut autem", completed: false },
-    );
+    const expected = await fetch(`${target}/${pathname}`, {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    });
+
+    assertEquals(await actual.json(), await expected.json());
   },
 });
