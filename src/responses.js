@@ -110,3 +110,10 @@ export const createSession = (kid, session) =>
     { kid },
     { session },
   );
+
+export const missingAuthorization = () =>
+  error(
+    401,
+    {},
+    { detail: "The Authorization header is required" },
+  );
