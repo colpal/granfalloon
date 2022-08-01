@@ -131,3 +131,10 @@ export const cannotRetrieveSession = () =>
     {},
     { detail: "Cannot retrieve session information from the store" },
   );
+
+export const sessionNotFound = () =>
+  error(
+    401,
+    {},
+    { detail: "Session not found. It may have expired" },
+  );

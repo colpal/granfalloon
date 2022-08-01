@@ -4,6 +4,7 @@ import {
   cannotRetrieveSession,
   malformedAuthorization,
   missingAuthorization,
+  sessionNotFound,
 } from "../responses.js";
 
 export default async (request, { store, profiles, target, token }) => {
@@ -16,7 +17,7 @@ export default async (request, { store, profiles, target, token }) => {
 
   const [getKIDError, kid] = await attempt(store.get(session));
   if (getKIDError) return cannotRetrieveSession();
-  if (!kid) return new Response(null, { status: 401 });
+  if (!kid) return sessionNotFound();
 
   const profile = profiles[kid];
   if (!profile) return new Response(null, { status: 500 });
