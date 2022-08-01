@@ -1,22 +1,15 @@
 import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
-import { jsonRequired } from "../responses.js";
+import { jsonRequired, jsonRequiredKeys } from "../responses.js";
 
 export default async (request, { store }) => {
-  const [bodyError, { nonce, answer }] = await attempt(request.json());
+  const [bodyError, body] = await attempt(request.json());
   if (bodyError) return jsonRequired();
 
-  if (!nonce) {
-    return new Response("The JSON body must include a 'nonce' key", {
-      status: 400,
-    });
-  }
-
-  if (!answer) {
-    return new Response("The JSON body must include an 'answer' key", {
-      status: 400,
-    });
-  }
+  const requiredKeys = ["nonce", "answer"];
+  const missingKeys = requiredKeys.filter((rk) => !body[rk]);
+  if (missingKeys.length > 0) return jsonRequiredKeys(missingKeys);
+  const { nonce, answer } = body;
 
   const [getError, [kid, expected]] = await attempt(Promise.all([
     store.get(`${nonce}:kid`),

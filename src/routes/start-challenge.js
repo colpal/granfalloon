@@ -3,17 +3,12 @@ import toEncryptionKey from "../jwk/to-encryption-key.js";
 import encrypt from "../jwk/encrypt.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
-import { jsonRequired } from "../responses.js";
+import { jsonRequired, jsonRequiredKeys } from "../responses.js";
 
 export default async (request, { store, profiles }) => {
   const [bodyError, body] = await attempt(request.json());
   if (bodyError) return jsonRequired();
-
-  if (!body.publicKey) {
-    return new Response('The JSON body must include a "publicKey" key', {
-      status: 422,
-    });
-  }
+  if (!body.publicKey) return jsonRequiredKeys("publicKey");
 
   const [thumbprintError, kid] = await attempt(thumbprint(body.publicKey));
   if (thumbprintError) {
