@@ -34,3 +34,10 @@ export const unknownPublicKey = (publicKey) =>
     { publicKey },
     { detail: "The public key's thumbprint does not match any profiles" },
   );
+
+export const invalidPublicKey = (publicKey) =>
+  error(
+    400,
+    { publicKey },
+    { detail: "Could not create a useable public key" },
+  );

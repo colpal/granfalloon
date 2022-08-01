@@ -5,6 +5,7 @@ import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
 import {
   cannotThumbprint,
+  invalidPublicKey,
   jsonRequired,
   jsonRequiredKeys,
   unknownPublicKey,
@@ -24,11 +25,7 @@ export default async (request, { store, profiles }) => {
   const [keyImportError, publicKey] = await attempt(toEncryptionKey(
     profile.publicKey,
   ));
-  if (keyImportError) {
-    return new Response("Could not create a useable public key", {
-      status: 400,
-    });
-  }
+  if (keyImportError) return invalidPublicKey(profile.publicKey);
 
   const nonce = `nonce-${crypto.randomUUID()}`;
   const secret = `secret-${crypto.randomUUID()}`;
