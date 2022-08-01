@@ -1,5 +1,6 @@
 import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
+import * as log from "../log.js";
 import {
   cannotClearChallenge,
   cannotCreateSession,
@@ -13,34 +14,70 @@ import {
 
 export default async (request, { store }) => {
   const [bodyError, body] = await attempt(request.json());
-  if (bodyError) return jsonRequired();
+  if (bodyError) {
+    log.error(bodyError);
+    return new Response(
+      log.info(jsonRequired()),
+      { status: 400 },
+    );
+  }
 
   const requiredKeys = ["nonce", "answer"];
   const missingKeys = requiredKeys.filter((rk) => !body[rk]);
-  if (missingKeys.length > 0) return jsonRequiredKeys(missingKeys);
+  if (missingKeys.length > 0) {
+    return new Response(
+      log.info(jsonRequiredKeys(missingKeys)),
+      { status: 400 },
+    );
+  }
   const { nonce, answer } = body;
 
   const [getError, [kid, expected]] = await attempt(Promise.all([
     store.get(`${nonce}:kid`),
     store.get(`${nonce}:secret`),
   ]));
-  if (getError) return cannotRetrieveChallenge(nonce);
-  if (!kid || !expected) return noActiveChallenge(nonce);
+  if (getError) {
+    log.error(getError);
+    return new Response(
+      log.info(cannotRetrieveChallenge(nonce)),
+      { status: 500 },
+    );
+  }
+  if (!kid || !expected) {
+    return new Response(
+      log.info(noActiveChallenge(nonce)),
+      { status: 400 },
+    );
+  }
   if (answer !== expected) {
     store.del(`${nonce}:kid`);
     store.del(`${nonce}:secret`);
-    return incorrectAnswer(nonce);
+    return new Response(
+      log.info(incorrectAnswer(nonce)),
+      { status: 400 },
+    );
   }
 
   const [clearNonceError] = await attempt(Promise.all([
     store.del(`${nonce}:kid`),
     store.del(`${nonce}:secret`),
   ]));
-  if (clearNonceError) return cannotClearChallenge(nonce, kid);
+  if (clearNonceError) {
+    log.error(clearNonceError);
+    return new Response(
+      log.info(cannotClearChallenge(nonce, kid)),
+      { status: 500 },
+    );
+  }
 
   const session = `session-${crypto.randomUUID()}`;
   const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));
-  if (setError) return cannotCreateSession(kid);
+  if (setError) {
+    return new Response(
+      log.info(cannotCreateSession(kid)),
+      { status: 500 },
+    );
+  }
 
-  return createSession(kid, session);
+  return new Response(createSession(kid, session));
 };
