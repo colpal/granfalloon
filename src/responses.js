@@ -1,3 +1,12 @@
+const error = (status, meta, ...errors) =>
+  new Response(
+    JSON.stringify({
+      meta,
+      errors,
+    }),
+    { status },
+  );
+
 export const jsonRequired = () =>
   new Response(
     JSON.stringify({
