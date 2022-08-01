@@ -104,3 +104,9 @@ export const cannotCreateSession = (kid) =>
     { kid },
     { detail: "Cloud not establish session" },
   );
+
+export const createSession = (kid, session) =>
+  data(
+    { kid },
+    { session },
+  );

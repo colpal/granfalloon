@@ -4,6 +4,7 @@ import {
   cannotClearChallenge,
   cannotCreateSession,
   cannotRetrieveChallenge,
+  createSession,
   incorrectAnswer,
   jsonRequired,
   jsonRequiredKeys,
@@ -41,5 +42,5 @@ export default async (request, { store }) => {
   const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));
   if (setError) return cannotCreateSession(kid);
 
-  return new Response(JSON.stringify({ data: { session } }));
+  return createSession(kid, session);
 };
