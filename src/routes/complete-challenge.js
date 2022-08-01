@@ -1,6 +1,7 @@
 import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
 import {
+  cannotClearChallenge,
   cannotRetrieveChallenge,
   incorrectAnswer,
   jsonRequired,
@@ -33,9 +34,7 @@ export default async (request, { store }) => {
     store.del(`${nonce}:kid`),
     store.del(`${nonce}:secret`),
   ]));
-  if (clearNonceError) {
-    return new Response("Could not clear challenge session", { status: 500 });
-  }
+  if (clearNonceError) return cannotClearChallenge(nonce, kid);
 
   const session = `session-${crypto.randomUUID()}`;
   const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));

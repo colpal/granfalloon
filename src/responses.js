@@ -90,3 +90,10 @@ export const incorrectAnswer = (nonce) =>
     { nonce },
     { detail: "Provided answer does not satisfy challenge" },
   );
+
+export const cannotClearChallenge = (nonce, kid) =>
+  error(
+    500,
+    { nonce, kid },
+    { detail: "Could not clear challenge session" },
+  );
