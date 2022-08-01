@@ -97,3 +97,10 @@ export const cannotClearChallenge = (nonce, kid) =>
     { nonce, kid },
     { detail: "Could not clear challenge session" },
   );
+
+export const cannotCreateSession = (kid) =>
+  error(
+    500,
+    { kid },
+    { detail: "Cloud not establish session" },
+  );
