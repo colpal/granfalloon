@@ -11,11 +11,13 @@ Deno.test({
   sanitizeResources: false,
   fn: async () => {
     const target = "https://api.github.com";
-    const pathname = "user"
+    const pathname = "user";
     const token = Deno.env.get("GRANFALLOON_TOKEN");
+    const log = { info: (x) => x, error: (x) => x };
 
     const [kid, profile] = await load("./test/profiles/example.json");
     const router = Router({
+      log,
       target,
       token,
       store: InMemoryStore.create(),

@@ -7,11 +7,12 @@ import load from "../profiles/load.js";
 const [kid, profile] = await load("./test/profiles/example.json");
 const profiles = Object.fromEntries([[kid, profile]]);
 const url = "http://localhost/_/start-challenge";
+const log = { info: (x) => x, error: (x) => x };
 
 Deno.test("empty body", async () => {
   const { status } = await startChallenge(
     new Request(url),
-    { profiles, store: InMemoryStore.create() },
+    { log, profiles, store: InMemoryStore.create() },
   );
   assertEquals(floorHundred(status), 400);
 });
@@ -19,7 +20,7 @@ Deno.test("empty body", async () => {
 Deno.test("empty JSON", async () => {
   const { status } = await startChallenge(
     new Request(url, { method: "POST", body: "{}" }),
-    { profiles, store: InMemoryStore.create() },
+    { log, profiles, store: InMemoryStore.create() },
   );
   assertEquals(floorHundred(status), 400);
 });
@@ -30,7 +31,7 @@ Deno.test("empty public key", async () => {
       method: "POST",
       body: JSON.stringify({ publicKey: {} }),
     }),
-    { profiles, store: InMemoryStore.create() },
+    { log, profiles, store: InMemoryStore.create() },
   );
   assertEquals(floorHundred(status), 400);
 });
@@ -41,7 +42,7 @@ Deno.test("unknown public key", async () => {
       method: "POST",
       body: JSON.stringify({ publicKey: profile.publicKey }),
     }),
-    { profiles: {}, store: InMemoryStore.create() },
+    { log, profiles: {}, store: InMemoryStore.create() },
   );
   assertEquals(floorHundred(status), 400);
 });
@@ -53,6 +54,7 @@ Deno.test("store error", async () => {
       body: JSON.stringify({ publicKey: profile.publicKey }),
     }),
     {
+      log,
       profiles,
       store: {
         // deno-lint-ignore require-await

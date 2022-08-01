@@ -1,6 +1,5 @@
 import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
-import * as log from "../log.js";
 import {
   cannotClearChallenge,
   cannotCreateSession,
@@ -12,7 +11,7 @@ import {
   noActiveChallenge,
 } from "../responses.js";
 
-export default async (request, { store }) => {
+export default async (request, { store, log }) => {
   const [bodyError, body] = await attempt(request.json());
   if (bodyError) {
     log.error(bodyError);

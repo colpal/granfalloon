@@ -13,9 +13,8 @@ import {
   jsonRequiredKeys,
   unknownPublicKey,
 } from "../responses.js";
-import * as log from "../log.js";
 
-export default async (request, { store, profiles }) => {
+export default async (request, { store, profiles, log }) => {
   const [bodyError, body] = await attempt(request.json());
   if (bodyError) {
     log.error(bodyError);

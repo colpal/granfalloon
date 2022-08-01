@@ -1,6 +1,5 @@
 import { globToRegExp } from "../deps.ts";
 import attempt from "../util/attempt.js";
-import * as log from "../log.js";
 import {
   blockedByProfile,
   cannotRetrieveSession,
@@ -10,7 +9,7 @@ import {
   sessionNotFound,
 } from "../responses.js";
 
-export default async (request, { store, profiles, target, token }) => {
+export default async (request, { store, profiles, target, token, log }) => {
   const authorization = request.headers.get("Authorization");
   if (!authorization) {
     return new Response(
