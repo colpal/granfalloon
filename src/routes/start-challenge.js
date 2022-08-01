@@ -3,7 +3,11 @@ import toEncryptionKey from "../jwk/to-encryption-key.js";
 import encrypt from "../jwk/encrypt.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
-import { jsonRequired, jsonRequiredKeys } from "../responses.js";
+import {
+  cannotThumbprint,
+  jsonRequired,
+  jsonRequiredKeys,
+} from "../responses.js";
 
 export default async (request, { store, profiles }) => {
   const [bodyError, body] = await attempt(request.json());
@@ -11,11 +15,7 @@ export default async (request, { store, profiles }) => {
   if (!body.publicKey) return jsonRequiredKeys("publicKey");
 
   const [thumbprintError, kid] = await attempt(thumbprint(body.publicKey));
-  if (thumbprintError) {
-    return new Response("Could not calculate the public key's thumbprint", {
-      status: 400,
-    });
-  }
+  if (thumbprintError) return cannotThumbprint(body.publicKey);
 
   const profile = profiles[kid];
   if (!profile) {

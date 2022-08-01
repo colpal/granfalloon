@@ -19,3 +19,14 @@ export const jsonRequiredKeys = (...ks) =>
     }),
     { status: 400 },
   );
+
+export const cannotThumbprint = (publicKey) =>
+  new Response(
+    JSON.stringify({
+      meta: { timestamp: new Date(), publicKey },
+      errors: [{
+        detail: "Could not calculate the public key's thumbprint",
+      }],
+    }),
+    { status: 400 },
+  );
