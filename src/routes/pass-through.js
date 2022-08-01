@@ -1,13 +1,13 @@
 import { globToRegExp } from "../deps.ts";
 import attempt from "../util/attempt.js";
-import { missingAuthorization } from "../responses.js";
+import { malformedAuthorization, missingAuthorization } from "../responses.js";
 
 export default async (request, { store, profiles, target, token }) => {
   const authorization = request.headers.get("Authorization");
   if (!authorization) return missingAuthorization();
 
   const matches = authorization.match(/token (.*)/);
-  if (!matches) return new Response(null, { status: 401 });
+  if (!matches) return malformedAuthorization();
   const [_, session] = matches;
 
   const [getKIDError, kid] = await attempt(store.get(session));

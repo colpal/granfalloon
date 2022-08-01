@@ -117,3 +117,10 @@ export const missingAuthorization = () =>
     {},
     { detail: "The Authorization header is required" },
   );
+
+export const malformedAuthorization = () =>
+  error(
+    401,
+    {},
+    { detail: "The Authorization header must have the format 'token {TOKEN}'" },
+  );
