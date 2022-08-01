@@ -7,6 +7,14 @@ const error = (status, meta, ...errors) =>
     { status },
   );
 
+const data = (meta, data) =>
+  new Response(
+    JSON.stringify({
+      meta: { ...meta, timestamp: new Date() },
+      data,
+    }),
+  );
+
 export const jsonRequired = () =>
   error(
     400,
