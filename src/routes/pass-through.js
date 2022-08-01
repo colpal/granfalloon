@@ -4,6 +4,7 @@ import {
   cannotRetrieveSession,
   malformedAuthorization,
   missingAuthorization,
+  missingProfile,
   sessionNotFound,
 } from "../responses.js";
 
@@ -20,7 +21,7 @@ export default async (request, { store, profiles, target, token }) => {
   if (!kid) return sessionNotFound();
 
   const profile = profiles[kid];
-  if (!profile) return new Response(null, { status: 500 });
+  if (!profile) return missingProfile(kid);
 
   const { pathname } = new URL(request.url);
   const isAllowed = profile.allow.some(([method, glob]) => {

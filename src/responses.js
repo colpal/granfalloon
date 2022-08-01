@@ -138,3 +138,10 @@ export const sessionNotFound = () =>
     {},
     { detail: "Session not found. It may have expired" },
   );
+
+export const missingProfile = (kid) =>
+  error(
+    500,
+    { kid },
+    { detail: "The profile matching the session could not be found" },
+  );
