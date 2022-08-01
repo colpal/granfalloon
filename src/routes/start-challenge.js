@@ -5,6 +5,7 @@ import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
 import {
   cannotCreateNonceSession,
+  cannotEncryptChallenge,
   cannotThumbprint,
   invalidPublicKey,
   jsonRequired,
@@ -37,9 +38,7 @@ export default async (request, { store, profiles }) => {
   if (setError) return cannotCreateNonceSession(profile.publicKey);
 
   const [encryptError, challenge] = await attempt(encrypt(publicKey, secret));
-  if (encryptError) {
-    return new Response("Could not encrypt challenge secret", { status: 500 });
-  }
+  if (encryptError) return cannotEncryptChallenge(profile.publicKey);
 
   return new Response(JSON.stringify({ data: { nonce, challenge } }));
 };

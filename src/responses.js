@@ -48,3 +48,10 @@ export const cannotCreateNonceSession = (publicKey) =>
     { publicKey },
     { detail: "Could not establish a nonce session" },
   );
+
+export const cannotEncryptChallenge = (publicKey) =>
+  error(
+    500,
+    { publicKey },
+    { detail: "Could not encrypt challenge secret" },
+  );
