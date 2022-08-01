@@ -8,34 +8,22 @@ const error = (status, meta, ...errors) =>
   );
 
 export const jsonRequired = () =>
-  new Response(
-    JSON.stringify({
-      meta: { timestamp: new Date() },
-      errors: [{
-        detail: "A JSON body is required",
-      }],
-    }),
-    { status: 400 },
+  error(
+    400,
+    { timestamp: new Date() },
+    { detail: "A JSON body is required" },
   );
 
 export const jsonRequiredKeys = (...ks) =>
-  new Response(
-    JSON.stringify({
-      meta: { timestamp: new Date() },
-      errors: ks.map((k) => ({
-        detail: `The JSON body must include a "${k}" key`,
-      })),
-    }),
-    { status: 400 },
+  error(
+    400,
+    { timestamp: new Date() },
+    ...ks.map((k) => ({ detail: `The JSON body must include a "${k}" key` })),
   );
 
 export const cannotThumbprint = (publicKey) =>
-  new Response(
-    JSON.stringify({
-      meta: { timestamp: new Date(), publicKey },
-      errors: [{
-        detail: "Could not calculate the public key's thumbprint",
-      }],
-    }),
-    { status: 400 },
+  error(
+    400,
+    { publicKey, timestamp: new Date() },
+    { detail: "Could not calculate the public key's thumbprint" },
   );
