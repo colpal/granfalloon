@@ -69,3 +69,10 @@ export const issueChallenge = (publicKey, nonce, challenge) =>
     { publicKey },
     { nonce, challenge },
   );
+
+export const cannotRetrieveChallenge = (nonce) =>
+  error(
+    500,
+    { nonce },
+    { detail: "Could not retrieve stored challenge information" },
+  );

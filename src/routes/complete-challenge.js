@@ -1,6 +1,10 @@
 import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
-import { jsonRequired, jsonRequiredKeys } from "../responses.js";
+import {
+  cannotRetrieveChallenge,
+  jsonRequired,
+  jsonRequiredKeys,
+} from "../responses.js";
 
 export default async (request, { store }) => {
   const [bodyError, body] = await attempt(request.json());
@@ -15,11 +19,7 @@ export default async (request, { store }) => {
     store.get(`${nonce}:kid`),
     store.get(`${nonce}:secret`),
   ]));
-  if (getError) {
-    return new Response("Could not retrieve stored challenge information", {
-      status: 500,
-    });
-  }
+  if (getError) return cannotRetrieveChallenge(nonce);
   if (!kid || !expected) {
     return new Response("No active challenge found for that nonce", {
       status: 400,
