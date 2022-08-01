@@ -1,4 +1,5 @@
-import { base64Encode, crypto } from "../deps.ts";
+import { crypto } from "../deps.ts";
+import toEncryptionKey from "../jwk/to-encryption-key.js";
 import encrypt from "../jwk/encrypt.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
@@ -29,12 +30,8 @@ export default async (request, { store, profiles }) => {
     });
   }
 
-  const [keyImportError, publicKey] = await attempt(crypto.subtle.importKey(
-    "jwk",
+  const [keyImportError, publicKey] = await attempt(toEncryptionKey(
     profile.publicKey,
-    { name: "RSA-OAEP", hash: "SHA-256" },
-    false,
-    ["encrypt"],
   ));
   if (keyImportError) {
     return new Response("Could not create a useable public key", {
