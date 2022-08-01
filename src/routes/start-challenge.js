@@ -4,6 +4,7 @@ import encrypt from "../jwk/encrypt.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
 import {
+  cannotCreateNonceSession,
   cannotThumbprint,
   invalidPublicKey,
   jsonRequired,
@@ -33,9 +34,7 @@ export default async (request, { store, profiles }) => {
     store.set(`${nonce}:kid`, kid, { ex: 60 }),
     store.set(`${nonce}:secret`, secret, { ex: 60 }),
   ]));
-  if (setError) {
-    return new Response("Could not establish nonce session", { status: 500 });
-  }
+  if (setError) return cannotCreateNonceSession(profile.publicKey);
 
   const [encryptError, challenge] = await attempt(encrypt(publicKey, secret));
   if (encryptError) {

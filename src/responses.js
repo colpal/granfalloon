@@ -41,3 +41,10 @@ export const invalidPublicKey = (publicKey) =>
     { publicKey },
     { detail: "Could not create a useable public key" },
   );
+
+export const cannotCreateNonceSession = (publicKey) =>
+  error(
+    500,
+    { publicKey },
+    { detail: "Could not establish a nonce session" },
+  );
