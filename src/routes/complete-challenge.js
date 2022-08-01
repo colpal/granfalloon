@@ -1,11 +1,10 @@
 import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
+import { jsonRequired } from "../responses.js";
 
 export default async (request, { store }) => {
   const [bodyError, { nonce, answer }] = await attempt(request.json());
-  if (bodyError) {
-    return new Response("A JSON body is required", { status: 400 });
-  }
+  if (bodyError) return jsonRequired();
 
   if (!nonce) {
     return new Response("The JSON body must include a 'nonce' key", {
