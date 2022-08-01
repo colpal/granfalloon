@@ -7,6 +7,7 @@ import {
   cannotThumbprint,
   jsonRequired,
   jsonRequiredKeys,
+  unknownPublicKey,
 } from "../responses.js";
 
 export default async (request, { store, profiles }) => {
@@ -18,11 +19,7 @@ export default async (request, { store, profiles }) => {
   if (thumbprintError) return cannotThumbprint(body.publicKey);
 
   const profile = profiles[kid];
-  if (!profile) {
-    return new Response("Public key's thumbprint does not match any profiles", {
-      status: 400,
-    });
-  }
+  if (!profile) return unknownPublicKey(body.publicKey);
 
   const [keyImportError, publicKey] = await attempt(toEncryptionKey(
     profile.publicKey,

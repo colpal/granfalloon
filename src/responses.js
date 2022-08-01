@@ -27,3 +27,10 @@ export const cannotThumbprint = (publicKey) =>
     { publicKey },
     { detail: "Could not calculate the public key's thumbprint" },
   );
+
+export const unknownPublicKey = (publicKey) =>
+  error(
+    400,
+    { publicKey },
+    { detail: "The public key's thumbprint does not match any profiles" },
+  );
