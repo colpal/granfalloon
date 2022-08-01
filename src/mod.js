@@ -1,4 +1,4 @@
-#!/usr/bin/env deno run --allow-net --allow-read
+#!/usr/bin/env deno run --allow-net --allow-read --allow-env
 import { serve } from "./deps.ts";
 import load from "./profiles/load.js";
 import * as InMemoryStore from "./store/in-memory.js";
