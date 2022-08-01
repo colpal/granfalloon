@@ -1,4 +1,5 @@
 import { base64Encode, crypto } from "../deps.ts";
+import encrypt from "../jwk/encrypt.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../jwk/thumbprint.js";
 
@@ -51,15 +52,10 @@ export default async (request, { store, profiles }) => {
     return new Response("Could not establish nonce session", { status: 500 });
   }
 
-  const [encryptError, encrypted] = await attempt(crypto.subtle.encrypt(
-    { name: "RSA-OAEP" },
-    publicKey,
-    new TextEncoder().encode(secret),
-  ));
+  const [encryptError, challenge] = await attempt(encrypt(publicKey, secret));
   if (encryptError) {
     return new Response("Could not encrypt challenge secret", { status: 500 });
   }
-  const challenge = base64Encode(encrypted);
 
   return new Response(JSON.stringify({ data: { nonce, challenge } }));
 };
