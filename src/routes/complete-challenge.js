@@ -2,6 +2,7 @@ import { crypto } from "../deps.ts";
 import attempt from "../util/attempt.js";
 import {
   cannotRetrieveChallenge,
+  incorrectAnswer,
   jsonRequired,
   jsonRequiredKeys,
   noActiveChallenge,
@@ -25,9 +26,7 @@ export default async (request, { store }) => {
   if (answer !== expected) {
     store.del(`${nonce}:kid`);
     store.del(`${nonce}:secret`);
-    return new Response("Provided answer does not satisfy challenge", {
-      status: 400,
-    });
+    return incorrectAnswer(nonce);
   }
 
   const [clearNonceError] = await attempt(Promise.all([

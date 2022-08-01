@@ -83,3 +83,10 @@ export const noActiveChallenge = (nonce) =>
     { nonce },
     { detail: "No active challenge found for this nonce" },
   );
+
+export const incorrectAnswer = (nonce) =>
+  error(
+    400,
+    { nonce },
+    { detail: "Provided answer does not satisfy challenge" },
+  );
