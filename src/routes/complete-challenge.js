@@ -4,6 +4,7 @@ import {
   cannotRetrieveChallenge,
   jsonRequired,
   jsonRequiredKeys,
+  noActiveChallenge,
 } from "../responses.js";
 
 export default async (request, { store }) => {
@@ -20,11 +21,7 @@ export default async (request, { store }) => {
     store.get(`${nonce}:secret`),
   ]));
   if (getError) return cannotRetrieveChallenge(nonce);
-  if (!kid || !expected) {
-    return new Response("No active challenge found for that nonce", {
-      status: 400,
-    });
-  }
+  if (!kid || !expected) return noActiveChallenge(nonce);
   if (answer !== expected) {
     store.del(`${nonce}:kid`);
     store.del(`${nonce}:secret`);

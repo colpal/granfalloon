@@ -76,3 +76,10 @@ export const cannotRetrieveChallenge = (nonce) =>
     { nonce },
     { detail: "Could not retrieve stored challenge information" },
   );
+
+export const noActiveChallenge = (nonce) =>
+  error(
+    400,
+    { nonce },
+    { detail: "No active challenge found for this nonce" },
+  );
