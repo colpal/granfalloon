@@ -1,6 +1,10 @@
 import { globToRegExp } from "../deps.ts";
 import attempt from "../util/attempt.js";
-import { malformedAuthorization, missingAuthorization } from "../responses.js";
+import {
+  cannotRetrieveSession,
+  malformedAuthorization,
+  missingAuthorization,
+} from "../responses.js";
 
 export default async (request, { store, profiles, target, token }) => {
   const authorization = request.headers.get("Authorization");
@@ -11,7 +15,7 @@ export default async (request, { store, profiles, target, token }) => {
   const [_, session] = matches;
 
   const [getKIDError, kid] = await attempt(store.get(session));
-  if (getKIDError) return new Response(null, { status: 500 });
+  if (getKIDError) return cannotRetrieveSession();
   if (!kid) return new Response(null, { status: 401 });
 
   const profile = profiles[kid];

@@ -124,3 +124,10 @@ export const malformedAuthorization = () =>
     {},
     { detail: "The Authorization header must have the format 'token {TOKEN}'" },
   );
+
+export const cannotRetrieveSession = () =>
+  error(
+    500,
+    {},
+    { detail: "Cannot retrieve session information from the store" },
+  );
