@@ -63,3 +63,9 @@ export const cannotEncryptChallenge = (publicKey) =>
     { publicKey },
     { detail: "Could not encrypt challenge secret" },
   );
+
+export const issueChallenge = (publicKey, nonce, challenge) =>
+  data(
+    { publicKey },
+    { nonce, challenge },
+  );

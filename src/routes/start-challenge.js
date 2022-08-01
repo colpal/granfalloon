@@ -8,6 +8,7 @@ import {
   cannotEncryptChallenge,
   cannotThumbprint,
   invalidPublicKey,
+  issueChallenge,
   jsonRequired,
   jsonRequiredKeys,
   unknownPublicKey,
@@ -40,5 +41,5 @@ export default async (request, { store, profiles }) => {
   const [encryptError, challenge] = await attempt(encrypt(publicKey, secret));
   if (encryptError) return cannotEncryptChallenge(profile.publicKey);
 
-  return new Response(JSON.stringify({ data: { nonce, challenge } }));
+  return issueChallenge(profile.publicKey, nonce, challenge);
 };
