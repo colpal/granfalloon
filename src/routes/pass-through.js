@@ -1,6 +1,7 @@
 import { globToRegExp } from "../deps.ts";
 import attempt from "../util/attempt.js";
 import {
+  blockedByProfile,
   cannotRetrieveSession,
   malformedAuthorization,
   missingAuthorization,
@@ -27,7 +28,7 @@ export default async (request, { store, profiles, target, token }) => {
   const isAllowed = profile.allow.some(([method, glob]) => {
     return request.method === method && globToRegExp(glob).test(pathname);
   });
-  if (!isAllowed) return new Response(null, { status: 403 });
+  if (!isAllowed) return blockedByProfile(kid, pathname);
 
   const headers = new Headers(request.headers);
   headers.set("Authorization", `token ${token}`);

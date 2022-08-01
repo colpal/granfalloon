@@ -145,3 +145,10 @@ export const missingProfile = (kid) =>
     { kid },
     { detail: "The profile matching the session could not be found" },
   );
+
+export const blockedByProfile = (kid, pathname) =>
+  error(
+    403,
+    { kid, pathname },
+    { detail: "The profile associated with this session blocked the request" },
+  );
