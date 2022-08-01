@@ -1,4 +1,5 @@
 import { crypto } from "../deps.ts";
+import hash from "../hash.js";
 import attempt from "../util/attempt.js";
 import {
   cannotClearChallenge,
@@ -78,5 +79,7 @@ export default async (request, { store, log }) => {
     );
   }
 
+  const sessionHash = await hash("SHA-256", session);
+  log.info(createSession(kid, `sha256:${sessionHash}`));
   return new Response(createSession(kid, session));
 };
