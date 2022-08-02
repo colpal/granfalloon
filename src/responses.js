@@ -19,7 +19,7 @@ export const jsonRequired = () =>
 export const jsonRequiredKeys = (...ks) =>
   error(
     {},
-    ...ks.map((k) => ({ detail: `The JSON body must include a "${k}" key` })),
+    ...ks.map((k) => ({ detail: `The JSON body must include a '${k}' key` })),
   );
 
 export const cannotThumbprint = (publicKey) =>
