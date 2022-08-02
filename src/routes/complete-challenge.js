@@ -1,5 +1,5 @@
 import { crypto } from "../deps.ts";
-import hash from "../hash.js";
+import hash from "../crypto/hash.js";
 import attempt from "../util/attempt.js";
 import {
   cannotClearChallenge,
