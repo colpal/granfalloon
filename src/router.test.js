@@ -1,6 +1,6 @@
 import { assertEquals } from "./deps.ts";
-import toDecryptionKey from "./jwk/to-decryption-key.js";
-import decrypt from "./jwk/decrypt.js";
+import toDecryptionKey from "./crypto/to-decryption-key.js";
+import decrypt from "./crypto/decrypt.js";
 import * as InMemoryStore from "./store/in-memory.js";
 import load from "./profiles/load.js";
 import Router from "./router.js";

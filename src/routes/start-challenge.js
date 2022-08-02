@@ -1,8 +1,8 @@
 import { crypto } from "../deps.ts";
-import toEncryptionKey from "../jwk/to-encryption-key.js";
-import encrypt from "../jwk/encrypt.js";
+import toEncryptionKey from "../crypto/to-encryption-key.js";
+import encrypt from "../crypto/encrypt.js";
 import attempt from "../util/attempt.js";
-import thumbprint from "../jwk/thumbprint.js";
+import thumbprint from "../crypto/thumbprint.js";
 import {
   cannotCreateNonceSession,
   cannotEncryptChallenge,
