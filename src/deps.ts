@@ -11,3 +11,4 @@ export {
   encode as base64Encode,
 } from "https://deno.land/std@0.149.0/encoding/base64.ts";
 export { globToRegExp } from "https://deno.land/std@0.149.0/path/glob.ts";
+export { join } from "https://deno.land/std@0.149.0/path/mod.ts";
