@@ -7,7 +7,7 @@ const requiredKeys = {
 export default async function thumbprint(jwk) {
   const ks = requiredKeys[jwk.kty];
   if (!ks) throw new Error(`Unsupported kty: "${jwk.kty}"`);
-  if (!ks.every(k => jwk[k])) throw new Error("JWK missing required keys");
+  if (!ks.every((k) => jwk[k])) throw new Error("JWK missing required keys");
   const entries = ks.map((k) => [k, jwk[k]]);
   const object = Object.fromEntries(entries);
   const json = JSON.stringify(object);
