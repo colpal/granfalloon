@@ -1,4 +1,4 @@
-import { crypto } from "./deps.ts";
+import { crypto } from "../deps.ts";
 
 export default async (algorithm, message) => {
   const encoded = new TextEncoder().encode(message);
