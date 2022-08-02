@@ -7,11 +7,18 @@ import * as log from "./log.js";
 import parseFlags from "./flags.js";
 
 const { target, profileDir } = await parseFlags(Deno.args);
+const profiles = await loadDir(profileDir);
+
+Deno.addSignalListener("SIGHUP", async () => {
+  log.error("[SIGHUP] reloading profiles...");
+  Object.assign(profiles, await loadDir(profileDir));
+  log.error("[SIGHUP] profiles reloaded");
+});
 
 serve(router({
   log,
   target,
+  profiles,
   store: InMemoryStore.create(),
-  profiles: await loadDir(profileDir),
   token: Deno.env.get("GRANFALLOON_TOKEN"),
 }));
