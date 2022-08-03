@@ -25,10 +25,12 @@ $ curl \
     http://localhost:8000/_/start-challenge \
 | jq '.data.nonce, .data.challenge'
 "nonce-00000000-0000-0000-0000-000000000000"
-"BASE64(ENCRYPT(answer))"
+"BASE64(ENCRYPT(my-answer))"
+
+# base64 decode and decrypt answer...
 
 $ curl \
-    --data '' \
+    --data '{ "nonce": "nonce-00000000-0000-0000-0000-000000000000", "answer": "my-answer" }' \
     http://localhost:8000/_/complete-challenge \
 | jq '.data.session'
 "session-00000000-0000-0000-0000-000000000000"
