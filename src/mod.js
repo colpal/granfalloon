@@ -1,5 +1,5 @@
 #!/usr/bin/env deno run --allow-net --allow-read --allow-env
-import { serve } from "./deps.ts";
+import { connect, serve } from "./deps.ts";
 import loadDir from "./profiles/load-dir.js";
 import * as InMemoryStore from "./store/in-memory.js";
 import router from "./router.js";
