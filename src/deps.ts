@@ -12,3 +12,4 @@ export {
 } from "https://deno.land/std@0.149.0/encoding/base64.ts";
 export { globToRegExp } from "https://deno.land/std@0.149.0/path/glob.ts";
 export { join } from "https://deno.land/std@0.149.0/path/mod.ts";
+export { connect } from "https://deno.land/x/redis@v0.26.0/mod.ts";
