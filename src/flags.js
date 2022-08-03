@@ -1,20 +1,28 @@
 import { parse } from "./deps.ts";
 
-const requiredArguments = ["target", "profile-dir"];
+const transformers = {
+  target({ target: v }) {
+    if (!v) throw new Error("missing required argument 'target'");
+    return new URL(v).origin;
+  },
+  async "profile-dir"({ "profile-dir": v }) {
+    if (!v) throw new Error("missing required argument 'profile-dir'");
+    const stat = await Deno.stat(v);
+    if (!stat.isDirectory) throw new Error(`'${v}' is not a directory`);
+    return v;
+  },
+};
 
 export default async (args) => {
   const parsedArgs = parse(args, {
-    string: requiredArguments,
+    string: Object.keys(transformers),
     unknown(_, k) {
       throw new Error(`unrecognized argument "${k}"`);
     },
   });
-  for (const arg of requiredArguments) {
-    if (!parsedArgs[arg]) throw new Error(`missing required argument "${arg}"`);
+  const flags = {};
+  for (const [key, fn] of Object.entries(transformers)) {
+    flags[key] = await fn(parsedArgs);
   }
-  const { target, "profile-dir": profileDir } = parsedArgs;
-  return {
-    profileDir: (await Deno.stat(profileDir)).isDirectory && profileDir,
-    target: new URL(target).origin,
-  };
+  return flags;
 };

@@ -6,7 +6,7 @@ import router from "./router.js";
 import * as log from "./log.js";
 import parseFlags from "./flags.js";
 
-const { target, profileDir } = await parseFlags(Deno.args);
+const { target, "profile-dir": profileDir } = await parseFlags(Deno.args);
 const profiles = await loadDir(profileDir);
 
 Deno.addSignalListener("SIGHUP", async () => {
