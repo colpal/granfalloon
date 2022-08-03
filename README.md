@@ -32,7 +32,7 @@ $ curl \
 $ curl \
     --data '{ "nonce": "nonce-00000000-0000-0000-0000-000000000000", "answer": "my-answer" }' \
     http://localhost:8000/_/complete-challenge \
-| jq '.data.session'
+| jq .data.session
 "session-00000000-0000-0000-0000-000000000000"
 
 $ curl \
