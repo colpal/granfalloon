@@ -17,13 +17,18 @@ const transformers = {
     return v;
   },
   "redis-hostname"({ "redis-hostname": v, store }) {
+    if (store !== "redis" && v) {
+      throw new Error("'redis-hostname' is only valid with '--store=redis'");
+    }
     if (store === "redis" && !v) {
       throw new Error("'redis-hostname' must be provided");
     }
     return v;
   },
   "redis-port"({ "redis-port": v, store }) {
-    if (store !== "redis") return v;
+    if (store !== "redis" && v) {
+      throw new Error("'redis-port' is only valid with '--store=redis'");
+    }
     if (store === "redis" && !v) {
       throw new Error("'redis-port' must be provided");
     }
