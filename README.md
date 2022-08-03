@@ -12,7 +12,7 @@ typically centralized secret
 ```sh
 # server
 $ cat .env
-export GRANFALLOON_TOKEN=ghp_shared-token
+export GRANFALLOON_TOKEN=ghp_shared-user-token
 $ source .env
 $ ./granfalloon --remote=https://api.github.com --profile-dir=profiles/
 Listening on http://localhost:8000/
@@ -38,8 +38,11 @@ $ curl \
 $ curl \
     --header "Authorization: token session-00000000-0000-0000-0000-000000000000" \
     http://localhost:8000/user \
-| jq .login
-"shared-user"
+| jq
+{
+  "login": "shared-user",
+  # ...
+}
 ```
 
 ## Motivation
