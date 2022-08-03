@@ -2,7 +2,7 @@ import startChallenge from "./routes/start-challenge.js";
 import completeChallenge from "./routes/complete-challenge.js";
 import passThrough from "./routes/pass-through.js";
 
-export default ({ store, profiles, target, token, log }) => (request) => {
+export default ({ store, profiles, remote, token, log }) => (request) => {
   const url = new URL(request.url);
   switch (url.pathname) {
     case "/_/start-challenge":
@@ -10,6 +10,6 @@ export default ({ store, profiles, target, token, log }) => (request) => {
     case "/_/complete-challenge":
       return completeChallenge(request, { store, log });
     default:
-      return passThrough(request, { store, profiles, target, token, log });
+      return passThrough(request, { store, profiles, remote, token, log });
   }
 };

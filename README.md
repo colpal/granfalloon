@@ -13,7 +13,7 @@ typically centralized secret
 $ cat .env
 export GRANFALLOON_TOKEN=my-token
 $ source .env
-$ ./granfalloon --target=https://api.github.com --profiles-dir=profiles/
+$ ./granfalloon --remote=https://api.github.com --profiles-dir=profiles/
 ```
 
 ## Motivation

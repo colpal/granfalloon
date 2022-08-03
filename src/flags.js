@@ -1,8 +1,8 @@
 import { parse } from "./deps.ts";
 
 const transformers = {
-  target({ target: v }) {
-    if (!v) throw new Error("missing required argument 'target'");
+  remote({ remote: v }) {
+    if (!v) throw new Error("missing required argument 'remote'");
     return new URL(v).origin;
   },
   async "profile-dir"({ "profile-dir": v }) {

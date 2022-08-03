@@ -9,7 +9,7 @@ import {
   sessionNotFound,
 } from "../responses.js";
 
-export default async (request, { store, profiles, target, token, log }) => {
+export default async (request, { store, profiles, remote, token, log }) => {
   const authorization = request.headers.get("Authorization");
   if (!authorization) {
     return new Response(
@@ -49,7 +49,7 @@ export default async (request, { store, profiles, target, token, log }) => {
   const headers = new Headers(request.headers);
   headers.set("Authorization", `token ${token}`);
 
-  const url = new URL(pathname, target);
+  const url = new URL(pathname, remote);
   log.info(JSON.stringify({ meta: { url, kid } }));
   return fetch(new Request(url, { ...request, headers }));
 };

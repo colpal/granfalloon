@@ -10,7 +10,7 @@ Deno.test({
   sanitizeOps: false,
   sanitizeResources: false,
   fn: async () => {
-    const target = "https://api.github.com";
+    const remote = "https://api.github.com";
     const pathname = "user";
     const token = Deno.env.get("GRANFALLOON_TOKEN");
     const log = { info: (x) => x, error: (x) => x };
@@ -18,7 +18,7 @@ Deno.test({
     const [kid, profile] = await load("./test/profiles/example.json");
     const router = Router({
       log,
-      target,
+      remote,
       token,
       store: InMemoryStore.create(),
       profiles: Object.fromEntries([[kid, profile]]),
@@ -51,7 +51,7 @@ Deno.test({
       }),
     );
 
-    const expected = await fetch(`${target}/${pathname}`, {
+    const expected = await fetch(`${remote}/${pathname}`, {
       headers: {
         Authorization: `token ${token}`,
       },

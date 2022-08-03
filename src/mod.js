@@ -25,6 +25,6 @@ serve(router({
   log,
   profiles,
   store,
-  target: flags.target,
+  remote: flags.remote,
   token: Deno.env.get("GRANFALLOON_TOKEN"),
 }));
