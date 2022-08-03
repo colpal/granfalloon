@@ -8,6 +8,12 @@ import parseFlags from "./flags.js";
 
 const flags = await parseFlags(Deno.args);
 
+const store = await {
+  "in-memory": InMemoryStore.create,
+  "redis": () =>
+    connect({ hostname: flags["redis-hostname"], port: flags["redis-port"] }),
+}[flags.store]();
+
 const profiles = await loadDir(flags["profile-dir"]);
 Deno.addSignalListener("SIGHUP", async () => {
   log.error("[SIGHUP] reloading profiles...");
@@ -18,7 +24,7 @@ Deno.addSignalListener("SIGHUP", async () => {
 serve(router({
   log,
   profiles,
+  store,
   target: flags.target,
-  store: InMemoryStore.create(),
   token: Deno.env.get("GRANFALLOON_TOKEN"),
 }));
