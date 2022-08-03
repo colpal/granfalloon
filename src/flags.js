@@ -12,8 +12,26 @@ const transformers = {
     return v;
   },
   store({ store: v }) {
-    if (v !== "in-memory") throw new Error(`unsupported store '${v}'`);
+    const valid = new Set(["in-memory", "redis"]);
+    if (!valid.has(v)) throw new Error(`unsupported store '${v}'`);
     return v;
+  },
+  "redis-hostname"({ "redis-hostname": v, store }) {
+    if (store === "redis" && !v) {
+      throw new Error("'redis-hostname' must be provided");
+    }
+    return v;
+  },
+  "redis-port"({ "redis-port": v, store }) {
+    if (store !== "redis") return v;
+    if (store === "redis" && !v) {
+      throw new Error("'redis-port' must be provided");
+    }
+    const port = parseInt(v);
+    if (Number.isNaN(port) || port < 1 || port > 65535) {
+      throw new Error(`invalid port number '${v}'`);
+    }
+    return port;
   },
 };
 
