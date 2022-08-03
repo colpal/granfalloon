@@ -6,19 +6,19 @@ import router from "./router.js";
 import * as log from "./log.js";
 import parseFlags from "./flags.js";
 
-const { target, "profile-dir": profileDir } = await parseFlags(Deno.args);
-const profiles = await loadDir(profileDir);
+const flags = await parseFlags(Deno.args);
 
+const profiles = await loadDir(flags["profile-dir"]);
 Deno.addSignalListener("SIGHUP", async () => {
   log.error("[SIGHUP] reloading profiles...");
-  Object.assign(profiles, await loadDir(profileDir));
+  Object.assign(profiles, await loadDir(flags["profile-dir"]));
   log.error("[SIGHUP] profiles reloaded");
 });
 
 serve(router({
   log,
-  target,
   profiles,
+  target: flags.target,
   store: InMemoryStore.create(),
   token: Deno.env.get("GRANFALLOON_TOKEN"),
 }));
