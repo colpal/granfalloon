@@ -10,10 +10,34 @@ typically centralized secret
 ## Usage
 
 ```sh
+# server
 $ cat .env
-export GRANFALLOON_TOKEN=my-token
+export GRANFALLOON_TOKEN=ghp_shared-token
 $ source .env
 $ ./granfalloon --remote=https://api.github.com --profile-dir=profiles/
+Listening on http://localhost:8000/
+```
+
+```sh
+# client
+$ curl \
+    --data '{"publicKey": {"kty": "RSA", "n": "...", "e": "..."}}' \
+    http://localhost:8000/_/start-challenge \
+| jq '.data.nonce, .data.challenge'
+"nonce-00000000-0000-0000-0000-000000000000"
+"BASE64(ENCRYPT(answer))"
+
+$ curl \
+    --data '' \
+    http://localhost:8000/_/complete-challenge \
+| jq '.data.session'
+"session-00000000-0000-0000-0000-000000000000"
+
+$ curl \
+    --header "Authorization: token session-00000000-0000-0000-0000-000000000000" \
+    http://localhost:8000/user \
+| jq .login
+"shared-user"
 ```
 
 ## Motivation
