@@ -7,6 +7,15 @@
 Granfalloon is a reverse-proxy that allows secure, distributed usage of a
 typically centralized secret
 
+## Usage
+
+```sh
+$ cat .env
+export GRANFALLOON_TOKEN=my-token
+$ source .env
+$ ./granfalloon --target=https://api.github.com --profiles-dir=profiles/
+```
+
 ## Motivation
 
 Granfalloon was originally conceived to address practical issue related to the
