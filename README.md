@@ -32,28 +32,38 @@ Listening on http://localhost:8000/
 
 ```sh
 # client
-$ curl \
-    --data '{"publicKey": {"kty": "RSA", "n": "...", "e": "..."}}' \
-    http://localhost:8000/_/start-challenge \
-| jq '.data.nonce, .data.challenge'
-"nonce-00000000-0000-0000-0000-000000000000"
-"BASE64(ENCRYPT(my-answer))"
 
-# base64 decode and decrypt answer...
+# Start a challenge by sending your pre-configured public key
+$ curl -d '...' http://localhost:8000/_/start-challenge | jq .data
+{
+  "nonce": "nonce-00000000-0000-0000-0000-000000000000",
+  "challenge": "BASE64(ENCRYPT(my-answer))"
+}
 
-$ curl \
-    --data '{ "nonce": "nonce-00000000-0000-0000-0000-000000000000", "answer": "my-answer" }' \
-    http://localhost:8000/_/complete-challenge \
-| jq .data.session
-"session-00000000-0000-0000-0000-000000000000"
+# Complete a challenge by sending the decrypted answer with your nonce
+$ curl -d '...' http://localhost:8000/_/complete-challenge | jq .data
+{
+  "session": "session-00000000-0000-0000-0000-000000000000"
+}
 
-$ curl \
-    --header "Authorization: token session-00000000-0000-0000-0000-000000000000" \
-    http://localhost:8000/user \
-| jq
+# Patterns allowed by the app's profile will be proxied with authentication
+$ curl -H "Authorization: token session-..." http://localhost:8000/user | jq
 {
   "login": "shared-user",
   # ...
+}
+
+# Patterns not allowed by the app's profile will fail immediately
+$ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq
+{
+  meta: {
+    kid: "...",
+    pathname: "/emojis",
+    timestamp: "..."
+  },
+  errors: [{
+    detail: "The profile associated with this session blocked the request"
+  }]
 }
 ```
 
