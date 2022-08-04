@@ -67,6 +67,56 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq
 }
 ```
 
+## Command-Line Arguments
+
+### `--remote REMOTE_URL`
+
+**Required**
+
+The remote base URL to which valid requests should be forwarded
+
+### `--profile-dir PATH_TO_DIRECTORY`
+
+**Required**
+
+The directory from which application profiles should be loaded. Any files with
+the `.json` extension are assumed to be application profiles.
+
+If you would like to add or update existing application profiles without
+restarting Granfalloon, you may send a `SIGHUP` signal to the process. This
+will cause Granfalloon to reload the profiles from the directory provided on
+startup. Notably, this cannot remove any previously loaded application
+profiles.
+
+### `--store (in-memory|redis)`
+
+**Default: in-memory**
+
+The mechanism to use for challenge-response and session storage.
+
+#### in-memory
+
+The application will manage storage using native data structures in the
+runtime. While this storage mechanism is suitable for simple use cases and
+demonstrations, it does not support manually revoking sessions and will be
+difficult to scale.
+
+#### redis
+
+The application will manage storage using an existing, external Redis service.
+
+### `--redis-hostname HOSTNAME`
+
+**Required if `--store=redis` is provided**
+
+The hostname of the external Redis service.
+
+### `--redis-port PORT`
+
+**Required if `--store=redis` is provided**
+
+The listening port of the external Redis service.
+
 ## Contributing
 
 0. Install `deno`
