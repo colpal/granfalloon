@@ -11,6 +11,18 @@ typically centralized secret
 
 ```sh
 # server
+$ cat profiles/example.json
+{
+  "publicKey": {
+    "kty": "RSA",
+    "n": "...",
+    "e": "..."
+  },
+  "allow": [
+    ["GET", "/orgs/*/repos"],
+    ["GET", "/user"]
+  ]
+}
 $ cat .env
 export GRANFALLOON_TOKEN=ghp_shared-user-token
 $ source .env
