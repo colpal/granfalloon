@@ -197,7 +197,7 @@ within 60 seconds.
 - `.data.nonce` - A one-time use, randomly generated identifier for the newly
   created challenge-response authentication attempt.
 - `.data.challenge` - The answer to the challenge-response authentication
-  attempt, first encrypted with provided public-key, then base64 encoded.
+  attempt, first encrypted with the provided public-key, then base64 encoded.
 
 # Contributing
 
