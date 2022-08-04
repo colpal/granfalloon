@@ -180,6 +180,25 @@ interface Profile {
 }
 ```
 
+# API
+
+## `POST /_/start-challenge`
+
+Initiate a challenge-response authentication attempt which must be completed
+within 60 seconds.
+
+### Parameters
+
+- `.publicKey` `required` - A JWK-formatted public-key matching one of those
+  found in the currently active application profiles
+
+### Response
+
+- `.data.nonce` - A one-time use, randomly generated identifier for the newly
+  created challenge-response authentication attempt.
+- `.data.challenge` - The answer to the challenge-response authentication
+  attempt, first encrypted with provided public-key, then base64 encoded.
+
 # Contributing
 
 0. Install `deno`
