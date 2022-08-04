@@ -117,6 +117,60 @@ The hostname of the external Redis service.
 
 The listening port of the external Redis service.
 
+# Profiles
+
+## Example
+
+```jsonc
+{
+  // The name of the application profile
+  "name": "example",
+  // The public-key portion of a key pair formatted as a JWK
+  "publicKey": {
+    "kty": "RSA",
+    "alg": "RSA-OAEP-256",
+    "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
+    "e": "AQAB",
+    "key_ops": ["encrypt"],
+    "ext": true
+  },
+  // The request patterns to allow for this profile. Globs are supported
+  "allow": [
+    ["GET", "/user"]
+    ["GET", "/users/**"]
+    ["GET", "/orgs/*/repos"],
+  ]
+}
+```
+
+## Schema
+
+```typescript
+type RequestMethod =
+  | "GET"
+  | "HEAD"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "CONNECT"
+  | "OPTIONS"
+  | "TRACE"
+  | "PATCH";
+
+interface Profile {
+  name?: string;
+  allow: Array<[RequestMethod, string]>;
+  publicKey: {
+    kty: "RSA";
+    n: string;
+    e: string;
+    alg?: "RSA-OAEP-256" | "RSA-OAEP-384" | "RSA-OAEP-512";
+    key_ops?: ["encrypt"];
+    ext?: boolean;
+  };
+}
+```
+
 # Contributing
 
 0. Install `deno`
