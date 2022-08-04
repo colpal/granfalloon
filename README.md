@@ -7,7 +7,7 @@
 Granfalloon is a reverse-proxy that allows secure, distributed usage of a
 typically centralized secret
 
-## Usage
+# Usage
 
 ```sh
 # server
@@ -67,15 +67,15 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq
 }
 ```
 
-## Command-Line Arguments
+# Command-Line Arguments
 
-### `--remote REMOTE_URL`
+## `--remote REMOTE_URL`
 
 **Required**
 
 The remote base URL to which valid requests should be forwarded
 
-### `--profile-dir PATH_TO_DIRECTORY`
+## `--profile-dir PATH_TO_DIRECTORY`
 
 **Required**
 
@@ -88,43 +88,43 @@ will cause Granfalloon to reload the profiles from the directory provided on
 startup. Notably, this cannot remove any previously loaded application
 profiles.
 
-### `--store (in-memory|redis)`
+## `--store (in-memory|redis)`
 
 **Default: in-memory**
 
 The mechanism to use for challenge-response and session storage.
 
-#### in-memory
+### in-memory
 
 The application will manage storage using native data structures in the
 runtime. While this storage mechanism is suitable for simple use cases and
 demonstrations, it does not support manually revoking sessions and will be
 difficult to scale.
 
-#### redis
+### redis
 
 The application will manage storage using an existing, external Redis service.
 
-### `--redis-hostname HOSTNAME`
+## `--redis-hostname HOSTNAME`
 
 **Required if `--store=redis` is provided**
 
 The hostname of the external Redis service.
 
-### `--redis-port PORT`
+## `--redis-port PORT`
 
 **Required if `--store=redis` is provided**
 
 The listening port of the external Redis service.
 
-## Contributing
+# Contributing
 
 0. Install `deno`
 0. Clone the repository
 0. `deno cache --reload --lock=lock.json src/deps.ts`
 0. `deno test --allow-read --allow-env --allow-net`
 
-## Motivation
+# Motivation
 
 Granfalloon was originally conceived to address practical issue related to the
 use of GitHub personal access tokens. Due to GitHub not having true service
@@ -168,6 +168,6 @@ profiles would just need to encode a list of REST endpoints.
 
 Thus, Granfalloon was born!
 
-## Inspiration
+# Inspiration
 
 - https://github.com/google/magic-github-proxy
