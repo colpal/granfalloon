@@ -67,6 +67,13 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq
 }
 ```
 
+## Contributing
+
+0. Install `deno`
+0. Clone the repository
+0. `deno cache --reload --lock=lock.json src/deps.ts`
+0. `deno test --allow-read --allow-env --allow-net`
+
 ## Motivation
 
 Granfalloon was originally conceived to address practical issue related to the
