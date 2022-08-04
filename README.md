@@ -67,6 +67,15 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq
 }
 ```
 
+# Environment Variables
+
+## `GRANFALLOON_TOKEN`
+
+**Required**
+
+The token to inject into forwarded calls to the `remote`. It will replace the
+`Authorization` header with the format `token {{GRANFALLOON_TOKEN}}`.
+
 # Command-Line Arguments
 
 ## `--remote REMOTE_URL`
