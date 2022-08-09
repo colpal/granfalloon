@@ -224,6 +224,49 @@ $ curl \
 }
 ```
 
+## `POST /_/complete-challenge`
+
+Complete a recently initiated challenge-response authentication attempt
+
+> Note: Each challenge may only be attempted once; whether it succeeds or
+> fails, the associated nonce will no longer be useable
+
+### Request
+
+- `.nonce` `required` - A nonce previously returned by the `/_/start-challenge`
+  endpoint
+- `.answer` `required` - The base64-decoded, decrypted challenge value
+  associated with the previously returned nonce 
+
+### Response
+
+- `.data.session` - A session token for the profile that initiated the
+  challenge-response authentication attempt
+
+### Example
+
+```sh
+$ cat payload.json
+{
+  "nonce": "nonce-cf0e9b8f-a498-4451-8686-915effb8d2f0",
+  "answer": "secret-3423238c-4215-4a57-8623-c9558d0a92cd"
+}
+
+$ curl \
+    --data @payload.json \
+    http://localhost:8000/_/complete-challenge
+```
+
+```json
+{
+  meta: {
+    kid: "FAhJ17LUhGOC98KwPkjuJTcZTsf2I3IqwlhMoqi3BkA",
+    timestamp: "2022-08-09T21:28:18.760Z"
+  },
+  data: { session: "session-7ee4c581-567e-44a9-9cd5-73bcffb60fd6" }
+}
+```
+
 # Contributing
 
 0. Install `deno`
