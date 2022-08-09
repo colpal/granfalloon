@@ -259,11 +259,13 @@ $ curl \
 
 ```json
 {
-  meta: {
-    kid: "FAhJ17LUhGOC98KwPkjuJTcZTsf2I3IqwlhMoqi3BkA",
-    timestamp: "2022-08-09T21:28:18.760Z"
+  "meta": {
+    "kid": "FAhJ17LUhGOC98KwPkjuJTcZTsf2I3IqwlhMoqi3BkA",
+    "timestamp": "2022-08-09T21:28:18.760Z"
   },
-  data: { session: "session-7ee4c581-567e-44a9-9cd5-73bcffb60fd6" }
+  "data": {
+    "session": "session-7ee4c581-567e-44a9-9cd5-73bcffb60fd6"
+  }
 }
 ```
 
