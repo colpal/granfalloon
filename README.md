@@ -187,7 +187,7 @@ interface Profile {
 Initiate a challenge-response authentication attempt which must be completed
 within 60 seconds.
 
-### Parameters
+### Request
 
 - `.publicKey` `required` - A JWK-formatted public-key matching one of those
   found in the currently active application profiles
