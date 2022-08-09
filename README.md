@@ -199,6 +199,40 @@ within 60 seconds.
 - `.data.challenge` - The answer to the challenge-response authentication
   attempt, first encrypted with the provided public-key, then base64 encoded.
 
+### Example
+
+```sh
+$ cat payload.json
+{
+  "publicKey": {
+    "kty": "RSA",
+    "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
+    "e": "AQAB"
+  }
+}
+
+$ curl \
+    --data @payload.json \
+    http://localhost:8000/_/start-challenge
+```
+
+```json
+{
+  "meta": {
+    "publicKey": {
+      "kty": "RSA",
+      "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
+      "e": "AQAB"
+    },
+    "timestamp": "2022-08-09T21:04:46.128Z"
+  },
+  "data": {
+    "nonce": "nonce-cf0e9b8f-a498-4451-8686-915effb8d2f0",
+    "challenge": "1GQT7iXEXTbrIPTMGa9TNxjBTaieQfx9BhrCqEND3qXCdzPlmiVoGntYhSSwGzm/vJpiKN4PK0zwq0zy6KCz8G4saouRYBocBbnvq9RV6MDX4ojK8fQepgPiBdPNsUqpQ1Hgq8+kbv8hMCCb+9XdQ6i2j1IFwGuwpZJzR7caYQutGVQrHqZXnw0WSLCgDbQ3Jq5mpjkp6P4RFWbRiGBtBQw+vZo0M9Yybv8zVxREEurgSiew1K3ZkHSqFUZvgR8MOK1f4Ym1dr4ibiT3/Wvuj3XlSeuIwgAT/jXA8Jc7f9S/p119yC8eBYoQZkgGv/rH4x+SbrOv9sRQ6uNc+Bgswg=="
+  }
+}
+```
+
 # Contributing
 
 0. Install `deno`
