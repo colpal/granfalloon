@@ -54,17 +54,8 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/user | jq
 }
 
 # Patterns not allowed by the app's profile will fail immediately
-$ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq
-{
-  meta: {
-    kid: "...",
-    pathname: "/emojis",
-    timestamp: "..."
-  },
-  errors: [{
-    detail: "The profile associated with this session blocked the request"
-  }]
-}
+$ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq .errors
+[ { detail: "The profile associated with this session blocked the request" } ]
 ```
 
 # Environment Variables
