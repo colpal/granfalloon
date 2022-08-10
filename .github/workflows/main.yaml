@@ -20,7 +20,7 @@ jobs:
                            --allow-net
                            --allow-env
                            --target="{}"
-                           --output="granfalloon-{}"
+                           --output="dist/granfalloon-{}"
                            --lock=lock.json
                            src/mod.js'
         env:
@@ -34,4 +34,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
-          files: granfalloon-*
+          files: dist/*
