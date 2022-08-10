@@ -13,3 +13,19 @@ jobs:
       - run: deno test --lock=lock.json --allow-read --allow-env --allow-net
         env:
           GRANFALLOON_TOKEN: ${{ github.token }}
+
+      - run: 'echo "$TARGETS"
+              | xargs -i deno compile
+                           --allow-read
+                           --allow-net
+                           --allow-env
+                           --target="{}"
+                           --output="granfalloon-{}"
+                           --lock=lock.json
+                           src/mod.js'
+        env:
+          TARGETS: |
+            x86_64-unknown-linux-gnu
+            x86_64-pc-windows-msvc
+            x86_64-apple-darwin
+            aarch64-apple-darwin
