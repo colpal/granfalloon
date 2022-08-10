@@ -32,6 +32,8 @@ jobs:
 
       - run: chmod +x dist/*
 
+      - run: deno bundle --lock=lock.json src/mod.js -- dist/granfalloon.js
+
       - if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
