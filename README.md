@@ -73,6 +73,12 @@ The token to inject into forwarded calls to the `remote`. It will replace the
 
 Prints out the version of Granfalloon, and then immediately exits successfully
 
+## `--port`
+
+**Default: 8000**
+
+The port on which Granfalloon should listen for connections
+
 ## `--remote REMOTE_URL`
 
 **Required**
