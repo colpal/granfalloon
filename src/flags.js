@@ -11,6 +11,14 @@ const transformers = {
     },
   },
   string: {
+    port({ port: v }) {
+      if (!v) return 8000;
+      const port = parseInt(v);
+      if (Number.isNaN(port) || port < 1 || port > 65535) {
+        throw new Error(`invalid port number '${v}'`);
+      }
+      return port;
+    },
     remote({ remote: v }) {
       if (!v) throw new Error("missing required argument 'remote'");
       return new URL(v).origin;
