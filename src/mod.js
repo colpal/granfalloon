@@ -3,7 +3,7 @@ import { connect, serve } from "./deps.ts";
 import loadDir from "./profiles/load-dir.js";
 import * as InMemoryStore from "./store/in-memory.js";
 import router from "./router.js";
-import * as log from "./log.js";
+import { error, info } from "./log.js";
 import parseFlags from "./flags.js";
 
 const flags = await parseFlags(Deno.args);
@@ -23,9 +23,9 @@ Deno.addSignalListener("SIGHUP", async () => {
 
 serve(
   router({
-    log,
     profiles,
     store,
+    log: { info, error },
     remote: flags.remote,
     token: Deno.env.get("GRANFALLOON_TOKEN"),
   }),
