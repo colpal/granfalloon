@@ -29,3 +29,5 @@ jobs:
             x86_64-pc-windows-msvc
             x86_64-apple-darwin
             aarch64-apple-darwin
+
+      - run: ls -lh
