@@ -69,6 +69,10 @@ The token to inject into forwarded calls to the `remote`. It will replace the
 
 # Command-Line Arguments
 
+## `--version`
+
+Prints out the version of Granfalloon, and then immediately exits successfully
+
 ## `--remote REMOTE_URL`
 
 **Required**
