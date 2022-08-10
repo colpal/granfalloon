@@ -21,10 +21,13 @@ Deno.addSignalListener("SIGHUP", async () => {
   log.error("[SIGHUP] profiles reloaded");
 });
 
-serve(router({
-  log,
-  profiles,
-  store,
-  remote: flags.remote,
-  token: Deno.env.get("GRANFALLOON_TOKEN"),
-}));
+serve(
+  router({
+    log,
+    profiles,
+    store,
+    remote: flags.remote,
+    token: Deno.env.get("GRANFALLOON_TOKEN"),
+  }),
+  { port: flags.port },
+);
