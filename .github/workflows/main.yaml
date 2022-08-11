@@ -1,5 +1,8 @@
 on: push
 
+env:
+  DENO_VERSION: 1.24.1
+
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -8,7 +11,7 @@ jobs:
       
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x
+          deno-version: ${{ env.DENO_VERSION }}
 
       - run: deno test --lock=lock.json --allow-read --allow-env --allow-net
         env:
