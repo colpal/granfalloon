@@ -9,4 +9,4 @@ FROM denoland/deno:distroless-1.24.1
 EXPOSE 8000
 ENV GRANFALLOON_TOKEN=
 COPY --from=builder granfalloon.js /
-ENTRYPOINT ["deno", "run", "--allow-read", "--allow-net", "--allow-env", "/granfalloon.js"]
+ENTRYPOINT ["deno", "run", "--no-remote", "--allow-read", "--allow-net", "--allow-env", "/granfalloon.js"]
