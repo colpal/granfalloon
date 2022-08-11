@@ -1,5 +1,5 @@
 #!/usr/bin/env deno run --allow-net --allow-read --allow-env
-import { assertNotEquals, connect, serve } from "./deps.ts";
+import { connect, serve } from "./deps.ts";
 import loadDir from "./profiles/load-dir.js";
 import * as InMemoryStore from "./store/in-memory.js";
 import router from "./router.js";
@@ -8,11 +8,9 @@ import parseFlags from "./flags.js";
 
 const flags = await parseFlags(Deno.args);
 const token = Deno.env.get("GRANFALLOON_TOKEN");
-assertNotEquals(
-  token,
-  undefined,
-  "The 'GRANFALLOON_TOKEN' environment variable is required",
-);
+if (!token) {
+  throw new Error("The 'GRANFALLOON_TOKEN' environment variable is required");
+}
 
 const store = await {
   "in-memory": InMemoryStore.create,
