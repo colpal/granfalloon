@@ -9,6 +9,10 @@ env:
     x86_64-apple-darwin
     aarch64-apple-darwin
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   main:
     runs-on: ubuntu-latest
