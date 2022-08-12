@@ -58,6 +58,18 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq .
 [ { detail: "The profile associated with this session blocked the request" } ]
 ```
 
+# OCI Usage
+
+```sh
+$ docker run \
+    --init \
+    --env GRANFALLOON_TOKEN \
+    --volume "$HOST_PROFILE_DIRECTORY":/profiles \
+    --publish "$HOST_PORT":8000
+    ghcr.io/colpal/granfalloon:"$TAG" \
+    --remote=$REMOTE
+```
+
 # Environment Variables
 
 ## `GRANFALLOON_TOKEN`
