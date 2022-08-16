@@ -1,3 +1,4 @@
+let k = https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/master/package.dhall
 let Values = ./values.dhall
 
 in  \(v : Values.Type) ->
@@ -6,45 +7,31 @@ in  \(v : Values.Type) ->
         `app.kubernetes.io/instance` = v.name,
       }
 
-      let proxy = {
-        kind = "Deployment",
-        apiVersion = "apps/v1",
-        metadata = {
-          name = "granfalloon-${v.name}-proxy",
-          labels,
-          labels.`app.kubernetes.io/component` = "proxy",
+      let proxy = k.Deployment::{
+        metadata = k.ObjectMeta::{
+          name = Some "granfalloon-${v.name}-proxy",
+          labels = Some (toMap (labels // {
+            `app.kubernetes.io/component` = "proxy",
+          })),
         },
-        spec.selector.matchLabels = labels,
-        spec.selector.matchLabels.`app.kubernetes.io/component` = "proxy",
-        spec.template = {
-          metadata.labels = labels,
-          metadata.labels.`app.kubernetes.io/component` = "proxy",
-          spec.containers = [{
-            name = "default",
-            image = "${v.image}:${v.tag}",
-            ports = [ { containerPort = 8000 } ],
-          }],
+        spec = Some k.DeploymentSpec::{
+          selector = k.LabelSelector::{
+            matchLabels = Some (toMap (labels // {
+              `app.kubernetes.io/component` = "proxy",
+            })),
+          },
+          template = k.PodTemplateSpec::{
+            spec = Some k.PodSpec::{
+              containers = [k.Container::{
+                name = "default",
+                image = Some "${v.image}:${v.tag}",
+                ports = Some [k.ContainerPort::{
+                  containerPort = 8000
+                }],
+              }],
+            },
+          },
         },
       }
 
-      let store = {
-        kind = "StatefulSet",
-        apiVersion = "apps/v1",
-        metadata = {
-          name = "granfalloon-${v.name}-store",
-          labels,
-          labels.`app.kubernetes.io/component` = "store",
-        },
-        spec.selector.matchLabels = labels,
-        spec.selector.matchLabels.`app.kubernetes.io/component` = "store",
-        spec.template = {
-          metadata.labels = labels,
-          metadata.labels.`app.kubernetes.io/component` = "store",
-          spec.containers = [{
-            name = "default",
-            image = "redis:alpine"
-          }]
-        }
-      }
-
-      in  [ proxy, store ]
+      in  [ proxy ]
