@@ -32,4 +32,29 @@ in  \(v : Values.Type) ->
         },
       }
 
-      in  [ proxy ]
+      let storeLabels = labels // { `app.kubernetes.io/component` = "store" }
+
+      let store = k.Resource.StatefulSet k.StatefulSet::{
+        metadata = k.ObjectMeta::{
+          name = Some "granfalloon-${v.name}-store"
+        },
+        spec = Some k.StatefulSetSpec::{
+          serviceName = "granfalloon-${v.name}-store",
+          selector = k.LabelSelector::{
+            matchLabels = Some (toMap storeLabels),
+          },
+          template = k.PodTemplateSpec::{
+            metadata = Some k.ObjectMeta::{
+              labels = Some (toMap storeLabels),
+            },
+            spec = Some k.PodSpec::{
+              containers = [k.Container::{
+                name = "default",
+                image = Some "redis:7.0.4-alpine3.16",
+              }]
+            },
+          },
+        },
+      }
+
+      in  [ proxy, store ]
