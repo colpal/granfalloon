@@ -10,7 +10,7 @@ in  \(v : Values.Type) ->
 
       let proxyLabels = labels // { `app.kubernetes.io/component` = "proxy" }
 
-      let proxy = k.Deployment::{
+      let proxy = k.Resource.Deployment k.Deployment::{
         metadata = k.ObjectMeta::{
           name = Some "granfalloon-${v.name}-proxy",
         },
