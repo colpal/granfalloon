@@ -8,21 +8,19 @@ in  \(v : Values.Type) ->
         `app.kubernetes.io/instance` = v.name,
       }
 
+      let proxyLabels = labels // { `app.kubernetes.io/component` = "proxy" }
+
       let proxy = k.Deployment::{
         metadata = k.ObjectMeta::{
           name = Some "granfalloon-${v.name}-proxy",
         },
         spec = Some k.DeploymentSpec::{
           selector = k.LabelSelector::{
-            matchLabels = Some (toMap (labels // {
-              `app.kubernetes.io/component` = "proxy",
-            })),
+            matchLabels = Some (toMap proxyLabels),
           },
           template = k.PodTemplateSpec::{
             metadata = Some k.ObjectMeta::{
-              labels = Some (toMap (labels // {
-                `app.kubernetes.io/component` = "proxy",
-              }))
+              labels = Some (toMap proxyLabels)
             },
             spec = Some k.PodSpec::{
               containers = [k.Container::{
