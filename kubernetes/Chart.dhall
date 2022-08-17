@@ -26,9 +26,6 @@ in  \(v : Values.Type) ->
               containers = [k.Container::{
                 name = "default",
                 image = Some "${v.image}:${v.tag}",
-                ports = Some [k.ContainerPort::{
-                  containerPort = 8000
-                }],
               }],
             },
           },
