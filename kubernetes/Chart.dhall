@@ -44,6 +44,17 @@ in  \(v : Values.Type) ->
 
       let storeLabels = labels // { `app.kubernetes.io/component` = "store" }
 
+      let storeService = k.Resource.Service k.Service::{
+        metadata = k.ObjectMeta::{
+          name = Some "granfalloon-${v.name}-store",
+        },
+        spec = Some k.ServiceSpec::{
+          ports = Some [k.ServicePort::{
+            port = 6379,
+          }],
+        },
+      }
+
       let store = k.Resource.StatefulSet k.StatefulSet::{
         metadata = k.ObjectMeta::{
           name = Some "granfalloon-${v.name}-store"
@@ -67,4 +78,4 @@ in  \(v : Values.Type) ->
         },
       }
 
-      in  [ proxy, store ]
+      in  [ proxy, store, storeService ]
