@@ -10,7 +10,7 @@ let T = {
 
 let default = {
   image = "ghcr.io/colpal/granfalloon",
-  tag = "0.0.7-deno1.24.1-distroless",
+  tag = "0.0.8-deno1.24.1-distroless",
 }
 
 in  { Type = T, default }
