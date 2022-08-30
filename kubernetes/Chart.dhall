@@ -10,6 +10,19 @@ in  \(v : Values.Type) ->
 
       let proxyLabels = labels // { `app.kubernetes.io/component` = "proxy" }
 
+      let proxyService = k.Resource.Service k.Service::{
+        metadata = k.ObjectMeta::{
+          name = Some "granfalloon-${v.name}-proxy",
+        },
+        spec = Some k.ServiceSpec::{
+          selector = Some (toMap proxyLabels),
+          ports = Some [k.ServicePort::{
+            port = 80,
+            targetPort = Some (k.NatOrString.Nat 8000),
+          }],
+        },
+      }
+
       let proxy = k.Resource.Deployment k.Deployment::{
         metadata = k.ObjectMeta::{
           name = Some "granfalloon-${v.name}-proxy",
@@ -79,4 +92,4 @@ in  \(v : Values.Type) ->
         },
       }
 
-      in  [ proxy, store, storeService ]
+      in  [ proxy, proxyService, store, storeService ]
