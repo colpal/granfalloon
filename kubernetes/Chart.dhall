@@ -26,6 +26,12 @@ in  \(v : Values.Type) ->
               containers = [k.Container::{
                 name = "default",
                 image = Some "${v.image}:${v.tag}",
+                args = Some [
+                  "--remote=https://api.github.com",
+                  "--store=redis",
+                  "--redis-hostname=granfalloon-${v.name}-store",
+                  "--redis-port=6379",
+                ],
               }],
             },
           },
