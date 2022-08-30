@@ -49,6 +49,7 @@ in  \(v : Values.Type) ->
           name = Some "granfalloon-${v.name}-store",
         },
         spec = Some k.ServiceSpec::{
+          selector = Some (toMap storeLabels),
           ports = Some [k.ServicePort::{
             port = 6379,
           }],
