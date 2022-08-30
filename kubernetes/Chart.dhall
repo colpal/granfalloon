@@ -8,6 +8,13 @@ in  \(v : Values.Type) ->
         `app.kubernetes.io/instance` = v.name,
       }
 
+      let configMap = k.Resource.ConfigMap k.ConfigMap::{
+        metadata = k.ObjectMeta::{
+          name = Some "granfalloon-${v.name}-profiles",
+        },
+        data = Some v.profiles,
+      }
+
       let proxyLabels = labels // { `app.kubernetes.io/component` = "proxy" }
 
       let proxyService = k.Resource.Service k.Service::{
@@ -92,4 +99,4 @@ in  \(v : Values.Type) ->
         },
       }
 
-      in  [ proxy, proxyService, store, storeService ]
+      in  [ configMap, proxy, proxyService, store, storeService ]
