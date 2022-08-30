@@ -43,12 +43,22 @@ in  \(v : Values.Type) ->
               labels = Some (toMap proxyLabels)
             },
             spec = Some k.PodSpec::{
+              volumes = Some [k.Volume::{
+                name = "profiles",
+                configMap = Some k.ConfigMapVolumeSource::{
+                  name = Some "granfalloon-${v.name}-profiles",
+                },
+              }],
               containers = [k.Container::{
                 name = "default",
                 image = Some "${v.image}:${v.tag}",
                 env = Some [k.EnvVar::{
                   name = "GRANFALLOON_TOKEN",
                   value = Some "banana",
+                }],
+                volumeMounts = Some [k.VolumeMount::{
+                  name = "profiles",
+                  mountPath = "/profiles",
                 }],
                 args = Some [
                   "--remote=https://api.github.com",
