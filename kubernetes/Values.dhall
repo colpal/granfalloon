@@ -2,6 +2,10 @@ let T = {
   name : Text,
   image : Text,
   tag : Text,
+  profiles : List {
+    mapKey : Text,
+    mapValue : Text,
+  },
 }
 
 let default = {
