@@ -5,10 +5,7 @@ let T = {
   ingress : {
     hosts : List Text,
   },
-  profiles : List {
-    mapKey : Text,
-    mapValue : Text,
-  },
+  profiles : List { mapKey : Text, mapValue : Text },
 }
 
 let default = {
