@@ -17,9 +17,11 @@ in  \(v : Values.Type) ->
 
       let proxyLabels = labels // { `app.kubernetes.io/component` = "proxy" }
 
+      let proxyName = "granfalloon-${v.name}-proxy"
+
       let proxyService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
-          name = Some "granfalloon-${v.name}-proxy",
+          name = Some proxyName
         },
         spec = Some k.ServiceSpec::{
           selector = Some (toMap proxyLabels),
@@ -32,7 +34,7 @@ in  \(v : Values.Type) ->
 
       let proxy = k.Resource.Deployment k.Deployment::{
         metadata = k.ObjectMeta::{
-          name = Some "granfalloon-${v.name}-proxy",
+          name = Some proxyName
         },
         spec = Some k.DeploymentSpec::{
           selector = k.LabelSelector::{
