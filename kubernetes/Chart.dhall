@@ -44,7 +44,7 @@ in  \(v : Values.Type) ->
           },
           tls = Some [k.IngressTLS::{
             secretName = Some proxyName,
-            hosts = Some v.hosts,
+            hosts = Some v.ingress.hosts,
           }],
         },
       }
