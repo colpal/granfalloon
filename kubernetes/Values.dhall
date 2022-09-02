@@ -2,6 +2,7 @@ let T = {
   name : Text,
   image : Text,
   tag : Text,
+  hosts : List Text,
   profiles : List {
     mapKey : Text,
     mapValue : Text,
