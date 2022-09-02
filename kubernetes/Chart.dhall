@@ -32,6 +32,23 @@ in  \(v : Values.Type) ->
         },
       }
 
+      let proxyIngress = k.Resource.Ingress k.Ingress::{
+        metadata = k.ObjectMeta::{
+          name = Some proxyName
+        },
+        spec = Some k.IngressSpec::{
+          defaultBackend = Some k.IngressBackend::{
+            service = Some k.IngressServiceBackend::{
+              name = proxyName,
+            },
+          },
+          tls = Some [k.IngressTLS::{
+            secretName = Some proxyName,
+            hosts = Some v.hosts,
+          }],
+        },
+      }
+
       let proxy = k.Resource.Deployment k.Deployment::{
         metadata = k.ObjectMeta::{
           name = Some proxyName
@@ -111,4 +128,4 @@ in  \(v : Values.Type) ->
         },
       }
 
-      in  [ configMap, proxy, proxyService, store, storeService ]
+      in  [ configMap, proxy, proxyService, proxyIngress, store, storeService ]
