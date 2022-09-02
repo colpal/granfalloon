@@ -34,6 +34,7 @@ in  \(v : Values.Type) ->
 
       let proxyIngress = k.Resource.Ingress k.Ingress::{
         metadata = k.ObjectMeta::{
+          annotations = Some v.ingressAnnotations,
           name = Some proxyName
         },
         spec = Some k.IngressSpec::{
