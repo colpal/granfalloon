@@ -50,6 +50,9 @@ in  \(v : Values.Type) ->
           defaultBackend = Some k.IngressBackend::{
             service = Some k.IngressServiceBackend::{
               name = proxyName,
+              port = Some k.ServiceBackendPort::{
+                number = Some 80,
+              },
             },
           },
           tls = Some [k.IngressTLS::{
