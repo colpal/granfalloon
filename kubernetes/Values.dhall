@@ -2,6 +2,7 @@ let T = {
   name : Text,
   image : Text,
   tag : Text,
+  token : Text,
   ingressHosts : List Text,
   ingressAnnotations : List { mapKey : Text, mapValue : Text },
   profiles : List { mapKey : Text, mapValue : Text },

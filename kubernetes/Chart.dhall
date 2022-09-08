@@ -19,6 +19,15 @@ in  \(v : Values.Type) ->
 
       let proxyName = "granfalloon-${v.name}-proxy"
 
+      let secret = k.Resource.Secret k.Secret::{
+        metadata = k.ObjectMeta::{
+          name = Some proxyName,
+        },
+        stringData = Some (toMap {
+          token = v.token,
+        }),
+      }
+
       let proxyService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
           name = Some proxyName
@@ -74,7 +83,13 @@ in  \(v : Values.Type) ->
                 image = Some "${v.image}:${v.tag}",
                 env = Some [k.EnvVar::{
                   name = "GRANFALLOON_TOKEN",
-                  value = Some "banana",
+                  valueFrom = Some k.EnvVarSource::{
+                    secretKeyRef = Some k.SecretKeySelector::{
+                      name = Some proxyName,
+                      key = "token",
+                      optional = Some False,
+                    },
+                  },
                 }],
                 volumeMounts = Some [k.VolumeMount::{
                   name = "profiles",
@@ -129,4 +144,4 @@ in  \(v : Values.Type) ->
         },
       }
 
-      in  [ configMap, proxy, proxyService, proxyIngress, store, storeService ]
+      in  [ secret, configMap, proxy, proxyService, proxyIngress, store, storeService ]
