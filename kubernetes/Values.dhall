@@ -1,5 +1,6 @@
 let T = {
   name : Text,
+  namespace : Optional Text,
   image : Text,
   tag : Text,
   token : Text,
@@ -11,6 +12,7 @@ let T = {
 }
 
 let default = {
+  namespace = None Text,
   image = "ghcr.io/colpal/granfalloon",
   tag = "0.0.9-deno1.24.1-distroless",
   proxyServiceType = "NodePort",

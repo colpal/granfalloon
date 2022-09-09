@@ -11,6 +11,7 @@ in  \(v : Values.Type) ->
       let configMap = k.Resource.ConfigMap k.ConfigMap::{
         metadata = k.ObjectMeta::{
           name = Some "granfalloon-${v.name}-profiles",
+          namespace = v.namespace,
         },
         data = Some v.profiles,
       }
@@ -22,6 +23,7 @@ in  \(v : Values.Type) ->
       let secret = k.Resource.Secret k.Secret::{
         metadata = k.ObjectMeta::{
           name = Some proxyName,
+          namespace = v.namespace,
         },
         stringData = Some (toMap {
           token = v.token,
@@ -31,6 +33,7 @@ in  \(v : Values.Type) ->
       let proxyService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
           annotations = Some v.proxyServiceAnnotations,
+          namespace = v.namespace,
           name = Some proxyName
         },
         spec = Some k.ServiceSpec::{
@@ -46,6 +49,7 @@ in  \(v : Values.Type) ->
       let proxyIngress = k.Resource.Ingress k.Ingress::{
         metadata = k.ObjectMeta::{
           annotations = Some v.ingressAnnotations,
+          namespace = v.namespace,
           name = Some proxyName
         },
         spec = Some k.IngressSpec::{
@@ -66,6 +70,7 @@ in  \(v : Values.Type) ->
 
       let proxy = k.Resource.Deployment k.Deployment::{
         metadata = k.ObjectMeta::{
+          namespace = v.namespace,
           name = Some proxyName
         },
         spec = Some k.DeploymentSpec::{
@@ -116,6 +121,7 @@ in  \(v : Values.Type) ->
 
       let storeService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
+          namespace = v.namespace,
           name = Some "granfalloon-${v.name}-store",
         },
         spec = Some k.ServiceSpec::{
@@ -128,6 +134,7 @@ in  \(v : Values.Type) ->
 
       let store = k.Resource.StatefulSet k.StatefulSet::{
         metadata = k.ObjectMeta::{
+          namespace = v.namespace,
           name = Some "granfalloon-${v.name}-store"
         },
         spec = Some k.StatefulSetSpec::{
