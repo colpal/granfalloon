@@ -1,5 +1,5 @@
 let T = {
-  name : Text,
+  name : Optional Text,
   namespace : Optional Text,
   image : Text,
   tag : Text,
@@ -12,6 +12,7 @@ let T = {
 }
 
 let default = {
+  name = None Text,
   namespace = None Text,
   image = "ghcr.io/colpal/granfalloon",
   tag = "0.0.9-deno1.24.1-distroless",

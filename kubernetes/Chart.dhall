@@ -7,13 +7,21 @@ in  \(v : Values.Type) ->
         `app.kubernetes.io/name` = "granfalloon",
       }
 
-      let labels = predefinedLabels # toMap {
-        `app.kubernetes.io/instance` = v.name,
-      }
+      let labels = merge {
+        Some = \(t : Text) -> predefinedLabels # toMap {
+          `app.kubernetes.io/instance` = t,
+        },
+        None = predefinedLabels,
+      } v.name
+
+      let namePrefix = merge {
+        Some = \(t : Text) -> "${t}-",
+        None = "",
+      } v.name
 
       let configMap = k.Resource.ConfigMap k.ConfigMap::{
         metadata = k.ObjectMeta::{
-          name = Some "granfalloon-${v.name}-profiles",
+          name = Some "${namePrefix}profiles",
           namespace = v.namespace,
         },
         data = Some v.profiles,
@@ -23,7 +31,7 @@ in  \(v : Values.Type) ->
         `app.kubernetes.io/component` = "proxy",
       }
 
-      let proxyName = "granfalloon-${v.name}-proxy"
+      let proxyName = "${namePrefix}proxy"
 
       let secret = k.Resource.Secret k.Secret::{
         metadata = k.ObjectMeta::{
@@ -90,7 +98,7 @@ in  \(v : Values.Type) ->
               volumes = Some [k.Volume::{
                 name = "profiles",
                 configMap = Some k.ConfigMapVolumeSource::{
-                  name = Some "granfalloon-${v.name}-profiles",
+                  name = Some "${namePrefix}profiles",
                 },
               }],
               containers = [k.Container::{
@@ -113,7 +121,7 @@ in  \(v : Values.Type) ->
                 args = Some [
                   "--remote=https://api.github.com",
                   "--store=redis",
-                  "--redis-hostname=granfalloon-${v.name}-store",
+                  "--redis-hostname=${namePrefix}store",
                   "--redis-port=6379",
                 ],
               }],
@@ -129,7 +137,7 @@ in  \(v : Values.Type) ->
       let storeService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
           namespace = v.namespace,
-          name = Some "granfalloon-${v.name}-store",
+          name = Some "${namePrefix}store",
         },
         spec = Some k.ServiceSpec::{
           selector = Some storeLabels,
@@ -142,10 +150,10 @@ in  \(v : Values.Type) ->
       let store = k.Resource.StatefulSet k.StatefulSet::{
         metadata = k.ObjectMeta::{
           namespace = v.namespace,
-          name = Some "granfalloon-${v.name}-store"
+          name = Some "${namePrefix}store"
         },
         spec = Some k.StatefulSetSpec::{
-          serviceName = "granfalloon-${v.name}-store",
+          serviceName = "${namePrefix}store",
           selector = k.LabelSelector::{
             matchLabels = Some storeLabels,
           },
