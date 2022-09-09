@@ -12,7 +12,7 @@ let T = {
 
 let default = {
   image = "ghcr.io/colpal/granfalloon",
-  tag = "0.0.8-deno1.24.1-distroless",
+  tag = "0.0.9-deno1.24.1-distroless",
   proxyServiceType = "NodePort",
   ingressAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
