@@ -293,7 +293,7 @@ $ curl \
 
 ## `GET /_/health`
 
-A generic health check endpoint
+A basic health check endpoint
 
 ### Example
 
