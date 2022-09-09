@@ -30,6 +30,7 @@ in  \(v : Values.Type) ->
 
       let proxyService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
+          annotations = Some v.proxyServiceAnnotations,
           name = Some proxyName
         },
         spec = Some k.ServiceSpec::{
