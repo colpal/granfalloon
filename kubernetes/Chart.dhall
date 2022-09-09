@@ -171,4 +171,12 @@ in \(v : Values.Type) ->
       },
     }
 
-    in  [ secret, configMap, proxy, proxyService, proxyIngress, store, storeService ]
+    in  [
+      secret,
+      configMap,
+      proxy,
+      proxyService,
+      proxyIngress,
+      store,
+      storeService,
+    ]
