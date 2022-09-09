@@ -171,7 +171,7 @@ in \(v : Values.Type) ->
       },
     }
 
-    in  [
+    in [
       secret,
       configMap,
       proxy,
