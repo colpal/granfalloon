@@ -291,6 +291,20 @@ $ curl \
 }
 ```
 
+## `GET /_/health`
+
+A generic health check endpoint
+
+### Example
+
+```sh
+$ curl --include http://localhost:8000/_/health
+HTTP/1.1 200 OK
+vary: Accept-Encoding
+content-length: 0
+date: Fri, 09 Sep 2022 17:08:26 GMT
+```
+
 # Contributing
 
 0. Install `deno`
