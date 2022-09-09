@@ -3,8 +3,11 @@ let k = https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/master/1.2
 let Values = ./Values.dhall
 
 in  \(v : Values.Type) ->
-      let labels = {
+      let predefinedLabels = toMap {
         `app.kubernetes.io/name` = "granfalloon",
+      }
+
+      let labels = predefinedLabels # toMap {
         `app.kubernetes.io/instance` = v.name,
       }
 
@@ -16,7 +19,9 @@ in  \(v : Values.Type) ->
         data = Some v.profiles,
       }
 
-      let proxyLabels = labels // { `app.kubernetes.io/component` = "proxy" }
+      let proxyLabels = labels # toMap {
+        `app.kubernetes.io/component` = "proxy",
+      }
 
       let proxyName = "granfalloon-${v.name}-proxy"
 
@@ -38,7 +43,7 @@ in  \(v : Values.Type) ->
         },
         spec = Some k.ServiceSpec::{
           type = Some v.proxyServiceType,
-          selector = Some (toMap proxyLabels),
+          selector = Some proxyLabels,
           ports = Some [k.ServicePort::{
             port = 80,
             targetPort = Some (k.NatOrString.Nat 8000),
@@ -75,11 +80,11 @@ in  \(v : Values.Type) ->
         },
         spec = Some k.DeploymentSpec::{
           selector = k.LabelSelector::{
-            matchLabels = Some (toMap proxyLabels),
+            matchLabels = Some proxyLabels,
           },
           template = k.PodTemplateSpec::{
             metadata = Some k.ObjectMeta::{
-              labels = Some (toMap proxyLabels)
+              labels = Some proxyLabels,
             },
             spec = Some k.PodSpec::{
               volumes = Some [k.Volume::{
@@ -117,7 +122,9 @@ in  \(v : Values.Type) ->
         },
       }
 
-      let storeLabels = labels // { `app.kubernetes.io/component` = "store" }
+      let storeLabels = labels # toMap {
+        `app.kubernetes.io/component` = "store",
+      }
 
       let storeService = k.Resource.Service k.Service::{
         metadata = k.ObjectMeta::{
@@ -125,7 +132,7 @@ in  \(v : Values.Type) ->
           name = Some "granfalloon-${v.name}-store",
         },
         spec = Some k.ServiceSpec::{
-          selector = Some (toMap storeLabels),
+          selector = Some storeLabels,
           ports = Some [k.ServicePort::{
             port = 6379,
           }],
@@ -140,11 +147,11 @@ in  \(v : Values.Type) ->
         spec = Some k.StatefulSetSpec::{
           serviceName = "granfalloon-${v.name}-store",
           selector = k.LabelSelector::{
-            matchLabels = Some (toMap storeLabels),
+            matchLabels = Some storeLabels,
           },
           template = k.PodTemplateSpec::{
             metadata = Some k.ObjectMeta::{
-              labels = Some (toMap storeLabels),
+              labels = Some storeLabels,
             },
             spec = Some k.PodSpec::{
               containers = [k.Container::{
