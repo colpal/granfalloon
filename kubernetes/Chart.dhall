@@ -66,14 +66,6 @@ in \(v : Values.Type) ->
         name = Some proxyName
       },
       spec = Some k.IngressSpec::{
-        defaultBackend = Some k.IngressBackend::{
-          service = Some k.IngressServiceBackend::{
-            name = proxyName,
-            port = Some k.ServiceBackendPort::{
-              number = Some 80,
-            },
-          },
-        },
         ingressClassName = v.ingressClassName,
         tls = Some [k.IngressTLS::{
           secretName = Some proxyName,
