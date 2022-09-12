@@ -4,6 +4,7 @@ let T = {
   image : Text,
   tag : Text,
   token : Text,
+  proxyLimits : Optional (List { mapKey: Text, mapValue: Text }),
   proxyServiceType : Text,
   proxyServiceAnnotations : List { mapKey : Text, mapValue : Text },
   ingressHosts : List Text,
@@ -24,6 +25,7 @@ let default = {
   ingressClassName = None Text,
   ingressPath = "/",
   ingressPathType = "Prefix",
+  proxyLimits = None (List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
 }
 

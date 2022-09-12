@@ -133,6 +133,9 @@ in \(v : Values.Type) ->
                 name = "profiles",
                 mountPath = "/profiles",
               }],
+              resources = Some k.ResourceRequirements::{
+                limits = v.proxyLimits,
+              },
               args = Some [
                 "--remote=https://api.github.com",
                 "--store=redis",
