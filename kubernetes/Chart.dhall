@@ -1,4 +1,4 @@
-let List/map = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/map.dhall
+let List/map = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/map.dhall sha256:dd845ffb4568d40327f2a817eb42d1c6138b929ca758d50bc33112ef3c885680
 let k = https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/master/1.22/package.dhall sha256:53c03eb6a2cf118b3608f81253293993308a11f46b4463a18e376d343163bb21
 
 let Values = ./Values.dhall
