@@ -133,6 +133,12 @@ in \(v : Values.Type) ->
                 name = "profiles",
                 mountPath = "/profiles",
               }],
+              livenessProbe = Some k.Probe::{
+                httpGet = Some k.HTTPGetAction::{
+                  path = Some "/_/health",
+                  port = k.NatOrString.Nat 8000,
+                },
+              },
               resources = Some k.ResourceRequirements::{
                 limits = v.proxyLimits,
               },
