@@ -12,6 +12,7 @@ let T = {
   ingressClassName : Optional Text,
   ingressPath : Text,
   ingressPathType : Text,
+  storeLimits : Optional (List { mapKey: Text, mapValue: Text }),
   profiles : List { mapKey : Text, mapValue : Text },
 }
 
@@ -27,6 +28,7 @@ let default = {
   ingressPathType = "Prefix",
   proxyLimits = None (List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
+  storeLimits = None (List { mapKey : Text, mapValue : Text }),
 }
 
 in  { Type = T, default }
