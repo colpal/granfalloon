@@ -9,6 +9,8 @@ let T = {
   ingressHosts : List Text,
   ingressAnnotations : List { mapKey : Text, mapValue : Text },
   ingressClassName : Optional Text,
+  ingressPath : Text,
+  ingressPathType : Text,
   profiles : List { mapKey : Text, mapValue : Text },
 }
 
@@ -20,6 +22,8 @@ let default = {
   proxyServiceType = "NodePort",
   ingressAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
   ingressClassName = None Text,
+  ingressPath = "/",
+  ingressPathType = "Prefix",
   proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
 }
 
