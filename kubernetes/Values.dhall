@@ -8,6 +8,7 @@ let T = {
   proxyServiceAnnotations : List { mapKey : Text, mapValue : Text },
   ingressHosts : List Text,
   ingressAnnotations : List { mapKey : Text, mapValue : Text },
+  ingressClassName : Optional Text,
   profiles : List { mapKey : Text, mapValue : Text },
 }
 
@@ -18,6 +19,7 @@ let default = {
   tag = "0.0.9-deno1.24.1-distroless",
   proxyServiceType = "NodePort",
   ingressAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
+  ingressClassName = None Text,
   proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
 }
 

@@ -74,6 +74,7 @@ in \(v : Values.Type) ->
             },
           },
         },
+        ingressClassName = v.ingressClassName,
         tls = Some [k.IngressTLS::{
           secretName = Some proxyName,
           hosts = Some v.ingressHosts,
