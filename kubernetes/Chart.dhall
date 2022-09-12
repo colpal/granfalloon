@@ -1,3 +1,4 @@
+let List/map = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/map.dhall
 let k = https://raw.githubusercontent.com/dhall-lang/dhall-kubernetes/master/1.22/package.dhall sha256:53c03eb6a2cf118b3608f81253293993308a11f46b4463a18e376d343163bb21
 
 let Values = ./Values.dhall
@@ -59,6 +60,26 @@ in \(v : Values.Type) ->
       },
     }
 
+    let hostToIngressRule = \(t : Text) -> k.IngressRule::{
+      host = Some t,
+      http = Some k.HTTPIngressRuleValue::{
+        paths = [k.HTTPIngressPath::{
+          path = Some v.ingressPath,
+          pathType = v.ingressPathType,
+          backend = k.IngressBackend::{
+            service = Some k.IngressServiceBackend::{
+              name = proxyName,
+              port = Some k.ServiceBackendPort::{
+                number = Some 80,
+              },
+            },
+          },
+        }]
+      },
+    }
+
+    let proxyIngressRules = List/map Text k.IngressRule.Type hostToIngressRule v.ingressHosts
+
     let proxyIngress = k.Resource.Ingress k.Ingress::{
       metadata = k.ObjectMeta::{
         annotations = Some v.ingressAnnotations,
@@ -71,6 +92,7 @@ in \(v : Values.Type) ->
           secretName = Some proxyName,
           hosts = Some v.ingressHosts,
         }],
+        rules = Some proxyIngressRules,
       },
     }
 
