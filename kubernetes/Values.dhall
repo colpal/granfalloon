@@ -8,7 +8,7 @@ let T = {
   tag : Text,
   token : Text,
   proxyServiceType : Text,
-  proxyServiceAnnotations : List { mapKey : Text, mapValue : Text },
+  proxyServiceAnnotations : Optional (List { mapKey : Text, mapValue : Text }),
   ingressHosts : List Text,
   ingressAnnotations : Optional (List { mapKey : Text, mapValue : Text }),
   ingressClassName : Optional Text,
@@ -29,7 +29,7 @@ let default = {
   ingressClassName = None Text,
   ingressPath = "/",
   ingressPathType = "Prefix",
-  proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
+  proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
   storeLimits = None (List { mapKey : Text, mapValue : Text }),
 }
 

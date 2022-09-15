@@ -46,7 +46,7 @@ in \(v : Values.Type) ->
 
     let proxyService = k.Resource.Service k.Service::{
       metadata = k.ObjectMeta::{
-        annotations = Some v.proxyServiceAnnotations,
+        annotations = v.proxyServiceAnnotations,
         namespace = v.namespace,
         name = Some proxyName
       },
