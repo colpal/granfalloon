@@ -2,6 +2,7 @@ let k = ./kubernetes.dhall
 
 let T = {
   proxyResources : Optional k.ResourceRequirements.Type,
+  storeResources : Optional k.ResourceRequirements.Type,
   name : Optional Text,
   namespace : Optional Text,
   image : Text,
@@ -14,12 +15,12 @@ let T = {
   ingressClassName : Optional Text,
   ingressPath : Text,
   ingressPathType : Text,
-  storeLimits : Optional (List { mapKey: Text, mapValue: Text }),
   profiles : List { mapKey : Text, mapValue : Text },
 }
 
 let default = {
   proxyResources = None k.ResourceRequirements.Type,
+  storeResources = None k.ResourceRequirements.Type,
   name = None Text,
   namespace = None Text,
   image = "ghcr.io/colpal/granfalloon",
@@ -30,7 +31,6 @@ let default = {
   ingressPath = "/",
   ingressPathType = "Prefix",
   proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
-  storeLimits = None (List { mapKey : Text, mapValue : Text }),
 }
 
 in  { Type = T, default }

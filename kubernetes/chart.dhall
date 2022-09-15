@@ -187,10 +187,8 @@ in \(v : Values.Type) ->
             containers = [k.Container::{
               name = "default",
               image = Some "redis:7.0.4-alpine3.16",
-              resources = Some k.ResourceRequirements::{
-                limits = v.storeLimits,
-              },
-            }]
+              resources = v.storeResources,
+            }],
           },
         },
       },
