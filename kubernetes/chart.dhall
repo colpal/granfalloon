@@ -9,9 +9,10 @@ in \(v : Values.Type) ->
     }
 
     let labels = merge {
-      Some = \(t : Text) -> predefinedLabels # toMap {
-        `app.kubernetes.io/instance` = t,
-      },
+      Some = \(t : Text) ->
+          predefinedLabels # toMap {
+            `app.kubernetes.io/instance` = t,
+          },
       None = predefinedLabels,
     } v.name
 
@@ -60,23 +61,24 @@ in \(v : Values.Type) ->
       },
     }
 
-    let hostToIngressRule = \(t : Text) -> k.IngressRule::{
-      host = Some t,
-      http = Some k.HTTPIngressRuleValue::{
-        paths = [k.HTTPIngressPath::{
-          path = Some v.ingressPath,
-          pathType = v.ingressPathType,
-          backend = k.IngressBackend::{
-            service = Some k.IngressServiceBackend::{
-              name = proxyName,
-              port = Some k.ServiceBackendPort::{
-                number = Some 80,
+    let hostToIngressRule = \(t : Text) ->
+        k.IngressRule::{
+          host = Some t,
+          http = Some k.HTTPIngressRuleValue::{
+            paths = [k.HTTPIngressPath::{
+              path = Some v.ingressPath,
+              pathType = v.ingressPathType,
+              backend = k.IngressBackend::{
+                service = Some k.IngressServiceBackend::{
+                  name = proxyName,
+                  port = Some k.ServiceBackendPort::{
+                    number = Some 80,
+                  },
+                },
               },
-            },
+            }],
           },
-        }]
-      },
-    }
+        }
 
     let proxyIngressRules = List/map Text k.IngressRule.Type hostToIngressRule v.ingressHosts
 
