@@ -1,10 +1,3 @@
-let Store = {
-  persistence : Optional {
-    storage : Text,
-    storageClassName : Text,
-  },
-}
-
 let T = {
   name : Optional Text,
   namespace : Optional Text,
@@ -21,7 +14,6 @@ let T = {
   ingressPathType : Text,
   storeLimits : Optional (List { mapKey: Text, mapValue: Text }),
   profiles : List { mapKey : Text, mapValue : Text },
-  store: Optional Store,
 }
 
 let default = {
@@ -37,7 +29,6 @@ let default = {
   proxyLimits = None (List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = ([] : List { mapKey : Text, mapValue : Text }),
   storeLimits = None (List { mapKey : Text, mapValue : Text }),
-  store = None Store,
 }
 
 in  { Type = T, default }
