@@ -139,9 +139,7 @@ in \(v : Values.Type) ->
                   port = k.NatOrString.Nat 8000,
                 },
               },
-              resources = Some k.ResourceRequirements::{
-                limits = v.proxyLimits,
-              },
+              resources = v.proxyResources,
               args = Some [
                 "--remote=https://api.github.com",
                 "--store=redis",
