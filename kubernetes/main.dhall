@@ -1,6 +1,7 @@
-let chart = ./chart.dhall
-
-let Values = ./Values.dhall
+let package = ./package.dhall
+let chart = package.chart
+let Values = package.Values
+let k = package.kubernetes
 
 in  chart Values::{
   name = "github",
