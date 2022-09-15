@@ -169,6 +169,32 @@ in \(v : Values.Type) ->
       },
     }
 
+    let storeVolumeClaimTemplates = merge {
+      None = None (List k.PersistentVolumeClaim.Type),
+      Some = \(s : k.PersistentVolumeClaimSpec.Type) ->
+          Some [k.PersistentVolumeClaim::{
+            metadata = k.ObjectMeta::{
+              name = Some "cache",
+            },
+            spec = Some s,
+          }]
+    } v.storePersistence
+
+    let storeVolumeMounts = merge {
+      None = None (List k.VolumeMount.Type),
+      Some = \(_ : k.PersistentVolumeClaimSpec.Type) ->
+          Some [k.VolumeMount::{
+            name = "cache",
+            mountPath = "/data",
+          }]
+    } v.storePersistence
+
+    let storeArgs = merge {
+      None = None (List Text),
+      Some = \(_ : k.PersistentVolumeClaimSpec.Type) ->
+          Some ["redis-server", "--save", "60", "1"]
+    } v.storePersistence
+
     let store = k.Resource.StatefulSet k.StatefulSet::{
       metadata = k.ObjectMeta::{
         namespace = v.namespace,
@@ -179,6 +205,7 @@ in \(v : Values.Type) ->
         selector = k.LabelSelector::{
           matchLabels = Some storeLabels,
         },
+        volumeClaimTemplates = storeVolumeClaimTemplates,
         template = k.PodTemplateSpec::{
           metadata = Some k.ObjectMeta::{
             labels = Some storeLabels,
@@ -187,7 +214,9 @@ in \(v : Values.Type) ->
             containers = [k.Container::{
               name = "default",
               image = Some "redis:7.0.4-alpine3.16",
+              args = storeArgs,
               resources = v.storeResources,
+              volumeMounts = storeVolumeMounts,
             }],
           },
         },

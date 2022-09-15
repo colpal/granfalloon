@@ -1,6 +1,7 @@
 let k = ./kubernetes.dhall
 
 let T = {
+  storePersistence : Optional k.PersistentVolumeClaimSpec.Type,
   proxyResources : Optional k.ResourceRequirements.Type,
   storeResources : Optional k.ResourceRequirements.Type,
   name : Optional Text,
@@ -19,6 +20,7 @@ let T = {
 }
 
 let default = {
+  storePersistence = None k.PersistentVolumeClaimSpec.Type,
   proxyResources = None k.ResourceRequirements.Type,
   storeResources = None k.ResourceRequirements.Type,
   name = None Text,
