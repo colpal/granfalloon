@@ -51,7 +51,7 @@ in \(v : Values.Type) ->
         name = Some proxyName
       },
       spec = Some k.ServiceSpec::{
-        type = v.proxyServiceType,
+        type = Some v.proxyServiceType,
         selector = Some proxyLabels,
         ports = Some [k.ServicePort::{
           port = 80,
