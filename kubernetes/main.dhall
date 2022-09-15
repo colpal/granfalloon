@@ -1,6 +1,6 @@
 let chart = ./chart.dhall
 
-let Values = ./values.dhall
+let Values = ./Values.dhall
 
 in  chart Values::{
   name = "github",
