@@ -33,7 +33,7 @@ let default = {
   ingressClassName = None Text,
   ingressPath = "/",
   ingressPathType = "Prefix",
-  profiles : None (List { mapKey : Text, mapValue : Text }),
+  profiles = None (List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
 }
 
