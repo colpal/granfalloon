@@ -17,6 +17,7 @@ let T = {
   ingressPath : Text,
   ingressPathType : Text,
   profiles : List { mapKey : Text, mapValue : Text },
+  remote : Text,
 }
 
 let default = {

@@ -143,7 +143,7 @@ in \(v : Values.Type) ->
               },
               resources = v.proxyResources,
               args = Some [
-                "--remote=https://api.github.com",
+                "--remote=${v.remote}",
                 "--store=redis",
                 "--redis-hostname=${namePrefix}store",
                 "--redis-port=6379",
