@@ -16,7 +16,7 @@ let T = {
   ingressClassName : Optional Text,
   ingressPath : Text,
   ingressPathType : Text,
-  profiles : List { mapKey : Text, mapValue : Text },
+  profiles : Optional (List { mapKey : Text, mapValue : Text }),
   remote : Text,
 }
 
@@ -33,6 +33,7 @@ let default = {
   ingressClassName = None Text,
   ingressPath = "/",
   ingressPathType = "Prefix",
+  profiles : None (List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
 }
 

@@ -26,7 +26,7 @@ in \(v : Values.Type) ->
         name = Some "${namePrefix}profiles",
         namespace = v.namespace,
       },
-      data = Some v.profiles,
+      data = v.profiles,
     }
 
     let proxyLabels = labels # toMap {
