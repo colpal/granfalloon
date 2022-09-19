@@ -128,7 +128,7 @@ in \(v : Values.Type) ->
             volumes = Some [k.Volume::{
               name = "profiles",
               configMap = Some k.ConfigMapVolumeSource::{
-                name = Some "${namePrefix}profiles",
+                name = Some configMapName,
               },
             }],
             containers = [k.Container::{
