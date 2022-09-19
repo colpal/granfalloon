@@ -133,7 +133,7 @@ in \(v : Values.Type) ->
             }],
             containers = [k.Container::{
               name = "default",
-              image = Some "${v.image}:${v.tag}",
+              image = Some "${v.proxyImage}:${v.proxyTag}",
               env = Some [k.EnvVar::{
                 name = "GRANFALLOON_TOKEN",
                 valueFrom = Some k.EnvVarSource::{
