@@ -129,6 +129,7 @@ in \(v : Values.Type) ->
               name = "profiles",
               configMap = Some k.ConfigMapVolumeSource::{
                 name = Some configMapName,
+                optional = Some False,
               },
             }],
             containers = [k.Container::{
