@@ -2,6 +2,7 @@ let List/map = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/P
 let List/unpackOptionals = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/unpackOptionals.dhall sha256:0cbaa920f429cf7fc3907f8a9143203fe948883913560e6e1043223e6b3d05e4
 let k = ./kubernetes.dhall
 
+let Profiles = ./Profiles.dhall
 let Values = ./Values.dhall
 
 in \(v : Values.Type) ->
@@ -22,13 +23,24 @@ in \(v : Values.Type) ->
       None = "",
     } v.name
 
-    let configMap = k.Resource.ConfigMap k.ConfigMap::{
-      metadata = k.ObjectMeta::{
-        name = Some "${namePrefix}profiles",
-        namespace = v.namespace,
-      },
-      data = v.profiles,
-    }
+    let configMapName = merge {
+      ConfigMapName = \(t : Text) -> t,
+      Files = \(_ : List { mapKey: Text, mapValue : Text }) ->
+          "${namePrefix}profiles",
+    } v.profiles
+
+    let configMap = merge {
+      ConfigMapName = \(_ : Text) -> None k.Resource,
+      Files = \(m : List { mapKey : Text, mapValue : Text }) ->
+          Some (k.Resource.ConfigMap k.ConfigMap::{
+            metadata = k.ObjectMeta::{
+              name = Some configMapName,
+              namespace = v.namespace,
+            },
+            data = Some m,
+          })
+    } v.profiles
+
 
     let proxyLabels = labels # toMap {
       `app.kubernetes.io/component` = "proxy",
@@ -228,10 +240,11 @@ in \(v : Values.Type) ->
 
     in [
       secret,
-      configMap,
       proxy,
       proxyService,
       proxyIngress,
       store,
       storeService,
+    ] # List/unpackOptionals k.Resource [
+      configMap,
     ]

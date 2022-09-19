@@ -1,4 +1,5 @@
 let k = ./kubernetes.dhall
+let Profiles = ./Profiles.dhall
 
 let T = {
   storePersistence : Optional k.PersistentVolumeClaimSpec.Type,
@@ -16,7 +17,7 @@ let T = {
   ingressClassName : Optional Text,
   ingressPath : Text,
   ingressPathType : Text,
-  profiles : Optional (List { mapKey : Text, mapValue : Text }),
+  profiles : Profiles,
   remote : Text,
 }
 
@@ -33,7 +34,6 @@ let default = {
   ingressClassName = None Text,
   ingressPath = "/",
   ingressPathType = "Prefix",
-  profiles = None (List { mapKey : Text, mapValue : Text }),
   proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
 }
 
