@@ -1,12 +1,9 @@
 let k = ./kubernetes.dhall
 let Profiles = ./Profiles.dhall
+let Ingress = ./Ingress.dhall
 
 let T = {
-  ingressAnnotations : Optional (List { mapKey : Text, mapValue : Text }),
-  ingressClassName : Optional Text,
-  ingressHosts : List Text,
-  ingressPath : Text,
-  ingressPathType : Text,
+  ingress : Optional Ingress.Type,
   name : Optional Text,
   namespace : Optional Text,
   profiles : Profiles,
@@ -22,10 +19,7 @@ let T = {
 }
 
 let default = {
-  ingressAnnotations = None (List { mapKey : Text, mapValue : Text }),
-  ingressClassName = None Text,
-  ingressPath = "/",
-  ingressPathType = "Prefix",
+  ingress = None Ingress.Type,
   name = None Text,
   namespace = None Text,
   proxyImage = "ghcr.io/colpal/granfalloon",

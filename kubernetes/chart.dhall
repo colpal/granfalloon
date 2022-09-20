@@ -3,6 +3,7 @@ let List/unpackOptionals = https://raw.githubusercontent.com/dhall-lang/dhall-la
 let k = ./kubernetes.dhall
 
 let Profiles = ./Profiles.dhall
+let Ingress = ./Ingress.dhall
 let Values = ./Values.dhall
 
 in \(v : Values.Type) ->
@@ -74,42 +75,44 @@ in \(v : Values.Type) ->
       },
     }
 
-    let hostToIngressRule = \(t : Text) ->
-        k.IngressRule::{
-          host = Some t,
-          http = Some k.HTTPIngressRuleValue::{
-            paths = [k.HTTPIngressPath::{
-              path = Some v.ingressPath,
-              pathType = v.ingressPathType,
-              backend = k.IngressBackend::{
-                service = Some k.IngressServiceBackend::{
-                  name = proxyName,
-                  port = Some k.ServiceBackendPort::{
-                    number = Some 80,
-                  },
+    let ingress = merge {
+      None = None k.Resource,
+      Some = \(i : Ingress.Type) ->
+          let hostToRule = \(t : Text) ->
+              k.IngressRule::{
+                host = Some t,
+                http = Some k.HTTPIngressRuleValue::{
+                  paths = [k.HTTPIngressPath::{
+                    path = Some i.path,
+                    pathType = i.pathType,
+                    backend = k.IngressBackend::{
+                      service = Some k.IngressServiceBackend::{
+                        name = proxyName,
+                        port = Some k.ServiceBackendPort::{
+                          number = Some 80,
+                        },
+                      },
+                    },
+                  }],
                 },
-              },
-            }],
-          },
-        }
-
-    let proxyIngressRules = List/map Text k.IngressRule.Type hostToIngressRule v.ingressHosts
-
-    let proxyIngress = k.Resource.Ingress k.Ingress::{
-      metadata = k.ObjectMeta::{
-        annotations = v.ingressAnnotations,
-        namespace = v.namespace,
-        name = Some proxyName
-      },
-      spec = Some k.IngressSpec::{
-        ingressClassName = v.ingressClassName,
-        tls = Some [k.IngressTLS::{
-          secretName = Some proxyName,
-          hosts = Some v.ingressHosts,
-        }],
-        rules = Some proxyIngressRules,
-      },
-    }
+              }
+          let rules = List/map Text k.IngressRule.Type hostToRule i.hosts
+          in Some (k.Resource.Ingress k.Ingress::{
+            metadata = k.ObjectMeta::{
+              annotations = i.annotations,
+              namespace = v.namespace,
+              name = Some proxyName
+            },
+            spec = Some k.IngressSpec::{
+              ingressClassName = i.className,
+              tls = Some [k.IngressTLS::{
+                secretName = Some proxyName,
+                hosts = Some i.hosts,
+              }],
+              rules = Some rules,
+            },
+          })
+    } v.ingress
 
     let proxy = k.Resource.Deployment k.Deployment::{
       metadata = k.ObjectMeta::{
@@ -243,9 +246,9 @@ in \(v : Values.Type) ->
       secret,
       proxy,
       proxyService,
-      proxyIngress,
       store,
       storeService,
     ] # List/unpackOptionals k.Resource [
       configMap,
+      ingress,
     ]
