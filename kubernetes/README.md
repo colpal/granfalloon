@@ -1,5 +1,19 @@
 # Kubernetes
 
+The are two deployment options for Granfallon on Kubernetes: manual, and a
+provided [Dhall](https://dhall-lang.org/) package
+
+## Dhall
+
+The provided [package.dhall](./package.dhall) file exports a `chart` function
+along with all associated types necessary to call it. It is possible to create
+your own Dhall file, and import package.dhall over HTTPS. When called, it will
+return a list of [dhall-kubernetes](
+https://github.com/dhall-lang/dhall-kubernetes) resources. These resources may
+be exported to YAML using the [dhall-to-yaml-ng](
+https://github.com/dhall-lang/dhall-haskell/tree/master/dhall-yaml)
+application. This YAML can be utilized by `kubectl`.
+
 ## Manual
 
 The official Granfalloon OCI image is hosted using [GitHub Packages](
