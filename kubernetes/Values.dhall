@@ -24,6 +24,6 @@ in {
     proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
     proxyServiceType = "NodePort",
     proxyTag = "0.0.9-deno1.24.1-distroless",
-    store = types.Store.InMemory,
-  }
+    store = types.Store.ManagedRedis types.ManagedRedis::{=},
+  },
 }
