@@ -1,7 +1,9 @@
 # Kubernetes
 
-The are two deployment options for Granfallon on Kubernetes: manual, and a
-provided [Dhall](https://dhall-lang.org/) package
+The are two deployment options for Granfallon on Kubernetes:
+
+- manual deployment
+- deployment via a provided [Dhall](https://dhall-lang.org/) package
 
 ## Dhall
 
