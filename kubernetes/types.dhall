@@ -19,7 +19,7 @@ let Ingress =
 let Profiles =
       < ConfigMapName : Text | Files : List { mapKey : Text, mapValue : Text } >
 
-let InternalRedis =
+let ManagedRedis =
       { Type =
           { persistence : Optional k.PersistentVolumeClaimSpec.Type
           , resources : Optional k.ResourceRequirements.Type
@@ -33,6 +33,6 @@ let InternalRedis =
 let ExternalRedis =
       { Type = { hostname : Text, port : Natural }, default.port = 6379 }
 
-let Store = < InternalRedis | ExternalRedis >
+let Store = < ManagedRedis | ExternalRedis >
 
-in  { Profiles, Ingress, InternalRedis, ExternalRedis, Store }
+in  { Profiles, Ingress, ManagedRedis, ExternalRedis, Store }
