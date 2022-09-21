@@ -12,8 +12,7 @@ in {
     proxyServiceType : Text,
     proxyTag : Text,
     remote : Text,
-    storePersistence : Optional k.PersistentVolumeClaimSpec.Type,
-    storeResources : Optional k.ResourceRequirements.Type,
+    store : types.Store,
     token : Text,
   },
   default = {
@@ -25,7 +24,6 @@ in {
     proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
     proxyServiceType = "NodePort",
     proxyTag = "0.0.9-deno1.24.1-distroless",
-    storePersistence = None k.PersistentVolumeClaimSpec.Type,
-    storeResources = None k.ResourceRequirements.Type,
+    store = types.Store.InMemory,
   }
 }

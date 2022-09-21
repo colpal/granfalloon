@@ -113,6 +113,25 @@ in \(v : Values.Type) ->
           })
     } v.ingress
 
+    let storeArguments = merge {
+      InMemory = ["--store=in-memory"],
+      ManagedRedis = \(_ : types.ManagedRedis.Type) ->
+          [
+            "--store=redis",
+            "--redis-hostname",
+            "${namePrefix}store",
+            "--redis-port=6379",
+          ],
+      ExternalRedis = \(er : types.ExternalRedis.Type) ->
+          [
+            "--store=redis",
+            "--redis-hostname",
+            er.hostname,
+            "--redis-port",
+            Natural/show er.port
+          ],
+    } v.store
+
     let proxy = k.Resource.Deployment k.Deployment::{
       metadata = k.ObjectMeta::{
         namespace = v.namespace,
@@ -158,12 +177,12 @@ in \(v : Values.Type) ->
                 },
               },
               resources = v.proxyResources,
-              args = Some [
+              args = Some ([
                 "--remote=${v.remote}",
                 "--store=redis",
                 "--redis-hostname=${namePrefix}store",
                 "--redis-port=6379",
-              ],
+              ] # storeArguments),
             }],
           },
         },
@@ -174,80 +193,94 @@ in \(v : Values.Type) ->
       `app.kubernetes.io/component` = "store",
     }
 
-    let storeService = k.Resource.Service k.Service::{
-      metadata = k.ObjectMeta::{
-        namespace = v.namespace,
-        name = Some "${namePrefix}store",
-      },
-      spec = Some k.ServiceSpec::{
-        selector = Some storeLabels,
-        ports = Some [k.ServicePort::{
-          port = 6379,
-        }],
-      },
-    }
+    let storeService = merge {
+      InMemory = None k.Resource,
+      ExternalRedis = \(_ : types.ExternalRedis.Type) -> None k.Resource,
+      ManagedRedis = \(_ : types.ManagedRedis.Type) ->
+          Some (k.Resource.Service k.Service::{
+            metadata = k.ObjectMeta::{
+              namespace = v.namespace,
+              name = Some "${namePrefix}store",
+            },
+            spec = Some k.ServiceSpec::{
+              selector = Some storeLabels,
+              ports = Some [k.ServicePort::{
+                port = 6379,
+              }],
+            },
+          }),
+    } v.store
 
     let storeVolumeClaimTemplates = merge {
-      None = None (List k.PersistentVolumeClaim.Type),
-      Some = \(s : k.PersistentVolumeClaimSpec.Type) ->
+      InMemory = None (List k.PersistentVolumeClaim.Type),
+      ExternalRedis = \(er : types.ExternalRedis.Type) ->
+          None (List k.PersistentVolumeClaim.Type),
+      ManagedRedis = \(mr : types.ManagedRedis.Type) ->
           Some [k.PersistentVolumeClaim::{
             metadata = k.ObjectMeta::{
               name = Some "cache",
             },
-            spec = Some s,
-          }]
-    } v.storePersistence
+            spec = mr.persistence,
+          }],
+    } v.store
 
     let storeVolumeMounts = merge {
       None = None (List k.VolumeMount.Type),
-      Some = \(_ : k.PersistentVolumeClaimSpec.Type) ->
+      Some = \(_ : List k.PersistentVolumeClaim.Type) ->
           Some [k.VolumeMount::{
             name = "cache",
             mountPath = "/data",
           }]
-    } v.storePersistence
+    } storeVolumeClaimTemplates
 
     let storeArgs = merge {
-      None = None (List Text),
-      Some = \(_ : k.PersistentVolumeClaimSpec.Type) ->
+      InMemory = None (List Text),
+      ExternalRedis = \(_ : types.ExternalRedis.Type) -> None (List Text),
+      ManagedRedis = \(_ : types.ManagedRedis.Type) ->
           Some ["redis-server", "--save", "60", "1"]
-    } v.storePersistence
+    } v.store
 
-    let store = k.Resource.StatefulSet k.StatefulSet::{
-      metadata = k.ObjectMeta::{
-        namespace = v.namespace,
-        name = Some "${namePrefix}store"
-      },
-      spec = Some k.StatefulSetSpec::{
-        serviceName = "${namePrefix}store",
-        selector = k.LabelSelector::{
-          matchLabels = Some storeLabels,
-        },
-        volumeClaimTemplates = storeVolumeClaimTemplates,
-        template = k.PodTemplateSpec::{
-          metadata = Some k.ObjectMeta::{
-            labels = Some storeLabels,
-          },
-          spec = Some k.PodSpec::{
-            containers = [k.Container::{
-              name = "default",
-              image = Some "redis:7.0.4-alpine3.16",
-              args = storeArgs,
-              resources = v.storeResources,
-              volumeMounts = storeVolumeMounts,
-            }],
-          },
-        },
-      },
-    }
+    let store = merge {
+      InMemory = None k.Resource,
+      ExternalRedis = \(_ : types.ExternalRedis.Type) -> None k.Resource,
+      ManagedRedis = \(mr : types.ManagedRedis.Type) ->
+          Some (k.Resource.StatefulSet k.StatefulSet::{
+            metadata = k.ObjectMeta::{
+              namespace = v.namespace,
+              name = Some "${namePrefix}store"
+            },
+            spec = Some k.StatefulSetSpec::{
+              serviceName = "${namePrefix}store",
+              selector = k.LabelSelector::{
+                matchLabels = Some storeLabels,
+              },
+              volumeClaimTemplates = storeVolumeClaimTemplates,
+              template = k.PodTemplateSpec::{
+                metadata = Some k.ObjectMeta::{
+                  labels = Some storeLabels,
+                },
+                spec = Some k.PodSpec::{
+                  containers = [k.Container::{
+                    name = "default",
+                    image = Some "redis:7.0.4-alpine3.16",
+                    args = storeArgs,
+                    resources = mr.resources,
+                    volumeMounts = storeVolumeMounts,
+                  }],
+                },
+              },
+            },
+          }),
+    } v.store
+
 
     in [
       secret,
       proxy,
       proxyService,
+    ] # List/unpackOptionals k.Resource [
       store,
       storeService,
-    ] # List/unpackOptionals k.Resource [
       configMap,
       ingress,
     ]
