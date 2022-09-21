@@ -2,8 +2,7 @@ let List/map = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/P
 let List/unpackOptionals = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/unpackOptionals.dhall sha256:0cbaa920f429cf7fc3907f8a9143203fe948883913560e6e1043223e6b3d05e4
 let k = ./kubernetes.dhall
 
-let Profiles = ./Profiles.dhall
-let Ingress = ./Ingress.dhall
+let types = ./types.dhall
 let Values = ./Values.dhall
 
 in \(v : Values.Type) ->
@@ -77,7 +76,7 @@ in \(v : Values.Type) ->
 
     let ingress = merge {
       None = None k.Resource,
-      Some = \(i : Ingress.Type) ->
+      Some = \(i : types.Ingress.Type) ->
           let hostToRule = \(t : Text) ->
               k.IngressRule::{
                 host = Some t,
