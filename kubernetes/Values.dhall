@@ -2,18 +2,18 @@ let k = ./kubernetes.dhall
 let types = ./types.dhall
 in {
   Type = {
+    profiles : types.Profiles,
+    remote : Text,
+    token : Text,
     ingress : Optional types.Ingress.Type,
     name : Optional Text,
     namespace : Optional Text,
-    profiles : types.Profiles,
     proxyImage : Text,
     proxyResources : Optional k.ResourceRequirements.Type,
     proxyServiceAnnotations : Optional (List { mapKey : Text, mapValue : Text }),
     proxyServiceType : Text,
     proxyTag : Text,
-    remote : Text,
     store : types.Store,
-    token : Text,
   },
   default = {
     ingress = None types.Ingress.Type,
