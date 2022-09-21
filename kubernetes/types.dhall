@@ -1,3 +1,5 @@
+let k = ./kubernetes.dhall
+
 let Ingress =
       { Type =
           { annotations : Optional (List { mapKey : Text, mapValue : Text })
@@ -17,4 +19,20 @@ let Ingress =
 let Profiles =
       < ConfigMapName : Text | Files : List { mapKey : Text, mapValue : Text } >
 
-in  { Profiles, Ingress }
+let InternalRedis =
+      { Type =
+          { persistence : Optional k.PersistentVolumeClaimSpec.Type
+          , resources : Optional k.ResourceRequirements.Type
+          }
+      , default =
+        { persistence = None k.PersistentVolumeClaimSpec.Type
+        , resources = None k.ResourceRequirements.Type
+        }
+      }
+
+let ExternalRedis =
+      { Type = { hostname : Text, port : Natural }, default.port = 6379 }
+
+let Store = < InternalRedis | ExternalRedis >
+
+in  { Profiles, Ingress, InternalRedis, ExternalRedis, Store }
