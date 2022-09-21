@@ -178,9 +178,6 @@ in \(v : Values.Type) ->
               resources = v.proxyResources,
               args = Some ([
                 "--remote=${v.remote}",
-                "--store=redis",
-                "--redis-hostname=${namePrefix}store",
-                "--redis-port=6379",
               ] # storeArguments),
             }],
           },
