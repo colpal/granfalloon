@@ -33,6 +33,10 @@ let ManagedRedis =
 let ExternalRedis =
       { Type = { hostname : Text, port : Natural }, default.port = 6379 }
 
-let Store = < ManagedRedis : ManagedRedis.Type | ExternalRedis : ExternalRedis.Type >
+let Store =
+      < InMemory
+      | ManagedRedis : ManagedRedis.Type
+      | ExternalRedis : ExternalRedis.Type
+      >
 
 in  { Profiles, Ingress, ManagedRedis, ExternalRedis, Store }
