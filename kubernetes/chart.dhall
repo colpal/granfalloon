@@ -41,7 +41,6 @@ in \(v : Values.Type) ->
           })
     } v.profiles
 
-
     let proxyLabels = labels # toMap {
       `app.kubernetes.io/component` = "proxy",
     }
@@ -211,35 +210,6 @@ in \(v : Values.Type) ->
           }),
     } v.store
 
-    let storeVolumeClaimTemplates = merge {
-      InMemory = None (List k.PersistentVolumeClaim.Type),
-      ExternalRedis = \(er : types.ExternalRedis.Type) ->
-          None (List k.PersistentVolumeClaim.Type),
-      ManagedRedis = \(mr : types.ManagedRedis.Type) ->
-          Some [k.PersistentVolumeClaim::{
-            metadata = k.ObjectMeta::{
-              name = Some "cache",
-            },
-            spec = mr.persistence,
-          }],
-    } v.store
-
-    let storeVolumeMounts = merge {
-      None = None (List k.VolumeMount.Type),
-      Some = \(_ : List k.PersistentVolumeClaim.Type) ->
-          Some [k.VolumeMount::{
-            name = "cache",
-            mountPath = "/data",
-          }]
-    } storeVolumeClaimTemplates
-
-    let storeArgs = merge {
-      InMemory = None (List Text),
-      ExternalRedis = \(_ : types.ExternalRedis.Type) -> None (List Text),
-      ManagedRedis = \(_ : types.ManagedRedis.Type) ->
-          Some ["redis-server", "--save", "60", "1"]
-    } v.store
-
     let store = merge {
       InMemory = None k.Resource,
       ExternalRedis = \(_ : types.ExternalRedis.Type) -> None k.Resource,
@@ -254,7 +224,12 @@ in \(v : Values.Type) ->
               selector = k.LabelSelector::{
                 matchLabels = Some storeLabels,
               },
-              volumeClaimTemplates = storeVolumeClaimTemplates,
+              volumeClaimTemplates = Some [k.PersistentVolumeClaim::{
+                metadata = k.ObjectMeta::{
+                  name = Some "cache",
+                },
+                spec = mr.persistence,
+              }],
               template = k.PodTemplateSpec::{
                 metadata = Some k.ObjectMeta::{
                   labels = Some storeLabels,
@@ -263,16 +238,18 @@ in \(v : Values.Type) ->
                   containers = [k.Container::{
                     name = "default",
                     image = Some "redis:7.0.4-alpine3.16",
-                    args = storeArgs,
+                    args = Some ["redis-server", "--save", "60", "1"],
                     resources = mr.resources,
-                    volumeMounts = storeVolumeMounts,
+                    volumeMounts = Some [k.VolumeMount::{
+                      name = "cache",
+                      mountPath = "/data",
+                    }],
                   }],
                 },
               },
             },
           }),
     } v.store
-
 
     in [
       secret,
