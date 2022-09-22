@@ -70,6 +70,10 @@ $ docker run \
     --remote=$REMOTE
 ```
 
+# Kubernetes Usage
+
+Please see the [`/kubernetes`])(./kubernetes) directory
+
 # Environment Variables
 
 ## `GRANFALLOON_TOKEN`
