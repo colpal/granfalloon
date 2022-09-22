@@ -17,7 +17,8 @@ let Ingress =
       }
 
 let Profiles =
-      < ConfigMapName : Text | Files : List { mapKey : Text, mapValue : Text } >
+      < ConfigMapName : Text
+      | Files : List { mapKey : Text, mapValue : Text } >
 
 let ManagedRedis =
       { Type =
