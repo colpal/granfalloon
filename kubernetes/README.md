@@ -1,5 +1,50 @@
 # Kubernetes
 
+The are two deployment options for Granfallon on Kubernetes:
+
+- manual deployment
+- deployment via a provided [Dhall](https://dhall-lang.org/) package
+
+## Dhall
+
+The provided [`package.dhall`](./package.dhall) file exports a `chart` function
+along with all associated types necessary to call it. It is possible to create
+your own Dhall file and import [`package.dhall`](./package.dhall) over HTTPS (it
+is strongly recommended that you use
+[Dhall's freeze functionality to validate imports](
+https://docs.dhall-lang.org/discussions/Safety-guarantees.html#code-injection)).
+When called, the `chart` function will return a list of [`dhall-kubernetes`](
+https://github.com/dhall-lang/dhall-kubernetes) resources. These resources may
+be exported to YAML using the [`dhall-to-yaml-ng`](
+https://github.com/dhall-lang/dhall-haskell/tree/master/dhall-yaml) command-line
+application. This YAML can be utilized by `kubectl` to apply resources.
+
+Below is a minimal example of configuring and applying the Dhall-based
+deployment:
+
+```dhall
+-- package.dhall
+let package =
+      https://raw.githubusercontent.com/colpal/granfalloon/dhall/kubernetes/package.dhall
+        sha256:0000000000000000000000000000000000000000000000000000000000000000
+
+in  package.chart
+      package.Values::{
+      , remote = "https://example.com"
+      , token = env:GRANFALLOON_TOKEN as Text
+      , profiles = package.Profiles.ConfigMapName "my-config-map"
+      }
+```
+
+```sh
+$ kubectl create configmap my-config-map --from-file=/profiles
+$ dhall-to-yaml-ng --file package.dhall --documents | kubectl apply -f -
+```
+
+For more information on the possible options that can be passed to the `chart`
+function, see the [`Values.dhall`](./Values.dhall) file. It defines all possible
+options as well as their default values, and is heavily annotated.
+
 ## Manual
 
 The official Granfalloon OCI image is hosted using [GitHub Packages](
