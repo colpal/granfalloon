@@ -2,6 +2,15 @@ let k = ./kubernetes.dhall
 let types = ./types.dhall
 in {
   Type = {
+    -- The Granfalloon profiles to provide to the proxy containers
+    --     types.Profiles.ConfigMapName Text:
+    --         The name of an existing ConfigMap that was created from a
+    --         directory of Granfalloon profiles
+    --     types.Profiles.Files (Map Text Text):
+    --         A Map of key-value pairs where each key is treated as a filename
+    --         and each value is treated as the plaintext contents of a
+    --         Granfalloon profile. This is used to "artificially" create a
+    --         new ConfigMap as if from a directory of Granfalloon profiles
     profiles : types.Profiles,
     remote : Text,
     token : Text,
