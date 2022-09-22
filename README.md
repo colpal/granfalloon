@@ -72,7 +72,7 @@ $ docker run \
 
 # Kubernetes Usage
 
-Please see the [`/kubernetes`])(./kubernetes) directory
+Please see the [`/kubernetes`](./kubernetes) directory
 
 # Environment Variables
 
