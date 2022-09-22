@@ -4,14 +4,7 @@ let types = ./types.dhall
 in {
   Type = {
     -- The Granfalloon profiles to provide to the proxy containers
-    --     types.Profiles.ConfigMapName Text:
-    --         The name of an existing ConfigMap that was created from a
-    --         directory of Granfalloon profiles
-    --     types.Profiles.Files (Map Text Text):
-    --         A Map of key-value pairs where each key is treated as a filename
-    --         and each value is treated as the plaintext contents of a
-    --         Granfalloon profile. This is used to "artificially" create a
-    --         new ConfigMap as if from a directory of Granfalloon profiles
+    -- See the declaration in types.dhall for more information
     profiles : types.Profiles,
 
     -- The remote service to which Granfalloon will be proxying requests
@@ -45,17 +38,7 @@ in {
     proxyTag : Text,
 
     -- The method Granfalloon will use to store session information
-    --     types.Store.InMemory:
-    --         Session information will be stored ephemerally within
-    --         Granfalloon's runtime
-    --     types.Store.ExternalRedis types.ExternalRedis:
-    --         Session information will be stored within a Redis instance that
-    --         is not bootstrapped by this package. A hostname and port must be
-    --         provided
-    --     types.Store.ManagedRedis types.ManagedRedis:
-    --         Session information will be stored within a Redis instance that
-    --         is bootstrapped by this package. Resource requests/limits and
-    --         persistence may be configured
+    -- See the declaration in types.dhall for more information
     store : types.Store,
   },
   default = {
