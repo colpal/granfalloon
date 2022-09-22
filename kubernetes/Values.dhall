@@ -1,3 +1,4 @@
+let Map = ./Map.Type.dhall
 let k = ./kubernetes.dhall
 let types = ./types.dhall
 in {
@@ -35,7 +36,7 @@ in {
     proxyResources : Optional k.ResourceRequirements.Type,
 
     -- Annotations to set on Granfalloon's Service
-    proxyServiceAnnotations : Optional (List { mapKey : Text, mapValue : Text }),
+    proxyServiceAnnotations : Optional (Map Text Text),
 
     -- The type to set on Granfalloon's Service
     proxyServiceType : Text,
@@ -74,7 +75,7 @@ in {
     proxyResources = None k.ResourceRequirements.Type,
 
     -- The default is to not declare any Service annotations
-    proxyServiceAnnotations = None (List { mapKey : Text, mapValue : Text }),
+    proxyServiceAnnotations = None (Map Text Text),
 
     -- The default is to declare the Service as a NodePort
     proxyServiceType = "NodePort",

@@ -1,3 +1,4 @@
+let Map = ./Map.Type.dhall
 let List/map = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/map.dhall sha256:dd845ffb4568d40327f2a817eb42d1c6138b929ca758d50bc33112ef3c885680
 let List/unpackOptionals = https://raw.githubusercontent.com/dhall-lang/dhall-lang/v21.1.0/Prelude/List/unpackOptionals.dhall sha256:0cbaa920f429cf7fc3907f8a9143203fe948883913560e6e1043223e6b3d05e4
 let k = ./kubernetes.dhall
@@ -25,13 +26,13 @@ in \(v : Values.Type) ->
 
     let configMapName = merge {
       ConfigMapName = \(t : Text) -> t,
-      Files = \(_ : List { mapKey: Text, mapValue : Text }) ->
+      Files = \(_ : Map Text Text) ->
           "${namePrefix}profiles",
     } v.profiles
 
     let configMap = merge {
       ConfigMapName = \(_ : Text) -> None k.Resource,
-      Files = \(m : List { mapKey : Text, mapValue : Text }) ->
+      Files = \(m : Map Text Text) ->
           Some (k.Resource.ConfigMap k.ConfigMap::{
             metadata = k.ObjectMeta::{
               name = Some configMapName,

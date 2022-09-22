@@ -1,15 +1,17 @@
+let Map = ./Map.Type.Dhall
+
 let k = ./kubernetes.dhall
 
 let Ingress =
       { Type =
-          { annotations : Optional (List { mapKey : Text, mapValue : Text })
+          { annotations : Optional (Map Text Text)
           , className : Optional Text
           , hosts : List Text
           , path : Text
           , pathType : Text
           }
       , default =
-        { annotations = None (List { mapKey : Text, mapValue : Text })
+        { annotations = None (Map Text Text)
         , className = None Text
         , path = "/"
         , pathType = "Prefix"
@@ -18,7 +20,7 @@ let Ingress =
 
 let Profiles =
       < ConfigMapName : Text
-      | Files : List { mapKey : Text, mapValue : Text } >
+      | Files : Map Text Text >
 
 let ManagedRedis =
       { Type =
