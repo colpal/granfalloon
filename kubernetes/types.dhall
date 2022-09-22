@@ -64,9 +64,11 @@ let ExternalRedis = {
   Type = {
     -- The hostname of the external Redis instance
     hostname : Text,
+    
     -- The listening port of the external Redis instance
     port : Natural,
   },
+  
   -- The default Redis port
   default.port = 6379,
 }
