@@ -210,7 +210,7 @@ the moment, Granfalloon supports the following key pair types:
 
 You may use any method to generate one of the above key pairs in the JWK
 format. If you do not have a preferred method in mind, you may also use the
-[`bin/generate-keys.js`](./bin/generate-key.js) Deno script
+[`bin/generate-keys.js`](./bin/generate-keys.js) Deno script
 
 # API
 
