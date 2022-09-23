@@ -32,12 +32,11 @@ let package =
       https://raw.githubusercontent.com/colpal/granfalloon/dhall/kubernetes/package.dhall
         sha256:0000000000000000000000000000000000000000000000000000000000000000
 
-in  package.chart
-      package.Values::{
-      , remote = "https://example.com"
-      , token = env:GRANFALLOON_TOKEN as Text
-      , profiles = package.Profiles.ConfigMapName "my-config-map"
-      }
+in package.chart package.Values::{
+  remote = "https://example.com",
+  token = env:GRANFALLOON_TOKEN as Text,
+  profiles = package.Profiles.ConfigMapName "my-config-map",
+}
 ```
 
 ```sh
