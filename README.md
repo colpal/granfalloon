@@ -197,6 +197,21 @@ interface Profile {
 }
 ```
 
+# Key Pairs
+
+To register a profile with Granfalloon, you must supply the public portion of
+an asymmetric key pair, formatted as a JWK. Authenticating to Granfalloon
+requires decrypting an encrypted challenge using the associated private key. At
+the moment, Granfalloon supports the following key pair types:
+
+- RSA-OAEP-256
+- RSA-OAEP-384
+- RSA-OAEP-512
+
+You may use any method to generate one of the above key pairs in the JWK
+format. If you do not have a preferred method in mind, you may also use the
+[`bin/generate-keys.js`](./bin/generate-key.js) Deno script
+
 # API
 
 ## `POST /_/start-challenge`
