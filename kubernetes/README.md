@@ -37,7 +37,7 @@ in  package.chart
 ```
 
 ```sh
-$ kubectl create configmap my-config-map --from-file=/profiles
+$ kubectl create configmap my-config-map --from-file=profiles/
 $ dhall-to-yaml-ng --file package.dhall --documents | kubectl apply -f -
 ```
 
