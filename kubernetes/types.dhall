@@ -1,4 +1,4 @@
-let Map = ./Map.Type.Dhall
+let Map = ./Map.Type.dhall
 
 let k = ./kubernetes.dhall
 
