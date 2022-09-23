@@ -100,6 +100,10 @@ in package.chart package.Values::{
 }
 ```
 
+```sh
+$ dhall-to-yaml-ng --file package.dhall --documents | kubectl apply -f -
+```
+
 ## Manual
 
 The official Granfalloon OCI image is hosted using [GitHub Packages](
