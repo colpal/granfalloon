@@ -11,6 +11,7 @@ typically centralized secret
 
 ```sh
 # server
+
 $ cat profiles/example.json
 {
   "publicKey": {
