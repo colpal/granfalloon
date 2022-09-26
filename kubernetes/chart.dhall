@@ -50,7 +50,7 @@ in \(v : Values.Type) ->
 
     let secret = k.Resource.Secret k.Secret::{
       metadata = k.ObjectMeta::{
-        name = Some proxyName,
+        name = Some "token",
         namespace = v.namespace,
       },
       stringData = Some (toMap {
