@@ -64,7 +64,7 @@ in {
     proxyServiceType = "NodePort",
 
     -- The default tag to use with the official Granfalloon image
-    proxyTag = "0.0.11-deno1.24.1-distroless",
+    proxyTag = "0.0.12-deno1.24.1-distroless",
 
     -- The default is to declare and connect to a non-resource constrained,
     -- non-persistent Redis instance in the same namespace
