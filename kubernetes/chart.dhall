@@ -48,9 +48,11 @@ in \(v : Values.Type) ->
 
     let proxyName = "${namePrefix}proxy"
 
+    let tokenSecretName = "${proxyName}-token"
+
     let secret = k.Resource.Secret k.Secret::{
       metadata = k.ObjectMeta::{
-        name = Some "token",
+        name = Some tokenSecretName,
         namespace = v.namespace,
       },
       stringData = Some (toMap {
@@ -105,7 +107,7 @@ in \(v : Values.Type) ->
             spec = Some k.IngressSpec::{
               ingressClassName = i.className,
               tls = Some [k.IngressTLS::{
-                secretName = Some proxyName,
+                secretName = Some "${proxyName}-cert",
                 hosts = Some i.hosts,
               }],
               rules = Some rules,
@@ -160,7 +162,7 @@ in \(v : Values.Type) ->
                 name = "GRANFALLOON_TOKEN",
                 valueFrom = Some k.EnvVarSource::{
                   secretKeyRef = Some k.SecretKeySelector::{
-                    name = Some proxyName,
+                    name = Some tokenSecretName,
                     key = "token",
                     optional = Some False,
                   },
