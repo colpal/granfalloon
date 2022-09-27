@@ -50,6 +50,6 @@ export default async (request, { store, profiles, remote, token, log }) => {
   headers.set("Authorization", `token ${token}`);
 
   const url = new URL(pathname, remote);
-  log.info(JSON.stringify({ meta: { url, kid } }));
+  log.info(JSON.stringify({ meta: { url, kid, timestamp: new Date() } }));
   return fetch(new Request(url, { ...request, headers }));
 };
