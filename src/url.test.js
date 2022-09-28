@@ -7,14 +7,16 @@ function assertURLEquals(actual, expected) {
   }
 }
 
+const token = "banana";
+
 Deno.test("shift", () => {
   const actual = shift(
     "https://api.example.com",
     new Request("http://localhost/user"),
-    "banana",
+    token,
   );
   const expected = new Request("https://api.example.com/user", {
-    headers: { authorization: "token banana" },
+    headers: { authorization: `token ${token}` },
   });
   assertURLEquals(actual, expected);
 });
