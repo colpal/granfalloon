@@ -24,10 +24,10 @@ Deno.test("shift", () => {
 Deno.test("shift with query", () => {
   const actual = shift(
     "https://api.example.com",
-    new Request("http://localhost/users?page=2"),
+    new Request("http://localhost/user?page=2"),
     token,
   );
-  const expected = new Request("https://api.example.com/users?page=2", {
+  const expected = new Request("https://api.example.com/user?page=2", {
     headers: { authorization: `token ${token}` },
   });
   assertURLEquals(actual, expected);
