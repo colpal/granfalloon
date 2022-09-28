@@ -28,3 +28,17 @@ Deno.test("shift with query", () => {
   });
   assertURLEquals(actual, expected);
 });
+
+Deno.test("shift with header", () => {
+  const actual = shift("https://api.example.com", token, new Request(
+    "http://localhost/user",
+    { "x-header": 42 },
+  ));
+  const expected = new Request("https://api.example.com/user", {
+    headers: {
+      authorization: `token ${token}`,
+      "x-header": 42,
+    },
+  });
+  assertURLEquals(actual, expected);
+});
