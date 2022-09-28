@@ -7,7 +7,7 @@ export const isMatch = (allows, request) => {
   });
 };
 
-export const shift = (remote, request, token) => {
+export const shift = (remote, token, request) => {
   const headers = new Headers(request.headers);
   headers.set("Authorization", `token ${token}`);
   const url = new URL((new URL(request.url)).pathname, remote);

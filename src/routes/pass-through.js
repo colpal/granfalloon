@@ -43,7 +43,7 @@ export default async (request, { store, profiles, remote, token, log }) => {
     });
   }
 
-  const outbound = shift(remote, request, token);
+  const outbound = shift(remote, token, request);
   log.info(
     JSON.stringify({ meta: { url: outbound.url, kid, timestamp: new Date() } }),
   );
