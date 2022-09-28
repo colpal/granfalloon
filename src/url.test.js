@@ -54,3 +54,17 @@ Deno.test("shift with header", () => {
   });
   assertURLEquals(actual, expected);
 });
+
+Deno.test("shift with ports", () => {
+  const actual = shift(
+    "https://api.example.com:8443",
+    token,
+    new Request("http://localhost:8000/user"),
+  );
+  const expected = new Request("https://api.example.com:8443/user", {
+    headers: {
+      authorization: `token ${token}`,
+    },
+  });
+  assertURLEquals(actual, expected);
+});
