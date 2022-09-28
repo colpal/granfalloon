@@ -1,5 +1,5 @@
-import { globToRegExp } from "../deps.ts";
 import attempt from "../util/attempt.js";
+import { isMatch } from "../url.js"
 import {
   blockedByProfile,
   cannotRetrieveSession,
@@ -36,10 +36,7 @@ export default async (request, { store, profiles, remote, token, log }) => {
     return new Response(log.info(missingProfile(kid)), { status: 500 });
   }
 
-  const { pathname } = new URL(request.url);
-  const isAllowed = profile.allow.some(([method, glob]) => {
-    return request.method === method && globToRegExp(glob).test(pathname);
-  });
+  const isAllowed = isMatch(profile.allow, request);
   if (!isAllowed) {
     return new Response(log.info(blockedByProfile(kid, pathname)), {
       status: 400,
@@ -49,7 +46,7 @@ export default async (request, { store, profiles, remote, token, log }) => {
   const headers = new Headers(request.headers);
   headers.set("Authorization", `token ${token}`);
 
-  const url = new URL(pathname, remote);
+  const url = new URL((new URL(request.url)).pathname, remote);
   log.info(JSON.stringify({ meta: { url, kid, timestamp: new Date() } }));
   return fetch(new Request(url, { ...request, headers }));
 };
