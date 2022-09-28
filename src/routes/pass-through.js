@@ -1,5 +1,5 @@
 import attempt from "../util/attempt.js";
-import { isMatch } from "../url.js"
+import { isMatch, shift } from "../url.js"
 import {
   blockedByProfile,
   cannotRetrieveSession,
@@ -43,10 +43,7 @@ export default async (request, { store, profiles, remote, token, log }) => {
     });
   }
 
-  const headers = new Headers(request.headers);
-  headers.set("Authorization", `token ${token}`);
-
-  const url = new URL((new URL(request.url)).pathname, remote);
-  log.info(JSON.stringify({ meta: { url, kid, timestamp: new Date() } }));
-  return fetch(new Request(url, { ...request, headers }));
+  const outbound = shift(remote, request, token);
+  log.info(JSON.stringify({ meta: { url: outbound.url, kid, timestamp: new Date() } }));
+  return fetch(outbound);
 };
