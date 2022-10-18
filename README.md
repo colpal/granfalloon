@@ -59,6 +59,17 @@ $ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq .
 [ { detail: "The profile associated with this session blocked the request" } ]
 ```
 
+# Security
+
+## Hosting
+
+Granfalloon should **never** be hosted without HTTPS! Granfalloon's
+authentication protocol alone is not sufficient to prove the identity of the
+server (it is not a mutual authentication). If you access Granfalloon over raw
+HTTP, it is trivial for an attacker to MITM an authentication attempt and
+acquire a session. Granfalloon (at this time) does not support end-to-end
+encryption, so you will need to configure some form of TLS termination.
+
 # OCI Usage
 
 ```sh
