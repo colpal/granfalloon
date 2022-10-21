@@ -5,7 +5,11 @@ import * as InMemoryStore from "../store/in-memory.js";
 import load from "../profiles/load.js";
 
 const [rsaKid, rsaProfile] = await load("./test/profiles/example-rsa.json");
-const profiles = Object.fromEntries([[rsaKid, rsaProfile]]);
+const [ed25519Kid, ed25519Profile] = await load ("./test/profiles/example-ed25519.json");
+const profiles = Object.fromEntries([
+  [rsaKid, rsaProfile],
+  [ed25519Kid, ed25519Profile],
+]);
 const url = "http://localhost/_/start-challenge";
 const log = { info: (x) => x, error: (x) => x };
 
