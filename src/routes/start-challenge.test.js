@@ -4,7 +4,7 @@ import startChallenge from "./start-challenge.js";
 import * as InMemoryStore from "../store/in-memory.js";
 import load from "../profiles/load.js";
 
-const [kid, profile] = await load("./test/profiles/example.json");
+const [kid, profile] = await load("./test/profiles/example-rsa.json");
 const profiles = Object.fromEntries([[kid, profile]]);
 const url = "http://localhost/_/start-challenge";
 const log = { info: (x) => x, error: (x) => x };

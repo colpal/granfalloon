@@ -15,7 +15,7 @@ Deno.test({
     const token = Deno.env.get("GRANFALLOON_TOKEN");
     const log = { info: (x) => x, error: (x) => x };
 
-    const [kid, profile] = await load("./test/profiles/example.json");
+    const [kid, profile] = await load("./test/profiles/example-rsa.json");
     const router = Router({
       log,
       remote,
@@ -33,7 +33,7 @@ Deno.test({
 
     const { data: { nonce, challenge } } = await start.json();
     const answer = await Deno
-      .readTextFile("./test/profiles/example.json.private")
+      .readTextFile("./test/profiles/example-rsa.json.private")
       .then(JSON.parse)
       .then(toDecryptionKey)
       .then((key) => decrypt(key, challenge));
