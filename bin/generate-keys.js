@@ -9,13 +9,10 @@ if (!flags.private) {
 
 const { publicKey, privateKey } = await crypto.subtle.generateKey(
   {
-    name: "RSA-OAEP",
-    modulusLength: 2048,
-    hash: "SHA-256",
-    publicExponent: new Uint8Array([1, 0, 1]),
+    name: "Ed25519",
   },
   true,
-  ["encrypt", "decrypt"],
+  ["sign", "verify"],
 );
 
 await Deno.writeTextFile(
