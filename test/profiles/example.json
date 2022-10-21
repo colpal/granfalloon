@@ -1,11 +1,13 @@
 {
   "name": "example",
   "publicKey": {
-    "kty": "RSA",
-    "alg": "RSA-OAEP-256",
-    "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
-    "e": "AQAB",
-    "key_ops": ["encrypt"],
+    "kty": "OKP",
+    "alg": "EdDSA",
+    "crv": "Ed25519",
+    "x": "0_Wi5E-xXujsb_rrZ5NbDHmdji2I-ix6XIzim7b4DN8",
+    "key_ops": [
+      "verify"
+    ],
     "ext": true
   },
   "allow": [
