@@ -1,5 +1,4 @@
 #!/usr/bin/env deno run --allow-write
-import { crypto } from "../src/deps.ts";
 import { parse } from "../src/deps.ts";
 
 const flags = parse(Deno.args);

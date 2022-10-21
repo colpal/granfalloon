@@ -1,4 +1,3 @@
-import { crypto } from "../deps.ts";
 import toEncryptionKey from "../crypto/to-encryption-key.js";
 import encrypt from "../crypto/encrypt.js";
 import attempt from "../util/attempt.js";

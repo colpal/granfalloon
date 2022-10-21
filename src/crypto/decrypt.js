@@ -1,4 +1,4 @@
-import { base64Decode, crypto } from "../deps.ts";
+import { base64Decode } from "../deps.ts";
 
 export default async (key, encryptedB64) => {
   const ab = await crypto.subtle.decrypt(

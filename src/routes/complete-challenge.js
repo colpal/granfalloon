@@ -1,4 +1,3 @@
-import { crypto } from "../deps.ts";
 import hash from "../crypto/hash.js";
 import attempt from "../util/attempt.js";
 import {

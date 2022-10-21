@@ -1,5 +1,3 @@
-import { crypto } from "../deps.ts";
-
 export default (jwk) => {
   return crypto.subtle.importKey(
     "jwk",

@@ -1,4 +1,4 @@
-import { base64urlEncode, crypto } from "../deps.ts";
+import { base64urlEncode } from "../deps.ts";
 
 const requiredKeys = {
   RSA: ["e", "kty", "n"],
