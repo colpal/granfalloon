@@ -230,7 +230,7 @@ format. If you do not have a preferred method in mind, you may also use the
 
 For testing purposes, this repository includes examples of how to decrypt using
 a JWK-formatted private key at
-[`src/crypto/to-decryption-key.js`](src/crypto/to-decryption-key.js) and
+[`src/crypto/to-private-key.js`](src/crypto/to-private-key.js) and
 [`src/crypto/decrypt.js`](src/crypto/decrypt.js).
 
 However, it should be possible to leverage the JWK-formatted private key in

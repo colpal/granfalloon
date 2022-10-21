@@ -1,5 +1,5 @@
 import { assertEquals } from "./deps.ts";
-import toDecryptionKey from "./crypto/to-decryption-key.js";
+import toPrivateKey from "./crypto/to-private-key.js";
 import decrypt from "./crypto/decrypt.js";
 import * as InMemoryStore from "./store/in-memory.js";
 import load from "./profiles/load.js";
@@ -31,7 +31,7 @@ const endToEnd = (profilePath, privatePath) => async() => {
   const answer = await Deno
     .readTextFile(privatePath)
     .then(JSON.parse)
-    .then(toDecryptionKey)
+    .then(toPrivateKey)
     .then((key) => decrypt(key, challenge));
   const complete = await router(
     new Request("http://localhost/_/complete-challenge", {
