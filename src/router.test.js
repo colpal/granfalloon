@@ -57,11 +57,21 @@ const endToEnd = (profilePath, privatePath) => async() => {
 }
 
 Deno.test({
-  name: "end-to-end",
+  name: "RSA",
   sanitizeOps: false,
   sanitizeResources: false,
   fn: endToEnd(
     "./test/profiles/example-rsa.json",
     "./test/profiles/example-rsa.json.private",
+  ),
+});
+
+Deno.test({
+  name: "Ed25519",
+  sanitizeOps: false,
+  sanitizeResources: false,
+  fn: endToEnd(
+    "./test/profiles/example-ed25519.json",
+    "./test/profiles/example-ed25519.json.private",
   ),
 });
