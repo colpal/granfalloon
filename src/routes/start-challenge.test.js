@@ -13,6 +13,17 @@ const profiles = Object.fromEntries([
 const url = "http://localhost/_/start-challenge";
 const log = { info: (x) => x, error: (x) => x };
 
+const unknownPublicKey = (publicKey) => async () => {
+  const { status } = await startChallenge(
+    new Request(url, {
+      method: "POST",
+      body: JSON.stringify({ publicKey }),
+    }),
+    { log, profiles: {}, store: InMemoryStore.create() },
+  );
+  assertEquals(floorHundred(status), 400);
+};
+
 Deno.test("empty body", async () => {
   const { status } = await startChallenge(
     new Request(url),
@@ -40,16 +51,8 @@ Deno.test("empty public key", async () => {
   assertEquals(floorHundred(status), 400);
 });
 
-Deno.test("unknown public key", async () => {
-  const { status } = await startChallenge(
-    new Request(url, {
-      method: "POST",
-      body: JSON.stringify({ publicKey: rsaProfile.publicKey }),
-    }),
-    { log, profiles: {}, store: InMemoryStore.create() },
-  );
-  assertEquals(floorHundred(status), 400);
-});
+Deno.test("RSA: unknown public key", unknownPublicKey(rsaProfile.publicKey));
+Deno.test("Ed25519: unknown public key", unknownPublicKey(ed25519Profile.publicKey));
 
 Deno.test("store error", async () => {
   const { status } = await startChallenge(
