@@ -4,8 +4,8 @@ import startChallenge from "./start-challenge.js";
 import * as InMemoryStore from "../store/in-memory.js";
 import load from "../profiles/load.js";
 
-const [kid, profile] = await load("./test/profiles/example-rsa.json");
-const profiles = Object.fromEntries([[kid, profile]]);
+const [rsaKid, rsaProfile] = await load("./test/profiles/example-rsa.json");
+const profiles = Object.fromEntries([[rsaKid, rsaProfile]]);
 const url = "http://localhost/_/start-challenge";
 const log = { info: (x) => x, error: (x) => x };
 
@@ -40,7 +40,7 @@ Deno.test("unknown public key", async () => {
   const { status } = await startChallenge(
     new Request(url, {
       method: "POST",
-      body: JSON.stringify({ publicKey: profile.publicKey }),
+      body: JSON.stringify({ publicKey: rsaProfile.publicKey }),
     }),
     { log, profiles: {}, store: InMemoryStore.create() },
   );
@@ -51,7 +51,7 @@ Deno.test("store error", async () => {
   const { status } = await startChallenge(
     new Request(url, {
       method: "POST",
-      body: JSON.stringify({ publicKey: profile.publicKey }),
+      body: JSON.stringify({ publicKey: rsaProfile.publicKey }),
     }),
     {
       log,
