@@ -1,10 +1,10 @@
 import toPublicKey from "../crypto/to-public-key.js";
-import encrypt from "../crypto/encrypt.js";
+import createChallenge from "../crypto/create-challenge.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../crypto/thumbprint.js";
 import {
   cannotCreateNonceSession,
-  cannotEncryptChallenge,
+  cannotCreateChallenge,
   cannotThumbprint,
   invalidPublicKey,
   issueChallenge,
@@ -68,11 +68,11 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const [encryptError, challenge] = await attempt(encrypt(publicKey, secret));
-  if (encryptError) {
-    log.error(encryptError);
+  const [challengeError, challenge] = await attempt(createChallenge(publicKey, secret));
+  if (challengeError) {
+    log.error(challengeError);
     return new Response(
-      log.info(cannotEncryptChallenge(profile.publicKey)),
+      log.info(cannotCreateChallenge(profile.publicKey)),
       { status: 500 },
     );
   }
