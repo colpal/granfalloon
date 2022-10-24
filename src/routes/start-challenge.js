@@ -1,4 +1,4 @@
-import toEncryptionKey from "../crypto/to-encryption-key.js";
+import toPublicKey from "../crypto/to-public-key.js";
 import encrypt from "../crypto/encrypt.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../crypto/thumbprint.js";
@@ -43,7 +43,7 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const [keyImportError, publicKey] = await attempt(toEncryptionKey(
+  const [keyImportError, publicKey] = await attempt(toPublicKey(
     profile.publicKey,
   ));
   if (keyImportError) {
