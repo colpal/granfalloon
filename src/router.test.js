@@ -1,6 +1,6 @@
 import { assertEquals } from "./deps.ts";
 import toPrivateKey from "./crypto/to-private-key.js";
-import decrypt from "./crypto/decrypt.js";
+import answerChallenge from "./crypto/answer-challenge.js";
 import * as InMemoryStore from "./store/in-memory.js";
 import load from "./profiles/load.js";
 import Router from "./router.js";
@@ -32,7 +32,7 @@ const endToEnd = (profilePath, privatePath) => async() => {
     .readTextFile(privatePath)
     .then(JSON.parse)
     .then(toPrivateKey)
-    .then((key) => decrypt(key, challenge));
+    .then((key) => answerChallenge(key, challenge));
   const complete = await router(
     new Request("http://localhost/_/complete-challenge", {
       method: "POST",
