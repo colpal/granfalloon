@@ -1,5 +1,6 @@
 import hash from "../crypto/hash.js";
 import attempt from "../util/attempt.js";
+import toPublicKey from "../crypto/to-public-key.js";
 import {
   cannotClearChallenge,
   cannotCreateSession,
@@ -48,6 +49,18 @@ export default async (request, { store, log, profiles }) => {
       { status: 400 },
     );
   }
+
+  const [keyImportError, key] = await attempt(toPublicKey(
+    profiles[kid].publicKey,
+  ));
+  if (keyImportError) {
+    log.error(keyImportError);
+    return new Response(
+      log.info(invalidPublicKey(profiles[kid].publicKey)),
+      { status: 500 },
+    );
+  }
+
   if (answer !== expected) {
     store.del(`${nonce}:kid`);
     store.del(`${nonce}:secret`);
