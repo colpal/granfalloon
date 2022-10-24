@@ -1,10 +1,12 @@
 import hash from "../crypto/hash.js";
 import attempt from "../util/attempt.js";
+import verifyAnswer from "../crypto/verify-answer.js";
 import toPublicKey from "../crypto/to-public-key.js";
 import {
   cannotClearChallenge,
   cannotCreateSession,
   cannotRetrieveChallenge,
+  cannotVerifyAnswer,
   createSession,
   incorrectAnswer,
   jsonRequired,
@@ -61,7 +63,20 @@ export default async (request, { store, log, profiles }) => {
     );
   }
 
-  if (answer !== expected) {
+  const [verificationError, verified] = await attempt(verifyAnswer(
+    key,
+    expected,
+    answer,
+  ));
+  if (verificationError) {
+    log.error(verificationError);
+    return new Response(
+      log.info(cannotVerifyAnswer(nonce)),
+      { status: 500 },
+    );
+  }
+
+  if (!verified) {
     store.del(`${nonce}:kid`);
     store.del(`${nonce}:secret`);
     return new Response(
