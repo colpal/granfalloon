@@ -216,7 +216,7 @@ type RSAPublicJWK = {
   ext?: boolean;
 };
 
-type Profile = {
+interface Profile {
   name?: string;
   allow: Array<[RequestMethod, string]>;
   publicKey: Ed25519PublicJWK | RSAPublicJWK;
