@@ -70,6 +70,12 @@ export const noActiveChallenge = (nonce) =>
     { detail: "No active challenge found for this nonce" },
   );
 
+export const cannotVerifyAnswer = (nonce) =>
+  error(
+    { nonce },
+    { detail: "Could not verify the provided answer" },
+  );
+
 export const incorrectAnswer = (nonce) =>
   error(
     { nonce },
