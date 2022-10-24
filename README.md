@@ -15,9 +15,10 @@ typically centralized secret
 $ cat profiles/example.json
 {
   "publicKey": {
-    "kty": "RSA",
-    "n": "...",
-    "e": "..."
+    "kty": "OKP",
+    "alg": "EdDSA",
+    "crv": "Ed25519",
+    "x": "..."
   },
   "allow": [
     ["GET", "/orgs/*/repos"],
@@ -38,10 +39,10 @@ Listening on http://localhost:8000/
 $ curl -d '...' http://localhost:8000/_/start-challenge | jq .data
 {
   "nonce": "nonce-00000000-0000-0000-0000-000000000000",
-  "challenge": "BASE64(ENCRYPT(my-answer))"
+  "challenge": "secret-00000000-0000-0000-0000-000000000000"
 }
 
-# Complete a challenge by sending the decrypted answer with your nonce
+# Complete a challenge by sending the signed/decrypted answer with your nonce
 $ curl -d '...' http://localhost:8000/_/complete-challenge | jq .data
 {
   "session": "session-00000000-0000-0000-0000-000000000000"
@@ -165,11 +166,13 @@ The listening port of the external Redis service.
   "name": "example",
   // The public-key portion of a key pair formatted as a JWK
   "publicKey": {
-    "kty": "RSA",
-    "alg": "RSA-OAEP-256",
-    "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
-    "e": "AQAB",
-    "key_ops": ["encrypt"],
+    "kty": "OKP",
+    "alg": "EdDSA",
+    "crv": "Ed25519",
+    "x": "0_Wi5E-xXujsb_rrZ5NbDHmdji2I-ix6XIzim7b4DN8",
+    "key_ops": [
+      "verify"
+    ],
     "ext": true
   },
   // The request patterns to allow for this profile. Globs are supported
@@ -195,17 +198,28 @@ type RequestMethod =
   | "TRACE"
   | "PATCH";
 
-interface Profile {
+type Ed25519PublicJWK = {
+  kty: "OKP";
+  crv: "Ed25519";
+  x: string;
+  alg?: "EdDSA";
+  key_ops?: ["verify"];
+  ext?: boolean;
+};
+
+type RSAPublicJWK = {
+  kty: "RSA";
+  alg: "RSA-OAEP-256" | "RSA-OAEP-384" | "RSA-OAEP-512";
+  n: string;
+  e: string;
+  key_ops?: ["encrypt"];
+  ext?: boolean;
+};
+
+type Profile = {
   name?: string;
   allow: Array<[RequestMethod, string]>;
-  publicKey: {
-    kty: "RSA";
-    n: string;
-    e: string;
-    alg?: "RSA-OAEP-256" | "RSA-OAEP-384" | "RSA-OAEP-512";
-    key_ops?: ["encrypt"];
-    ext?: boolean;
-  };
+  publicKey: Ed25519PublicJWK | RSAPublicJWK;
 }
 ```
 
@@ -215,9 +229,10 @@ interface Profile {
 
 To register a profile with Granfalloon, you must supply the public portion of
 an asymmetric key pair, formatted as a JWK. Authenticating to Granfalloon
-requires decrypting an encrypted challenge using the associated private key. At
+requires signing/decrypting a challenge using the associated private key. At
 the moment, Granfalloon supports the following key pair types:
 
+- Ed25519 (Recommended)
 - RSA-OAEP-256
 - RSA-OAEP-384
 - RSA-OAEP-512
@@ -228,10 +243,10 @@ format. If you do not have a preferred method in mind, you may also use the
 
 ## Usage
 
-For testing purposes, this repository includes examples of how to decrypt using
-a JWK-formatted private key at
+For testing purposes, this repository includes examples of how to sign/decrypt
+using a JWK-formatted private key at
 [`src/crypto/to-private-key.js`](src/crypto/to-private-key.js) and
-[`src/crypto/decrypt.js`](src/crypto/decrypt.js).
+[`src/crypto/answer-challenge.js`](src/crypto/answer-challenge.js).
 
 However, it should be possible to leverage the JWK-formatted private key in
 most major languages/platforms:
@@ -255,8 +270,10 @@ within 60 seconds.
 
 - `.data.nonce` - A one-time use, randomly generated identifier for the newly
   created challenge-response authentication attempt.
-- `.data.challenge` - The answer to the challenge-response authentication
-  attempt, first encrypted with the provided public-key, then base64 encoded.
+- `.data.challenge` - If the associated public key is Ed25519-based, this will
+  contain the plaintext (unsigned) answer to the challenge. If the associated
+  public key is RSA-based, this will contain the answer to the challenge, first
+  encrypted with the associated private key, then base64-encoded.
 
 ### Example
 
@@ -264,9 +281,9 @@ within 60 seconds.
 $ cat payload.json
 {
   "publicKey": {
-    "kty": "RSA",
-    "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
-    "e": "AQAB"
+    "kty": "OKP",
+    "crv": "Ed25519",
+    "x": "0_Wi5E-xXujsb_rrZ5NbDHmdji2I-ix6XIzim7b4DN8"
   }
 }
 
@@ -279,15 +296,15 @@ $ curl \
 {
   "meta": {
     "publicKey": {
-      "kty": "RSA",
-      "n": "7N3WvSyofUN_Bbmnw6sm6Caj-gpejrhNL-v6wvV3_Yb9sPE4b4ytphBSUuxt9PWV9ofmjugh3r9DK7peqP7i-PTBk9stj2Lb2YwkV-FJaha8gnfGBODA1UijKKyXh38FNrWxYAwqCIHpn1NzJFNtgGLdLLNo9EmyYnKcPBsRegU6ZbjOmsstVy4i3sZL2m7u-2S5zpXVTMMZDfTYQGESKfR-_vz7gaorEvy5Gs-vZ-Mh3PqLvnccHacq5GC7U8LjaGG8QA4XIZe2W2k8fvJX5WfDOXR1pQdcqvdVboy2O5bIR4_x64Mg-O5crrTlsqP6HGUcEb4X06qYMaM85U8h3Q",
-      "e": "AQAB"
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "0_Wi5E-xXujsb_rrZ5NbDHmdji2I-ix6XIzim7b4DN8"
     },
     "timestamp": "2022-08-09T21:04:46.128Z"
   },
   "data": {
-    "nonce": "nonce-cf0e9b8f-a498-4451-8686-915effb8d2f0",
-    "challenge": "1GQT7iXEXTbrIPTMGa9TNxjBTaieQfx9BhrCqEND3qXCdzPlmiVoGntYhSSwGzm/vJpiKN4PK0zwq0zy6KCz8G4saouRYBocBbnvq9RV6MDX4ojK8fQepgPiBdPNsUqpQ1Hgq8+kbv8hMCCb+9XdQ6i2j1IFwGuwpZJzR7caYQutGVQrHqZXnw0WSLCgDbQ3Jq5mpjkp6P4RFWbRiGBtBQw+vZo0M9Yybv8zVxREEurgSiew1K3ZkHSqFUZvgR8MOK1f4Ym1dr4ibiT3/Wvuj3XlSeuIwgAT/jXA8Jc7f9S/p119yC8eBYoQZkgGv/rH4x+SbrOv9sRQ6uNc+Bgswg=="
+    "nonce": "nonce-00000000-0000-0000-0000-000000000000",
+    "challenge": "secret-00000000-0000-0000-0000-000000000000"
   }
 }
 ```
@@ -303,8 +320,10 @@ Complete a recently initiated challenge-response authentication attempt
 
 - `.nonce` `required` - A nonce previously returned by the `/_/start-challenge`
   endpoint
-- `.answer` `required` - The base64-decoded, decrypted challenge value
-  associated with the previously returned nonce 
+- `.answer` `required` - If the key associated with the profile is
+  Ed25519-based, this must be the challenge value signed with the associated
+  private-key, then base64-encoded. If the key associated with the profile is
+  RSA-based, this must be the decrypted challenge value in plaintext.
 
 ### Response
 
@@ -317,7 +336,7 @@ Complete a recently initiated challenge-response authentication attempt
 $ cat payload.json
 {
   "nonce": "nonce-cf0e9b8f-a498-4451-8686-915effb8d2f0",
-  "answer": "secret-3423238c-4215-4a57-8623-c9558d0a92cd"
+  "answer": "dGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZwo="
 }
 
 $ curl \
