@@ -11,7 +11,7 @@ import {
   noActiveChallenge,
 } from "../responses.js";
 
-export default async (request, { store, log }) => {
+export default async (request, { store, log, profiles }) => {
   const [bodyError, body] = await attempt(request.json());
   if (bodyError) {
     log.error(bodyError);

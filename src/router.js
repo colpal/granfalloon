@@ -9,7 +9,7 @@ export default ({ store, profiles, remote, token, log }) => (request) => {
     case "/_/start-challenge":
       return startChallenge(request, { store, profiles, log });
     case "/_/complete-challenge":
-      return completeChallenge(request, { store, log });
+      return completeChallenge(request, { store, log, profiles });
     case "/_/health":
       return health();
     default:
