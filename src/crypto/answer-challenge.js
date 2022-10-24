@@ -1,9 +1,9 @@
-import { base64Decode } from "../deps.ts";
+import { base64Decode, base64Encode } from "../deps.ts";
 
 export default async (key, challenge) => {
   switch (true) {
     case key.usages.includes("sign"):
-      return new TextDecoder().decode(
+      return base64Encode(
         await crypto.subtle.sign(
           key.algorithm.name,
           key,
