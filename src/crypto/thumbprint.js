@@ -1,6 +1,7 @@
 import { base64urlEncode } from "../deps.ts";
 
 const requiredKeys = {
+  OKP: ["crv", "kty", "x"],
   RSA: ["e", "kty", "n"],
 };
 

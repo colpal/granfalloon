@@ -1,10 +1,10 @@
-import toEncryptionKey from "../crypto/to-encryption-key.js";
-import encrypt from "../crypto/encrypt.js";
+import toPublicKey from "../crypto/to-public-key.js";
+import createChallenge from "../crypto/create-challenge.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../crypto/thumbprint.js";
 import {
+  cannotCreateChallenge,
   cannotCreateNonceSession,
-  cannotEncryptChallenge,
   cannotThumbprint,
   invalidPublicKey,
   issueChallenge,
@@ -43,7 +43,7 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const [keyImportError, publicKey] = await attempt(toEncryptionKey(
+  const [keyImportError, publicKey] = await attempt(toPublicKey(
     profile.publicKey,
   ));
   if (keyImportError) {
@@ -54,11 +54,13 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const nonce = `nonce-${crypto.randomUUID()}`;
-  const secret = `secret-${crypto.randomUUID()}`;
+  const nonce = `granfalloon-nonce_${crypto.randomUUID()}`;
+  const answer = publicKey.usages.includes("verify")
+    ? `granfalloon-unsigned_${crypto.randomUUID()}`
+    : `granfalloon-secret_${crypto.randomUUID()}`;
   const [setError] = await attempt(Promise.all([
     store.set(`${nonce}:kid`, kid, { ex: 60 }),
-    store.set(`${nonce}:secret`, secret, { ex: 60 }),
+    store.set(`${nonce}:answer`, answer, { ex: 60 }),
   ]));
   if (setError) {
     log.error(setError);
@@ -68,11 +70,13 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const [encryptError, challenge] = await attempt(encrypt(publicKey, secret));
-  if (encryptError) {
-    log.error(encryptError);
+  const [challengeError, challenge] = await attempt(
+    createChallenge(publicKey, answer),
+  );
+  if (challengeError) {
+    log.error(challengeError);
     return new Response(
-      log.info(cannotEncryptChallenge(profile.publicKey)),
+      log.info(cannotCreateChallenge(profile.publicKey)),
       { status: 500 },
     );
   }

@@ -1,0 +1,11 @@
+{
+  "kty": "OKP",
+  "alg": "EdDSA",
+  "crv": "Ed25519",
+  "x": "0_Wi5E-xXujsb_rrZ5NbDHmdji2I-ix6XIzim7b4DN8",
+  "key_ops": [
+    "sign"
+  ],
+  "ext": true,
+  "d": "yayDxqmohsVF1pZOvFAoZJGQVPMoiLzYgr5Qmfmsm2k"
+}

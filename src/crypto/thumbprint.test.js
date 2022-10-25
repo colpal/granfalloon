@@ -13,3 +13,14 @@ Deno.test("RSA", async () => {
   const actual = await thumbprint(publicKey);
   assertEquals(actual, expected);
 });
+
+Deno.test("Ed25519", async () => {
+  const publicKey = {
+    "kty": "OKP",
+    "crv": "Ed25519",
+    "x": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+  };
+  const expected = "kPrK_qmxVWaYVA9wwBF6Iuo3vVzz7TxHCTwXBygrS4k";
+  const actual = await thumbprint(publicKey);
+  assertEquals(actual, expected);
+});

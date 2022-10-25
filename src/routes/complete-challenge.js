@@ -1,9 +1,12 @@
 import hash from "../crypto/hash.js";
 import attempt from "../util/attempt.js";
+import verifyAnswer from "../crypto/verify-answer.js";
+import toPublicKey from "../crypto/to-public-key.js";
 import {
   cannotClearChallenge,
   cannotCreateSession,
   cannotRetrieveChallenge,
+  cannotVerifyAnswer,
   createSession,
   incorrectAnswer,
   jsonRequired,
@@ -11,7 +14,7 @@ import {
   noActiveChallenge,
 } from "../responses.js";
 
-export default async (request, { store, log }) => {
+export default async (request, { store, log, profiles }) => {
   const [bodyError, body] = await attempt(request.json());
   if (bodyError) {
     log.error(bodyError);
@@ -33,7 +36,7 @@ export default async (request, { store, log }) => {
 
   const [getError, [kid, expected]] = await attempt(Promise.all([
     store.get(`${nonce}:kid`),
-    store.get(`${nonce}:secret`),
+    store.get(`${nonce}:answer`),
   ]));
   if (getError) {
     log.error(getError);
@@ -48,9 +51,34 @@ export default async (request, { store, log }) => {
       { status: 400 },
     );
   }
-  if (answer !== expected) {
+
+  const [keyImportError, key] = await attempt(toPublicKey(
+    profiles[kid].publicKey,
+  ));
+  if (keyImportError) {
+    log.error(keyImportError);
+    return new Response(
+      log.info(invalidPublicKey(profiles[kid].publicKey)),
+      { status: 500 },
+    );
+  }
+
+  const [verificationError, verified] = await attempt(verifyAnswer(
+    key,
+    expected,
+    answer,
+  ));
+  if (verificationError) {
+    log.error(verificationError);
+    return new Response(
+      log.info(cannotVerifyAnswer(nonce)),
+      { status: 500 },
+    );
+  }
+
+  if (!verified) {
     store.del(`${nonce}:kid`);
-    store.del(`${nonce}:secret`);
+    store.del(`${nonce}:answer`);
     return new Response(
       log.info(incorrectAnswer(nonce)),
       { status: 400 },
@@ -59,7 +87,7 @@ export default async (request, { store, log }) => {
 
   const [clearNonceError] = await attempt(Promise.all([
     store.del(`${nonce}:kid`),
-    store.del(`${nonce}:secret`),
+    store.del(`${nonce}:answer`),
   ]));
   if (clearNonceError) {
     log.error(clearNonceError);
@@ -69,7 +97,7 @@ export default async (request, { store, log }) => {
     );
   }
 
-  const session = `session-${crypto.randomUUID()}`;
+  const session = `granfalloon-session_${crypto.randomUUID()}`;
   const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));
   if (setError) {
     return new Response(
