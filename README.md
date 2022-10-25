@@ -38,8 +38,8 @@ Listening on http://localhost:8000/
 # Start a challenge by sending your pre-configured public key
 $ curl -d '...' http://localhost:8000/_/start-challenge | jq .data
 {
-  "nonce": "nonce-00000000-0000-0000-0000-000000000000",
-  "challenge": "secret-00000000-0000-0000-0000-000000000000"
+  "nonce": "granfalloon-nonce_00000000-0000-0000-0000-000000000000",
+  "challenge": "granfalloon-unsigned_00000000-0000-0000-0000-000000000000"
 }
 
 # Complete a challenge by sending the signed/decrypted answer with your nonce
@@ -303,8 +303,8 @@ $ curl \
     "timestamp": "2022-08-09T21:04:46.128Z"
   },
   "data": {
-    "nonce": "nonce-00000000-0000-0000-0000-000000000000",
-    "challenge": "secret-00000000-0000-0000-0000-000000000000"
+    "nonce": "granfalloon-nonce_00000000-0000-0000-0000-000000000000",
+    "challenge": "granfalloon-unsigned_00000000-0000-0000-0000-000000000000"
   }
 }
 ```
@@ -335,7 +335,7 @@ Complete a recently initiated challenge-response authentication attempt
 ```sh
 $ cat payload.json
 {
-  "nonce": "nonce-cf0e9b8f-a498-4451-8686-915effb8d2f0",
+  "nonce": "granfalloon-nonce_cf0e9b8f-a498-4451-8686-915effb8d2f0",
   "answer": "dGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZwo="
 }
 
