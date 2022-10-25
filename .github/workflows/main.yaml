@@ -1,7 +1,7 @@
 on: push
 
 env:
-  DENO_VERSION: 1.24.1
+  DENO_VERSION: 1.26.2
   IMAGE: ghcr.io/colpal/granfalloon
   TARGETS: |
     x86_64-unknown-linux-gnu
