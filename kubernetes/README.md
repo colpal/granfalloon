@@ -29,7 +29,7 @@ all possible options as well as their default values, and is heavily annotated.
 ```dhall
 -- package.dhall
 let package =
-      https://raw.githubusercontent.com/colpal/granfalloon/v0.0.15/kubernetes/package.dhall
+      https://raw.githubusercontent.com/colpal/granfalloon/v0.1.0/kubernetes/package.dhall
         sha256:0000000000000000000000000000000000000000000000000000000000000000
 
 in package.chart package.Values::{
@@ -49,7 +49,7 @@ $ dhall-to-yaml-ng --file package.dhall --documents | kubectl apply -f -
 ```dhall
 -- package.dhall
 let package =
-      https://raw.githubusercontent.com/colpal/granfalloon/v0.0.15/kubernetes/package.dhall
+      https://raw.githubusercontent.com/colpal/granfalloon/v0.1.0/kubernetes/package.dhall
         sha256:0000000000000000000000000000000000000000000000000000000000000000
 
 in package.chart package.Values::{
