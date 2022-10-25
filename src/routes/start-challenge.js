@@ -3,8 +3,8 @@ import createChallenge from "../crypto/create-challenge.js";
 import attempt from "../util/attempt.js";
 import thumbprint from "../crypto/thumbprint.js";
 import {
-  cannotCreateNonceSession,
   cannotCreateChallenge,
+  cannotCreateNonceSession,
   cannotThumbprint,
   invalidPublicKey,
   issueChallenge,
@@ -68,7 +68,9 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const [challengeError, challenge] = await attempt(createChallenge(publicKey, answer));
+  const [challengeError, challenge] = await attempt(
+    createChallenge(publicKey, answer),
+  );
   if (challengeError) {
     log.error(challengeError);
     return new Response(
