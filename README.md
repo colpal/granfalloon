@@ -16,7 +16,6 @@ $ cat profiles/example.json
 {
   "publicKey": {
     "kty": "OKP",
-    "alg": "EdDSA",
     "crv": "Ed25519",
     "x": "..."
   },
