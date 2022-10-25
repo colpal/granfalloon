@@ -55,10 +55,10 @@ export default async (request, { store, profiles, log }) => {
   }
 
   const nonce = `nonce-${crypto.randomUUID()}`;
-  const secret = `secret-${crypto.randomUUID()}`;
+  const answer = `secret-${crypto.randomUUID()}`;
   const [setError] = await attempt(Promise.all([
     store.set(`${nonce}:kid`, kid, { ex: 60 }),
-    store.set(`${nonce}:secret`, secret, { ex: 60 }),
+    store.set(`${nonce}:answer`, answer, { ex: 60 }),
   ]));
   if (setError) {
     log.error(setError);
@@ -68,7 +68,7 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const [challengeError, challenge] = await attempt(createChallenge(publicKey, secret));
+  const [challengeError, challenge] = await attempt(createChallenge(publicKey, answer));
   if (challengeError) {
     log.error(challengeError);
     return new Response(

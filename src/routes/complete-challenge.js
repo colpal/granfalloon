@@ -36,7 +36,7 @@ export default async (request, { store, log, profiles }) => {
 
   const [getError, [kid, expected]] = await attempt(Promise.all([
     store.get(`${nonce}:kid`),
-    store.get(`${nonce}:secret`),
+    store.get(`${nonce}:answer`),
   ]));
   if (getError) {
     log.error(getError);
@@ -78,7 +78,7 @@ export default async (request, { store, log, profiles }) => {
 
   if (!verified) {
     store.del(`${nonce}:kid`);
-    store.del(`${nonce}:secret`);
+    store.del(`${nonce}:answer`);
     return new Response(
       log.info(incorrectAnswer(nonce)),
       { status: 400 },
@@ -87,7 +87,7 @@ export default async (request, { store, log, profiles }) => {
 
   const [clearNonceError] = await attempt(Promise.all([
     store.del(`${nonce}:kid`),
-    store.del(`${nonce}:secret`),
+    store.del(`${nonce}:answer`),
   ]));
   if (clearNonceError) {
     log.error(clearNonceError);
