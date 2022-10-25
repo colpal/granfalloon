@@ -360,6 +360,10 @@ date: Fri, 09 Sep 2022 17:08:26 GMT
 
 # Motivation
 
+> Note: This section was written before
+> [fine-grained personal access tokens](https://github.blog/changelog/2022-10-18-introducing-fine-grained-personal-access-tokens/)
+> were introduced.
+
 Granfalloon was originally conceived to address practical issue related to the
 use of GitHub personal access tokens. Due to GitHub not having true service
 accounts, it is common for teams/organizations to create a bot account, then
