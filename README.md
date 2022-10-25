@@ -44,18 +44,18 @@ $ curl -d '...' http://localhost:8000/_/start-challenge | jq .data
 # Complete a challenge by sending the signed/decrypted answer with your nonce
 $ curl -d '...' http://localhost:8000/_/complete-challenge | jq .data
 {
-  "session": "session-00000000-0000-0000-0000-000000000000"
+  "session": "granfalloon-session_00000000-0000-0000-0000-000000000000"
 }
 
 # Patterns allowed by the app's profile will be proxied with authentication
-$ curl -H "Authorization: token session-..." http://localhost:8000/user | jq
+$ curl -H "Authorization: token granfalloon-session_..." http://localhost:8000/user | jq
 {
   "login": "shared-user",
   # ...
 }
 
 # Patterns not allowed by the app's profile will fail immediately
-$ curl -H "Authorization: token session-..." http://localhost:8000/emojis | jq .errors
+$ curl -H "Authorization: token granfalloon-session_..." http://localhost:8000/emojis | jq .errors
 [ { detail: "The profile associated with this session blocked the request" } ]
 ```
 
@@ -350,7 +350,7 @@ $ curl \
     "timestamp": "2022-08-09T21:28:18.760Z"
   },
   "data": {
-    "session": "session-7ee4c581-567e-44a9-9cd5-73bcffb60fd6"
+    "session": "granfalloon-session_7ee4c581-567e-44a9-9cd5-73bcffb60fd6"
   }
 }
 ```

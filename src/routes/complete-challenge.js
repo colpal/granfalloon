@@ -97,7 +97,7 @@ export default async (request, { store, log, profiles }) => {
     );
   }
 
-  const session = `session-${crypto.randomUUID()}`;
+  const session = `granfalloon-session_${crypto.randomUUID()}`;
   const [setError] = await attempt(store.set(session, kid, { ex: 60 * 60 }));
   if (setError) {
     return new Response(
