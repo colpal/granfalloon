@@ -346,7 +346,7 @@ $ curl \
 ```json
 {
   "meta": {
-    "kid": "FAhJ17LUhGOC98KwPkjuJTcZTsf2I3IqwlhMoqi3BkA",
+    "kid": "eVTxhrEP4Ca60WM9S-ZmQhJ8urzAbjtqe3koQo8AxRs",
     "timestamp": "2022-08-09T21:28:18.760Z"
   },
   "data": {
