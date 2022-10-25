@@ -54,8 +54,10 @@ export default async (request, { store, profiles, log }) => {
     );
   }
 
-  const nonce = `nonce-${crypto.randomUUID()}`;
-  const answer = `secret-${crypto.randomUUID()}`;
+  const nonce = `granfalloon-nonce_${crypto.randomUUID()}`;
+  const answer = publicKey.usages.includes("verify")
+    ? `granfalloon-unsigned_${crypto.randomUUID()}`
+    : `granfalloon-secret_${crypto.randomUUID()}`;
   const [setError] = await attempt(Promise.all([
     store.set(`${nonce}:kid`, kid, { ex: 60 }),
     store.set(`${nonce}:answer`, answer, { ex: 60 }),
