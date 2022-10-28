@@ -11,18 +11,18 @@ The provided [`package.dhall`](./package.dhall) file exports a `chart` function
 along with all associated types necessary to call it. It is possible to create
 your own Dhall file and import [`package.dhall`](./package.dhall) over HTTPS (it
 is strongly recommended that you use
-[Dhall's freeze functionality to validate imports](
-https://docs.dhall-lang.org/discussions/Safety-guarantees.html#code-injection)).
-When called, the `chart` function will return a list of [`dhall-kubernetes`](
-https://github.com/dhall-lang/dhall-kubernetes) resources. These resources may
-be exported to YAML using the [`dhall-to-yaml-ng`](
-https://github.com/dhall-lang/dhall-haskell/tree/master/dhall-yaml) command-line
-application. This YAML can be utilized by `kubectl` to apply resources.
+[Dhall's freeze functionality to validate imports](https://docs.dhall-lang.org/discussions/Safety-guarantees.html#code-injection)).
+When called, the `chart` function will return a list of
+[`dhall-kubernetes`](https://github.com/dhall-lang/dhall-kubernetes) resources.
+These resources may be exported to YAML using the
+[`dhall-to-yaml-ng`](https://github.com/dhall-lang/dhall-haskell/tree/master/dhall-yaml)
+command-line application. This YAML can be utilized by `kubectl` to apply
+resources.
 
-Below are a few examples of configuring and applying the Dhall-based
-deployment. For more information on the possible options that can be passed to
-the `chart` function, see the [`Values.dhall`](./Values.dhall) file. It defines
-all possible options as well as their default values, and is heavily annotated.
+Below are a few examples of configuring and applying the Dhall-based deployment.
+For more information on the possible options that can be passed to the `chart`
+function, see the [`Values.dhall`](./Values.dhall) file. It defines all possible
+options as well as their default values, and is heavily annotated.
 
 ### Minimal Example
 
@@ -105,11 +105,11 @@ $ dhall-to-yaml-ng --file package.dhall --documents | kubectl apply -f -
 
 ## Manual
 
-The official Granfalloon OCI image is hosted using [GitHub Packages](
-https://github.com/colpal/granfalloon/pkgs/container/granfalloon). Profiles can
-be mounted into containers using the `/profiles` volume. Container arguments
-are passed directly to the Granfalloon executables command-line arguments, and
-can be used to configure store options.
+The official Granfalloon OCI image is hosted using
+[GitHub Packages](https://github.com/colpal/granfalloon/pkgs/container/granfalloon).
+Profiles can be mounted into containers using the `/profiles` volume. Container
+arguments are passed directly to the Granfalloon executables command-line
+arguments, and can be used to configure store options.
 
 With this in mind, a minimal Granfalloon deployment on Kubernetes can be created
 with the following resources:

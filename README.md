@@ -121,10 +121,9 @@ The directory from which application profiles should be loaded. Any files with
 the `.json` extension are assumed to be application profiles.
 
 If you would like to add or update existing application profiles without
-restarting Granfalloon, you may send a `SIGHUP` signal to the process. This
-will cause Granfalloon to reload the profiles from the directory provided on
-startup. Notably, this cannot remove any previously loaded application
-profiles.
+restarting Granfalloon, you may send a `SIGHUP` signal to the process. This will
+cause Granfalloon to reload the profiles from the directory provided on startup.
+Notably, this cannot remove any previously loaded application profiles.
 
 ## `--store (in-memory|redis)`
 
@@ -134,8 +133,8 @@ The mechanism to use for challenge-response and session storage.
 
 ### in-memory
 
-The application will manage storage using native data structures in the
-runtime. While this storage mechanism is suitable for simple use cases and
+The application will manage storage using native data structures in the runtime.
+While this storage mechanism is suitable for simple use cases and
 demonstrations, it does not support manually revoking sessions and will be
 difficult to scale.
 
@@ -176,9 +175,9 @@ The listening port of the external Redis service.
   },
   // The request patterns to allow for this profile. Globs are supported
   "allow": [
-    ["GET", "/user"]
-    ["GET", "/users/**"]
-    ["GET", "/orgs/*/repos"],
+    ["GET", "/user"],
+    ["GET", "/users/**"],
+    ["GET", "/orgs/*/repos"]
   ]
 }
 ```
@@ -226,18 +225,18 @@ interface Profile {
 
 ## Creation
 
-To register a profile with Granfalloon, you must supply the public portion of
-an asymmetric key pair, formatted as a JWK. Authenticating to Granfalloon
-requires signing/decrypting a challenge using the associated private key. At
-the moment, Granfalloon supports the following key pair types:
+To register a profile with Granfalloon, you must supply the public portion of an
+asymmetric key pair, formatted as a JWK. Authenticating to Granfalloon requires
+signing/decrypting a challenge using the associated private key. At the moment,
+Granfalloon supports the following key pair types:
 
 - Ed25519 (Recommended)
 - RSA-OAEP-256
 - RSA-OAEP-384
 - RSA-OAEP-512
 
-You may use any method to generate one of the above key pairs in the JWK
-format. If you do not have a preferred method in mind, you may also use the
+You may use any method to generate one of the above key pairs in the JWK format.
+If you do not have a preferred method in mind, you may also use the
 [`bin/generate-keys.js`](./bin/generate-keys.js) Deno script
 
 ## Usage
@@ -247,8 +246,8 @@ using a JWK-formatted private key at
 [`src/crypto/to-private-key.js`](src/crypto/to-private-key.js) and
 [`src/crypto/answer-challenge.js`](src/crypto/answer-challenge.js).
 
-However, it should be possible to leverage the JWK-formatted private key in
-most major languages/platforms:
+However, it should be possible to leverage the JWK-formatted private key in most
+major languages/platforms:
 
 - [Deno/Web Crypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/decrypt)
 - [Node.js](https://nodejs.org/api/crypto.html#cryptoprivatedecryptprivatekey-buffer)
@@ -312,8 +311,8 @@ $ curl \
 
 Complete a recently initiated challenge-response authentication attempt
 
-> Note: Each challenge may only be attempted once; whether it succeeds or
-> fails, the associated nonce will no longer be useable
+> Note: Each challenge may only be attempted once; whether it succeeds or fails,
+> the associated nonce will no longer be useable
 
 ### Request
 
@@ -372,9 +371,9 @@ date: Fri, 09 Sep 2022 17:08:26 GMT
 # Contributing
 
 0. Install `deno`
-0. Clone the repository
-0. `deno cache --reload --lock=lock.json src/deps.ts`
-0. `deno test --allow-read --allow-env --allow-net`
+1. Clone the repository
+2. `deno cache --reload --lock=lock.json src/deps.ts`
+3. `deno test --allow-read --allow-env --allow-net`
 
 # Motivation
 
@@ -384,8 +383,8 @@ date: Fri, 09 Sep 2022 17:08:26 GMT
 
 Granfalloon was originally conceived to address practical issue related to the
 use of GitHub personal access tokens. Due to GitHub not having true service
-accounts, it is common for teams/organizations to create a bot account, then
-use the bot's personal access tokens as a de facto service account key.
+accounts, it is common for teams/organizations to create a bot account, then use
+the bot's personal access tokens as a de facto service account key.
 
 However, the scoping rules for GitHub personal access tokens are very limited:
 
@@ -411,8 +410,8 @@ like authentication information as well as "allowable" endpoints.
 When an application submits an invalid request (either due to invalid
 authentication or an invalid request based on their profile), the proxy would
 reject. Otherwise, the proxy would minimally modify the request to include the
-personal access token, forward it to GitHub, then forward GitHub's response
-back to the application.
+personal access token, forward it to GitHub, then forward GitHub's response back
+to the application.
 
 To GitHub, these requests would seem like they are coming from a single
 identity, but the proxy itself could maintain an audit logs for every
