@@ -10,7 +10,7 @@ export const isMatch = (allows, request) => {
 export const shift = (remote, token, request) => {
   const headers = new Headers(request.headers);
   headers.set("Authorization", `token ${token}`);
-  const { href, origin } = new URL(request.url)
+  const { href, origin } = new URL(request.url);
   const url = new URL(href.replace(origin, ""), remote);
   return new Request(url, { ...request, headers });
 };

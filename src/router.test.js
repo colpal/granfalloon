@@ -5,7 +5,7 @@ import * as InMemoryStore from "./store/in-memory.js";
 import load from "./profiles/load.js";
 import Router from "./router.js";
 
-const endToEnd = (profilePath, privatePath) => async() => {
+const endToEnd = (profilePath, privatePath) => async () => {
   const remote = "https://api.github.com";
   const pathname = "user";
   const token = Deno.env.get("GRANFALLOON_TOKEN");
@@ -54,7 +54,7 @@ const endToEnd = (profilePath, privatePath) => async() => {
   });
 
   assertEquals(await actual.json(), await expected.json());
-}
+};
 
 Deno.test({
   name: "RSA",

@@ -5,7 +5,9 @@ import * as InMemoryStore from "../store/in-memory.js";
 import load from "../profiles/load.js";
 
 const [rsaKid, rsaProfile] = await load("./test/profiles/example-rsa.json");
-const [ed25519Kid, ed25519Profile] = await load ("./test/profiles/example-ed25519.json");
+const [ed25519Kid, ed25519Profile] = await load(
+  "./test/profiles/example-ed25519.json",
+);
 const profiles = Object.fromEntries([
   [rsaKid, rsaProfile],
   [ed25519Kid, ed25519Profile],
@@ -72,7 +74,10 @@ Deno.test("empty public key", async () => {
 });
 
 Deno.test("RSA: unknown public key", unknownPublicKey(rsaProfile.publicKey));
-Deno.test("Ed25519: unknown public key", unknownPublicKey(ed25519Profile.publicKey));
+Deno.test(
+  "Ed25519: unknown public key",
+  unknownPublicKey(ed25519Profile.publicKey),
+);
 
 Deno.test("RSA: store error", storeError(rsaProfile.publicKey));
 Deno.test("Ed25519: store error", storeError(ed25519Profile.publicKey));
