@@ -4,7 +4,7 @@ export {
   assertEquals,
   assertNotEquals,
 } from "https://deno.land/std@0.174.0/testing/asserts.ts";
-export { encode as base64urlEncode } from "https://deno.land/std@0.149.0/encoding/base64url.ts";
+export { encode as base64urlEncode } from "https://deno.land/std@0.174.0/encoding/base64url.ts";
 export {
   decode as base64Decode,
   encode as base64Encode,
