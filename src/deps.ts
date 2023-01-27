@@ -1,5 +1,5 @@
 export { serve } from "https://deno.land/std@0.174.0/http/mod.ts";
-export { parse } from "https://deno.land/std@0.149.0/flags/mod.ts";
+export { parse } from "https://deno.land/std@0.174.0/flags/mod.ts";
 export {
   assertEquals,
   assertNotEquals,
