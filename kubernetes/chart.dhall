@@ -255,7 +255,7 @@ in \(v : Values.Type) ->
                 spec = Some k.PodSpec::{
                   containers = [k.Container::{
                     name = "default",
-                    image = Some "redis:7.0.4-alpine3.16",
+                    image = Some "redis:7.0.8-alpine3.17",
                     args = args,
                     resources = mr.resources,
                     volumeMounts = volumeMounts,
