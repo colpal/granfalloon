@@ -23,7 +23,7 @@ jobs:
         with:
           deno-version: ${{ env.DENO_VERSION }}
 
-      - run: deno test --lock=lock.json --allow-read --allow-env --allow-net
+      - run: deno test --lock --allow-read --allow-env --allow-net
         env:
           GRANFALLOON_TOKEN: ${{ github.token }}
 
@@ -34,10 +34,10 @@ jobs:
                            --allow-env
                            --target="{}"
                            --output="dist/granfalloon-{}"
-                           --lock=lock.json
+                           --lock
                            src/mod.js'
 
-      - run: deno bundle --lock=lock.json src/mod.js -- dist/granfalloon.js
+      - run: deno bundle --lock src/mod.js -- dist/granfalloon.js
 
       - if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
