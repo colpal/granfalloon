@@ -372,7 +372,7 @@ date: Fri, 09 Sep 2022 17:08:26 GMT
 
 0. Install `deno`
 1. Clone the repository
-2. `deno cache --reload --lock src/deps.ts`
+2. `deno cache --reload src/deps.ts`
 3. `deno test --allow-read --allow-env --allow-net`
 
 # Motivation
