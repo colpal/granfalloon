@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-from base64 import b64encode
+from base64 import b64decode, b64encode
 from typing import Any
+from os import environ
 import requests
 from jwcrypto.jwk import JWK
 
@@ -25,10 +26,11 @@ def authenticate() -> str:
     except KeyError:
         raise Exception(start_body["errors"])
 
-    with open("../../test/profiles/example-ed25519.json.private") as file:
-        private_jwk = JWK.from_json(file.read())
-
+    private_jwk_base64: str = environ["PRIVATE_JWK"]
+    private_jwk_json: str = b64decode(private_jwk_base64)
+    private_jwk = JWK.from_json(private_jwk_json)
     private_key = private_jwk.get_op_key("sign")
+
     challenge_encoded: bytes = challenge.encode()
     signature: bytes = private_key.sign(challenge_encoded)
     signature_base64: bytes = b64encode(signature)
