@@ -47,7 +47,7 @@ def authenticate() -> str:
 def main():
     token: str = authenticate()
     response = requests.get(
-        f"{GRANFALLOON_URL}/widgets",
+        f"{GRANFALLOON_URL}/user",
         headers={"Authorization": f"token {token}"},
     )
 
