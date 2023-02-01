@@ -9,6 +9,7 @@ import {
   cannotVerifyAnswer,
   createSession,
   incorrectAnswer,
+  invalidPublicKey,
   jsonRequired,
   jsonRequiredKeys,
   noActiveChallenge,

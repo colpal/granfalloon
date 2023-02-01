@@ -38,6 +38,7 @@ export default async (request, { store, profiles, remote, token, log }) => {
 
   const isAllowed = isMatch(profile.allow, request);
   if (!isAllowed) {
+    const { pathname } = new URL(request.url);
     return new Response(log.info(blockedByProfile(kid, pathname)), {
       status: 400,
     });

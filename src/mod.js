@@ -20,9 +20,9 @@ const store = await {
 
 const profiles = await loadDir(flags["profile-dir"]);
 Deno.addSignalListener("SIGHUP", async () => {
-  log.error("[SIGHUP] reloading profiles...");
+  error("[SIGHUP] reloading profiles...");
   Object.assign(profiles, await loadDir(flags["profile-dir"]));
-  log.error("[SIGHUP] profiles reloaded");
+  error("[SIGHUP] profiles reloaded");
 });
 
 serve(
