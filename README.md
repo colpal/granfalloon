@@ -59,6 +59,10 @@ $ curl -H "Authorization: token granfalloon-session_..." http://localhost:8000/e
 [ { detail: "The profile associated with this session blocked the request" } ]
 ```
 
+## Examples
+
+- [Python](./examples/python-client)
+
 # Security
 
 ## Hosting
