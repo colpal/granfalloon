@@ -13,16 +13,16 @@ PUBLIC_JWK: dict[str, str] = {
 
 
 def authenticate() -> str:
-    response = requests.post(
+    body = requests.post(
         f"{GRANFALLOON_URL}/_/start-challenge",
         json={"publicKey": PUBLIC_JWK},
     ).json()
 
     try:
-        nonce: str = response["data"]["nonce"]
-        challenge: str = response["data"]["challenge"]
+        nonce: str = body["data"]["nonce"]
+        challenge: str = body["data"]["challenge"]
     except KeyError:
-        raise Exception(response["errors"])
+        raise Exception(body["errors"])
 
     with open("../../test/profiles/example-ed25519.json.private") as file:
         private_jwk = JWK.from_json(file.read())
@@ -33,15 +33,15 @@ def authenticate() -> str:
     signature_base64: bytes = b64encode(signature)
     answer: str = signature_base64.decode()
 
-    response = requests.post(
+    body = requests.post(
         f"{GRANFALLOON_URL}/_/complete-challenge",
         json={"nonce": nonce, "answer": answer},
     ).json()
 
     try:
-        return response["data"]["session"]
+        return body["data"]["session"]
     except KeyError:
-        raise Exception(response["errors"])
+        raise Exception(body["errors"])
 
 
 def main():
