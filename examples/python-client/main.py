@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from base64 import b64encode
+from typing import Any
 import requests
 from jwcrypto.jwk import JWK
 
@@ -13,16 +14,16 @@ PUBLIC_JWK: dict[str, str] = {
 
 
 def authenticate() -> str:
-    body = requests.post(
+    start_body: dict[str, Any] = requests.post(
         f"{GRANFALLOON_URL}/_/start-challenge",
         json={"publicKey": PUBLIC_JWK},
     ).json()
 
     try:
-        nonce: str = body["data"]["nonce"]
-        challenge: str = body["data"]["challenge"]
+        nonce: str = start_body["data"]["nonce"]
+        challenge: str = start_body["data"]["challenge"]
     except KeyError:
-        raise Exception(body["errors"])
+        raise Exception(start_body["errors"])
 
     with open("../../test/profiles/example-ed25519.json.private") as file:
         private_jwk = JWK.from_json(file.read())
@@ -33,15 +34,15 @@ def authenticate() -> str:
     signature_base64: bytes = b64encode(signature)
     answer: str = signature_base64.decode()
 
-    body = requests.post(
+    complete_body: dict[str, Any] = requests.post(
         f"{GRANFALLOON_URL}/_/complete-challenge",
         json={"nonce": nonce, "answer": answer},
     ).json()
 
     try:
-        return body["data"]["session"]
+        return complete_body["data"]["session"]
     except KeyError:
-        raise Exception(body["errors"])
+        raise Exception(complete_body["errors"])
 
 
 def main():
