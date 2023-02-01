@@ -50,6 +50,7 @@ def main():
         f"{GRANFALLOON_URL}/user",
         headers={"Authorization": f"token {token}"},
     )
+    print(response.text)
 
 
 if __name__ == "__main__":
